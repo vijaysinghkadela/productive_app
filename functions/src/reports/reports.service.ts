@@ -305,7 +305,7 @@ export const generateMonthlyReport = functions
     // Month before for comparison
     const prevMonthEnd = new Date(monthStart);
     prevMonthEnd.setDate(prevMonthEnd.getDate() - 1);
-    const prevMonthStart = new Date(prevMonthEnd.getFullYear(), prevMonthEnd.getMonth(), 1);
+    const _prevMonthStart = new Date(prevMonthEnd.getFullYear(), prevMonthEnd.getMonth(), 1);
 
     const usersSnap = await db
       .collection(Collections.USERS)

@@ -156,8 +156,8 @@ export const rebuildLeaderboard = functions
     // Determine period keys
     const weekNum = getWeekNumber(now);
     const dailyKey = `daily_${today}`;
-    const weeklyKey = `weekly_${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
-    const monthlyKey = `monthly_${now.toISOString().slice(0, 7)}`;
+    const _weeklyKey = `weekly_${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+    const _monthlyKey = `monthly_${now.toISOString().slice(0, 7)}`;
 
     // Batch write (split into chunks of 500)
     for (let i = 0; i < entries.length; i += 400) {

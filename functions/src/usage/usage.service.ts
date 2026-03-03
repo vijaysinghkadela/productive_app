@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-import { Timestamp, FieldValue } from 'firebase-admin/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
 import { getFirestore, REGION } from '../shared/config/firebase.config';
 import { Collections } from '../shared/constants/collections.constants';
 import { syncDailyUsageSchema } from '../shared/validators/common.validators';

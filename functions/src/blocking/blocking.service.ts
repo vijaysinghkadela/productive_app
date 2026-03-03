@@ -311,7 +311,7 @@ export const logOverrideAttempt = functions.region(REGION).https.onCall(async (d
   const uid = context.auth.uid;
   const db = getFirestore();
 
-  const { appId, scheduleId } = data;
+  const { appId, scheduleId: _scheduleId } = data;
   if (!appId) throw new functions.https.HttpsError('invalid-argument', 'appId required');
 
   const today = new Date().toISOString().split('T')[0];

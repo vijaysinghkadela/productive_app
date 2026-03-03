@@ -37,7 +37,7 @@ adminRouter.use(adminRateLimit);
 adminRouter.get('/users', async (req, res, next) => {
   try {
     const db = getFirestore();
-    const { page = '1', pageSize = '20', tier, status, country } = req.query;
+    const { page = '1', pageSize = '20', tier, status, country: _country } = req.query;
     const limit = Math.min(parseInt(pageSize as string) || 20, 100);
     const offset = (parseInt(page as string) - 1) * limit;
 

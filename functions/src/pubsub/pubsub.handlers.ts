@@ -31,7 +31,14 @@ export const onSessionCompleted = functions
       completionRate: number;
     };
 
-    const { userId, sessionId, durationMinutes, type, distractionCount, completionRate } = data;
+    const {
+      userId,
+      sessionId,
+      durationMinutes,
+      type: _type,
+      distractionCount,
+      completionRate,
+    } = data;
     const db = getFirestore();
 
     try {
@@ -148,7 +155,7 @@ export const onSubscriptionChanged = functions
     };
 
     const { userId, previousTier, newTier, eventType } = data;
-    const db = getFirestore();
+    const _db = getFirestore();
 
     try {
       // Sync to BigQuery

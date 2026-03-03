@@ -114,9 +114,14 @@ describe('Productivity Score Calculator', () => {
   });
 
   test('early phone use deduction', () => {
-    const stats = createMockDailyStats({ firstPhoneUse: '06:30' });
+    // Use stats with no bonuses so score stays below 100 cap
+    const baseStats = createMockDailyStats({
+      focusSessions: { completed: 0, abandoned: 0, totalMinutes: 0, averageLength: 0, longestSession: 0 },
+      socialMediaMinutes: 30,
+      firstPhoneUse: '06:30',
+    });
     const { score: scoreEarly } = calculateProductivityScore({
-      dailyStats: stats,
+      dailyStats: baseStats,
       goals: emptyGoals,
       habits: emptyHabits,
       streakDays: 0,
@@ -124,7 +129,7 @@ describe('Productivity Score Calculator', () => {
     });
 
     const { score: scoreLate } = calculateProductivityScore({
-      dailyStats: createMockDailyStats({ firstPhoneUse: '08:00' }),
+      dailyStats: { ...baseStats, firstPhoneUse: '08:00' },
       goals: emptyGoals,
       habits: emptyHabits,
       streakDays: 0,
@@ -203,19 +208,26 @@ describe('Productivity Score Calculator', () => {
   });
 
   test('late night usage causes deduction', () => {
-    const stats = createMockDailyStats({
+    // Use stats with no bonuses so scores stay below 100 cap
+    const baseOverrides = {
+      focusSessions: { completed: 0, abandoned: 0, totalMinutes: 0, averageLength: 0, longestSession: 0 } as const,
+      socialMediaMinutes: 30,
+    };
+    const lateStats = createMockDailyStats({
+      ...baseOverrides,
       sleepData: { bedtime: '01:00', wakeTime: '09:00', quality: 2, lateNightUsageMinutes: 60 },
     });
     const { score: lateScore } = calculateProductivityScore({
-      dailyStats: stats,
+      dailyStats: lateStats,
       goals: emptyGoals,
       habits: emptyHabits,
       streakDays: 0,
       firstPhoneUseBefore7am: false,
     });
 
+    const normalStats = createMockDailyStats(baseOverrides);
     const { score: normalScore } = calculateProductivityScore({
-      dailyStats: createMockDailyStats(),
+      dailyStats: normalStats,
       goals: emptyGoals,
       habits: emptyHabits,
       streakDays: 0,

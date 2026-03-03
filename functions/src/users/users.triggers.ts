@@ -2,7 +2,7 @@ import * as functions from 'firebase-functions';
 import { Timestamp, FieldValue } from 'firebase-admin/firestore';
 import { getFirestore, getAuth, getMessaging, REGION } from '../shared/config/firebase.config';
 import { Collections } from '../shared/constants/collections.constants';
-import { UserDocument, SubscriptionTier } from '../shared/types/firestore.types';
+import { UserDocument } from '../shared/types/firestore.types';
 import { cacheDelete } from '../shared/config/redis.config';
 import { sendNotification, NotificationTemplates } from '../notifications/notifications.service';
 import { checkAndUnlockAchievements } from '../achievements/achievements.engine';
@@ -116,7 +116,7 @@ export const onUserDocumentUpdate = functions
           .collection(Collections.ACCOUNTABILITY_PAIRS)
           .where('userIds', 'array-contains', uid)
           .get();
-        for (const pairDoc of pairsSnap.docs) {
+        for (const _pairDoc of pairsSnap.docs) {
           // Username stored in messages, not top-level — no batch needed
         }
 

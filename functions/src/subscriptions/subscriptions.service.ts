@@ -194,7 +194,7 @@ export const revenuecatWebhook = functions
         case 'PRODUCT_CHANGE': {
           const oldTier = userSnap.data()?.subscription?.tier || 'free';
           const tierOrder = { free: 0, basic: 1, pro: 2, elite: 3, lifetime: 4 };
-          const isUpgrade =
+          const _isUpgrade =
             (tierOrder[newTier as keyof typeof tierOrder] || 0) >
             (tierOrder[oldTier as keyof typeof tierOrder] || 0);
 
