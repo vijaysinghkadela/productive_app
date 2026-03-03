@@ -171,7 +171,8 @@ class _RetryInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    final retryCount = err.requestOptions.extra['retryCount'] ?? 0;
+    final int retryCount =
+        (err.requestOptions.extra['retryCount'] as int?) ?? 0;
     final shouldRetry = retryCount < _maxRetries &&
         (err.type == DioExceptionType.connectionTimeout ||
             err.type == DioExceptionType.connectionError ||

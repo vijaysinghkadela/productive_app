@@ -374,11 +374,11 @@ void main() {
   group('JournalModel', () {
     test('moodEmoji maps correctly', () {
       expect(
-          const JournalModel(id: 'j1', userId: 'u1', date: null, mood: 1)
+          JournalModel(id: 'j1', userId: 'u1', date: DateTime(2026), mood: 1)
               .moodEmoji,
           '😞');
       expect(
-          const JournalModel(id: 'j2', userId: 'u1', date: null, mood: 5)
+          JournalModel(id: 'j2', userId: 'u1', date: DateTime(2026), mood: 5)
               .moodEmoji,
           '🤩');
     });

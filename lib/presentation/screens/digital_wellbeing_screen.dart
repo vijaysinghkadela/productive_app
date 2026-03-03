@@ -424,10 +424,11 @@ class _GaugePainter extends CustomPainter {
     Color fillColor;
     if (value > 0.6) {
       fillColor = AppColors.success;
-    } else if (value > 0.3)
+    } else if (value > 0.3) {
       fillColor = AppColors.warning;
-    else
+    } else {
       fillColor = AppColors.alert;
+    }
 
     canvas.drawArc(
         rect,
