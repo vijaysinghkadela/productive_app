@@ -1,0 +1,78 @@
+name: focus_guard
+description: "FocusGuard Pro — The most advanced productivity & digital wellness SaaS app for iOS and Android."
+publish_to: 'none'
+version: 2.0.0+1
+
+environment:
+  sdk: ^3.6.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  go_router: ^14.8.1
+  hive_flutter: ^1.1.0
+  hive: ^2.2.3
+  fl_chart: ^0.70.2
+  flutter_local_notifications: ^18.0.1
+  permission_handler: ^11.3.1
+  flutter_animate: ^4.5.2
+  google_fonts: ^6.2.1
+  dio: ^5.7.0
+  flutter_secure_storage: ^9.2.4
+  flutter_dotenv: ^5.2.1
+  uuid: ^4.5.1
+  intl: ^0.19.0
+  percent_indicator: ^4.2.3
+  share_plus: ^10.1.4
+  url_launcher: ^6.3.1
+  smooth_page_indicator: ^1.2.0+3
+  vibration: ^2.0.0
+  path_provider: ^2.1.5
+  json_annotation: ^4.9.0
+  equatable: ^2.0.7
+  freezed_annotation: ^2.4.4
+  shared_preferences: ^2.3.4
+  # New for FocusGuard Pro
+  table_calendar: ^3.1.3
+  confetti: ^0.7.0
+  audioplayers: ^6.1.0
+  csv: ^6.0.0
+  pdf: ^3.11.2
+  printing: ^5.13.4
+  connectivity_plus: ^6.1.1
+  device_info_plus: ^11.2.0
+  package_info_plus: ^8.1.3
+  # Enterprise-grade additions
+  lottie: ^3.2.0
+  flutter_svg: ^2.0.17
+  cached_network_image: ^3.4.1
+  image_picker: ^1.1.2
+  flutter_slidable: ^3.1.1
+  shimmer: ^3.0.0
+  local_auth: ^2.3.0
+  in_app_review: ^2.0.10
+  wakelock_plus: ^1.2.10
+  badges: ^3.1.2
+  # Localization
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mocktail: ^1.0.4
+
+  build_runner: ^2.4.13
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - .env
+    - assets/animations/
+    - assets/images/
+    - assets/sounds/
+

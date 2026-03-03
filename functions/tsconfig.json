@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022"],
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "paths": {
+      "@shared/*": ["shared/*"],
+      "@auth/*": ["auth/*"],
+      "@users/*": ["users/*"],
+      "@sessions/*": ["sessions/*"],
+      "@usage/*": ["usage/*"],
+      "@goals/*": ["goals/*"],
+      "@habits/*": ["habits/*"],
+      "@achievements/*": ["achievements/*"],
+      "@challenges/*": ["challenges/*"],
+      "@leaderboard/*": ["leaderboard/*"],
+      "@ai/*": ["ai/*"],
+      "@notifications/*": ["notifications/*"],
+      "@reports/*": ["reports/*"],
+      "@subscriptions/*": ["subscriptions/*"],
+      "@admin/*": ["admin/*"],
+      "@api/*": ["api/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "lib", "tests"]
+}

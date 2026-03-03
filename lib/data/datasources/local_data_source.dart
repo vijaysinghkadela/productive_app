@@ -1,0 +1,180 @@
+import 'dart:convert';
+import 'package:hive_flutter/hive_flutter.dart';
+import '../../domain/entities/focus_session.dart';
+import '../../domain/entities/daily_stat.dart';
+import '../../domain/entities/goal.dart';
+import '../../domain/entities/app_info.dart';
+import '../../domain/entities/achievement.dart';
+
+class LocalDataSource {
+  static const String _sessionsBox = 'sessions';
+  static const String _statsBox = 'daily_stats';
+  static const String _goalsBox = 'goals';
+  static const String _blockerBox = 'blocker';
+  static const String _settingsBox = 'settings';
+  static const String _achievementsBox = 'achievements';
+
+  static Future<void> init() async {
+    await Hive.initFlutter();
+    await Hive.openBox(_sessionsBox);
+    await Hive.openBox(_statsBox);
+    await Hive.openBox(_goalsBox);
+    await Hive.openBox(_blockerBox);
+    await Hive.openBox(_settingsBox);
+    await Hive.openBox(_achievementsBox);
+  }
+
+  // --- Focus Sessions ---
+  Box get _sessions => Hive.box(_sessionsBox);
+
+  Future<void> saveSession(FocusSession session) async {
+    await _sessions.put(session.id, jsonEncode(session.toMap()));
+  }
+
+  List<FocusSession> getSessions() {
+    return _sessions.values
+        .map((v) => FocusSession.fromMap(
+            jsonDecode(v as String) as Map<String, dynamic>))
+        .toList()
+      ..sort((a, b) => b.startTime.compareTo(a.startTime));
+  }
+
+  List<FocusSession> getSessionsForDate(String dateKey) {
+    return getSessions()
+        .where((s) => s.startTime.toIso8601String().startsWith(dateKey))
+        .toList();
+  }
+
+  Future<void> deleteSession(String id) async {
+    await _sessions.delete(id);
+  }
+
+  // --- Daily Stats ---
+  Box get _stats => Hive.box(_statsBox);
+
+  Future<void> saveDailyStat(DailyStat stat) async {
+    await _stats.put(stat.date, jsonEncode(stat.toMap()));
+  }
+
+  DailyStat? getDailyStat(String dateKey) {
+    final data = _stats.get(dateKey);
+    if (data == null) return null;
+    return DailyStat.fromMap(
+        jsonDecode(data as String) as Map<String, dynamic>);
+  }
+
+  List<DailyStat> getStatsForRange(DateTime start, DateTime end) {
+    final results = <DailyStat>[];
+    var current = start;
+    while (!current.isAfter(end)) {
+      final key =
+          '${current.year}-${current.month.toString().padLeft(2, '0')}-${current.day.toString().padLeft(2, '0')}';
+      final stat = getDailyStat(key);
+      if (stat != null) results.add(stat);
+      current = current.add(const Duration(days: 1));
+    }
+    return results;
+  }
+
+  // --- Goals ---
+  Box get _goals => Hive.box(_goalsBox);
+
+  Future<void> saveGoal(AppGoal goal) async {
+    await _goals.put(goal.packageName, jsonEncode(goal.toMap()));
+  }
+
+  List<AppGoal> getGoals() {
+    return _goals.values
+        .map((v) =>
+            AppGoal.fromMap(jsonDecode(v as String) as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> deleteGoal(String packageName) async {
+    await _goals.delete(packageName);
+  }
+
+  // --- Blocker Config ---
+  Box get _blocker => Hive.box(_blockerBox);
+
+  Future<void> saveBlockedApp(AppInfo app) async {
+    await _blocker.put(app.packageName, jsonEncode(app.toMap()));
+  }
+
+  List<AppInfo> getBlockedApps() {
+    return _blocker.values
+        .map((v) =>
+            AppInfo.fromMap(jsonDecode(v as String) as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> removeBlockedApp(String packageName) async {
+    await _blocker.delete(packageName);
+  }
+
+  // --- Settings ---
+  Box get _settingsData => Hive.box(_settingsBox);
+
+  Future<void> saveSetting(String key, dynamic value) async {
+    await _settingsData.put(key, jsonEncode(value));
+  }
+
+  T? getSetting<T>(String key) {
+    final data = _settingsData.get(key);
+    if (data == null) return null;
+    return jsonDecode(data as String) as T?;
+  }
+
+  bool getHasCompletedOnboarding() =>
+      getSetting<bool>('onboarding_completed') ?? false;
+  Future<void> setHasCompletedOnboarding() =>
+      saveSetting('onboarding_completed', true);
+
+  bool getHasAcceptedTerms() => getSetting<bool>('terms_accepted') ?? false;
+  Future<void> setHasAcceptedTerms() => saveSetting('terms_accepted', true);
+
+  String? getStrictModePin() => getSetting<String>('strict_mode_pin');
+  Future<void> setStrictModePin(String pin) =>
+      saveSetting('strict_mode_pin', pin);
+
+  // --- Bedtime ---
+  Map<String, dynamic>? getBedtimeConfig() {
+    final data = _settingsData.get('bedtime_config');
+    if (data == null) return null;
+    return jsonDecode(data as String) as Map<String, dynamic>;
+  }
+
+  Future<void> saveBedtimeConfig(Map<String, dynamic> config) async {
+    await _settingsData.put('bedtime_config', jsonEncode(config));
+  }
+
+  // --- Achievements ---
+  Box get _achievementsData => Hive.box(_achievementsBox);
+
+  Future<void> saveAchievement(Achievement achievement) async {
+    await _achievementsData.put(
+        achievement.id,
+        jsonEncode({
+          'id': achievement.id,
+          'currentValue': achievement.currentValue,
+          'unlocked': achievement.unlocked,
+          'unlockedDate': achievement.unlockedDate?.toIso8601String(),
+        }));
+  }
+
+  Map<String, dynamic>? getAchievementProgress(String id) {
+    final data = _achievementsData.get(id);
+    if (data == null) return null;
+    return jsonDecode(data as String) as Map<String, dynamic>;
+  }
+
+  // --- Clear all data ---
+  Future<void> clearAll() async {
+    await _sessions.clear();
+    await _stats.clear();
+    await _goals.clear();
+    await _blocker.clear();
+    await _settingsData.clear();
+    await _achievementsData.clear();
+  }
+}

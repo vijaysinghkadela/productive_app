@@ -1,0 +1,95 @@
+{
+  "conditions": [
+    {
+      "name": "platform_android",
+      "expression": "device.os == 'android'"
+    },
+    {
+      "name": "platform_ios",
+      "expression": "device.os == 'ios'"
+    },
+    {
+      "name": "beta_users",
+      "expression": "app.id == 'focusguard_beta'"
+    }
+  ],
+  "parameters": {
+    "social_media_android_packages": {
+      "defaultValue": {
+        "value": "{\"com.instagram.android\":\"Instagram\",\"com.zhiliaoapp.musically\":\"TikTok\",\"com.google.android.youtube\":\"YouTube\",\"com.twitter.android\":\"X (Twitter)\",\"com.facebook.katana\":\"Facebook\",\"com.snapchat.android\":\"Snapchat\",\"com.reddit.frontpage\":\"Reddit\",\"com.pinterest\":\"Pinterest\",\"com.linkedin.android\":\"LinkedIn\",\"com.whatsapp\":\"WhatsApp\",\"org.telegram.messenger\":\"Telegram\",\"com.discord\":\"Discord\",\"com.tumblr\":\"Tumblr\",\"com.zhiliaoapp.musically.go\":\"TikTok Lite\",\"com.facebook.orca\":\"Messenger\"}"
+      },
+      "description": "Android social media package names → display names"
+    },
+    "social_media_ios_bundles": {
+      "defaultValue": {
+        "value": "{\"com.burbn.instagram\":\"Instagram\",\"com.zhiliaoapp.musically\":\"TikTok\",\"com.google.ios.youtube\":\"YouTube\",\"com.atebits.Tweetie2\":\"X (Twitter)\",\"com.facebook.Facebook\":\"Facebook\",\"com.toyopagroup.picaboo\":\"Snapchat\",\"com.reddit.Reddit\":\"Reddit\",\"com.pinterest\":\"Pinterest\",\"com.linkedin.LinkedIn\":\"LinkedIn\",\"net.whatsapp.WhatsApp\":\"WhatsApp\",\"ph.telegra.Telegraph\":\"Telegram\",\"com.hammerandchisel.discord\":\"Discord\"}"
+      },
+      "description": "iOS social media bundle IDs → display names"
+    },
+    "productivity_categories": {
+      "defaultValue": {
+        "value": "{\"social_media\":[\"com.instagram.android\",\"com.zhiliaoapp.musically\",\"com.twitter.android\",\"com.facebook.katana\",\"com.snapchat.android\",\"com.reddit.frontpage\"],\"entertainment\":[\"com.google.android.youtube\",\"com.netflix.mediaclient\",\"tv.twitch.android.app\",\"com.spotify.music\"],\"productivity\":[\"com.google.android.apps.docs\",\"com.microsoft.office.word\",\"com.notion.id\",\"com.slack\"],\"communication\":[\"com.whatsapp\",\"org.telegram.messenger\",\"com.discord\",\"com.google.android.gm\"],\"education\":[\"com.duolingo\",\"com.coursera.app\",\"com.udemy.android\"]}"
+      },
+      "description": "App category classification"
+    },
+    "paywall_config": {
+      "defaultValue": {
+        "value": "{\"plans\":{\"basic\":{\"monthly_price\":\"$5.99\",\"yearly_price\":\"$47.99\",\"yearly_savings\":\"33%\",\"trial_days\":7},\"pro\":{\"monthly_price\":\"$9.99\",\"yearly_price\":\"$79.99\",\"yearly_savings\":\"33%\",\"trial_days\":7,\"featured\":true},\"elite\":{\"monthly_price\":\"$12.99\",\"yearly_price\":\"$99.99\",\"yearly_savings\":\"36%\",\"trial_days\":7}},\"lifetime\":{\"price\":\"$199.99\",\"available\":true},\"ab_test_variant\":\"B\",\"show_annual_first\":true,\"featured_plan\":\"pro\"}"
+      },
+      "description": "Paywall configuration including prices, trials, and AB test variant"
+    },
+    "feature_flags": {
+      "defaultValue": {
+        "value": "{\"ai_coaching_enabled\":true,\"focus_spaces_enabled\":true,\"live_activities_enabled\":false,\"watch_app_enabled\":false,\"challenges_enabled\":true,\"accountability_enabled\":true,\"bedtime_mode_enabled\":true,\"biometric_strict_mode\":true,\"custom_overlay_enabled\":true,\"referral_system_enabled\":true}"
+      },
+      "description": "Feature flags for gradual rollout"
+    },
+    "score_algorithm_version": {
+      "defaultValue": { "value": "2.1.0" },
+      "description": "Productivity score algorithm version for client-side cache invalidation"
+    },
+    "min_app_version_android": {
+      "defaultValue": { "value": "1.0.0" },
+      "description": "Minimum required Android app version"
+    },
+    "min_app_version_ios": {
+      "defaultValue": { "value": "1.0.0" },
+      "description": "Minimum required iOS app version"
+    },
+    "maintenance_mode": {
+      "defaultValue": { "value": "false" },
+      "description": "Enable maintenance mode (blocks all API calls)"
+    },
+    "maintenance_message": {
+      "defaultValue": { "value": "FocusGuard is undergoing scheduled maintenance. We'll be back shortly!" },
+      "description": "Message shown during maintenance"
+    },
+    "blocked_usernames": {
+      "defaultValue": {
+        "value": "[\"admin\",\"administrator\",\"focusguard\",\"support\",\"help\",\"system\",\"root\",\"moderator\",\"mod\",\"official\",\"staff\",\"team\",\"bot\",\"null\",\"undefined\",\"test\",\"demo\",\"api\",\"www\",\"mail\",\"ftp\",\"localhost\",\"dev\",\"staging\",\"production\",\"app\",\"ios\",\"android\",\"web\"]"
+      },
+      "description": "Reserved usernames that cannot be registered"
+    },
+    "motivational_messages": {
+      "defaultValue": {
+        "value": "[\"Your future self will thank you for this moment of focus.\",\"Every minute of deep work compounds into extraordinary results.\",\"The phone can wait. Your dreams cannot.\",\"You're trading a dopamine hit for a dopamine mountain.\",\"Scrolling steals time. Focus creates legacy.\",\"This block isn't a restriction — it's a gift to yourself.\",\"The world's most successful people guard their attention fiercely.\",\"Right now, you're choosing growth over distraction.\",\"One hour of focus > five hours of multitasking.\",\"Your attention is the most valuable currency you own.\",\"The apps will be there later. This moment won't.\",\"Discipline is choosing between what you want now and what you want most.\",\"You don't need notifications to know you matter.\",\"Real connections happen face to face, not screen to screen.\",\"Every time you resist, your willpower muscle grows stronger.\",\"The average person checks their phone 96x daily. You're not average.\",\"Three years from now, you'll wish you started focusing today.\",\"Your brain isn't designed for constant stimulation. Give it peace.\",\"When you feel the urge, breathe. It passes in 15 seconds.\",\"You're rewiring your brain right now. Keep going.\"]"
+      },
+      "description": "Motivational messages shown when blocking apps (first 20 of 200)"
+    },
+    "onboarding_content": {
+      "defaultValue": {
+        "value": "{\"slides\":[{\"title\":\"Take Back Your Time\",\"subtitle\":\"FocusGuard helps you build a healthier relationship with technology\",\"image\":\"onboarding_1\"},{\"title\":\"Block Distractions\",\"subtitle\":\"Smart app blocking that adapts to your schedule\",\"image\":\"onboarding_2\"},{\"title\":\"Track Progress\",\"subtitle\":\"See your productivity score improve day by day\",\"image\":\"onboarding_3\"},{\"title\":\"Join the Community\",\"subtitle\":\"Compete in challenges and keep each other accountable\",\"image\":\"onboarding_4\"}]}"
+      },
+      "description": "Onboarding slides content"
+    },
+    "habit_templates": {
+      "defaultValue": {
+        "value": "[{\"templateId\":\"no_phone_morning\",\"name\":\"No Phone First Hour\",\"description\":\"Start your day without screens\",\"icon\":\"🌅\",\"color\":\"#FF6B6B\",\"category\":\"digital_wellness\",\"xpPerCompletion\":30},{\"templateId\":\"phone_free_meals\",\"name\":\"Phone-Free Meals\",\"description\":\"Put your phone away during meals\",\"icon\":\"🍽️\",\"color\":\"#4ECDC4\",\"category\":\"digital_wellness\",\"xpPerCompletion\":20},{\"templateId\":\"evening_wind_down\",\"name\":\"Evening Wind-Down\",\"description\":\"No screens 1 hour before bed\",\"icon\":\"🌙\",\"color\":\"#6C5CE7\",\"category\":\"sleep\",\"xpPerCompletion\":30},{\"templateId\":\"daily_focus_25\",\"name\":\"Daily 25min Focus\",\"description\":\"One Pomodoro session every day\",\"icon\":\"🎯\",\"color\":\"#00B894\",\"category\":\"productivity\",\"xpPerCompletion\":25},{\"templateId\":\"morning_stretch\",\"name\":\"Morning Stretch\",\"description\":\"5 minutes of stretching to start the day\",\"icon\":\"🧘\",\"color\":\"#FDCB6E\",\"category\":\"health\",\"xpPerCompletion\":15},{\"templateId\":\"gratitude_journal\",\"name\":\"Gratitude Journal\",\"description\":\"Write 3 things you're grateful for\",\"icon\":\"📓\",\"color\":\"#E17055\",\"category\":\"mindfulness\",\"xpPerCompletion\":20},{\"templateId\":\"hydration\",\"name\":\"Drink 8 Glasses\",\"description\":\"Stay hydrated throughout the day\",\"icon\":\"💧\",\"color\":\"#0984E3\",\"category\":\"health\",\"xpPerCompletion\":10},{\"templateId\":\"reading_30\",\"name\":\"Read 30 Minutes\",\"description\":\"Read a book instead of scrolling\",\"icon\":\"📚\",\"color\":\"#6C5CE7\",\"category\":\"productivity\",\"xpPerCompletion\":25},{\"templateId\":\"no_social_after_9\",\"name\":\"No Social After 9pm\",\"description\":\"Put social media away by 9pm\",\"icon\":\"🚫\",\"color\":\"#D63031\",\"category\":\"digital_wellness\",\"xpPerCompletion\":25},{\"templateId\":\"walk_10k\",\"name\":\"10,000 Steps\",\"description\":\"Walk at least 10,000 steps daily\",\"icon\":\"🚶\",\"color\":\"#00CEC9\",\"category\":\"health\",\"xpPerCompletion\":20},{\"templateId\":\"deep_work_1h\",\"name\":\"1 Hour Deep Work\",\"description\":\"One uninterrupted hour of focused work\",\"icon\":\"🧠\",\"color\":\"#A29BFE\",\"category\":\"productivity\",\"xpPerCompletion\":35},{\"templateId\":\"meditation_10\",\"name\":\"10-Min Meditation\",\"description\":\"Take 10 minutes to meditate\",\"icon\":\"🧘‍♂️\",\"color\":\"#55EFC4\",\"category\":\"mindfulness\",\"xpPerCompletion\":20},{\"templateId\":\"sleep_8h\",\"name\":\"8 Hours Sleep\",\"description\":\"Get a full night of quality sleep\",\"icon\":\"😴\",\"color\":\"#636E72\",\"category\":\"sleep\",\"xpPerCompletion\":20},{\"templateId\":\"inbox_zero\",\"name\":\"Inbox Zero\",\"description\":\"Clear your email inbox before end of day\",\"icon\":\"📧\",\"color\":\"#74B9FF\",\"category\":\"productivity\",\"xpPerCompletion\":15},{\"templateId\":\"no_doomscroll\",\"name\":\"No Doomscrolling\",\"description\":\"Avoid mindless social media scrolling\",\"icon\":\"📱\",\"color\":\"#E17055\",\"category\":\"digital_wellness\",\"xpPerCompletion\":25},{\"templateId\":\"plan_tomorrow\",\"name\":\"Plan Tomorrow\",\"description\":\"Write tomorrow's top 3 priorities before bed\",\"icon\":\"📋\",\"color\":\"#FFEAA7\",\"category\":\"productivity\",\"xpPerCompletion\":15},{\"templateId\":\"creative_time\",\"name\":\"30min Creative Time\",\"description\":\"Spend 30 minutes on a creative project\",\"icon\":\"🎨\",\"color\":\"#FD79A8\",\"category\":\"productivity\",\"xpPerCompletion\":25},{\"templateId\":\"digital_sabbath\",\"name\":\"Digital Sabbath\",\"description\":\"One screen-free day per week\",\"icon\":\"🌿\",\"color\":\"#00B894\",\"category\":\"digital_wellness\",\"xpPerCompletion\":50},{\"templateId\":\"learn_something\",\"name\":\"Learn Something New\",\"description\":\"Spend 15 minutes learning a new skill\",\"icon\":\"💡\",\"color\":\"#FDCB6E\",\"category\":\"productivity\",\"xpPerCompletion\":20},{\"templateId\":\"connect_irl\",\"name\":\"Connect IRL\",\"description\":\"Have a face-to-face conversation with someone\",\"icon\":\"🤝\",\"color\":\"#E84393\",\"category\":\"social\",\"xpPerCompletion\":15}]"
+      },
+      "description": "20 habit templates for users to quick-start"
+    }
+  },
+  "version": {
+    "versionNumber": "1"
+  }
+}
