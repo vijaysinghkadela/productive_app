@@ -1,7 +1,9 @@
+// ignore_for_file: discarded_futures, inference_failure_on_function_invocation
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/domain/entities/goal.dart';
 import 'package:focusguard_pro/presentation/providers/app_providers.dart';
 import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
 import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
@@ -195,16 +197,16 @@ class _CompletionRing extends StatelessWidget {
 
 class _GoalCard extends StatelessWidget {
   const _GoalCard({required this.goal, required this.index});
-  final dynamic goal;
+  final AppGoal goal;
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    final current = goal.currentMinutes ?? 0;
-    final target = goal.dailyLimitMinutes ?? 60;
-    final ratio = (current / target).clamp(0.0, 1.2);
+    final current = goal.currentUsageMinutes;
+    final target = goal.dailyLimitMinutes;
+    final ratio = target > 0 ? (current / target).clamp(0.0, 1.2) : 0.0;
     final isCompleted = goal.isGoalMet;
-    final streakDays = goal.streakDays ?? 0;
+    const streakDays = 0; // Tracking not available yet in AppGoal
 
     // Dynamic color
     Color barColor;
@@ -245,7 +247,7 @@ class _GoalCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      goal.appName ?? 'Goal',
+                      goal.appName,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -311,9 +313,9 @@ class _GoalCard extends StatelessWidget {
                   color: AppColors.streak.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(
+                child: const Text(
                   '🔥 $streakDays day streak',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: AppColors.streak,

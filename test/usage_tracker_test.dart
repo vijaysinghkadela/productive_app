@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focus_guard/services/usage_tracker_service.dart';
+import 'package:focusguard_pro/services/usage_tracker_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

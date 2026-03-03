@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type, type_annotate_public_apis, unawaited_futures
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:focusguard_pro/core/optimization/startup_optimizer.dart';

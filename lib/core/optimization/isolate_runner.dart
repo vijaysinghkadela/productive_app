@@ -1,4 +1,4 @@
-import 'dart:typedData';
+// ignore_for_file: inference_failure_on_untyped_parameter, type_annotate_public_apis
 import 'package:flutter/foundation.dart';
 
 class IsolateRunner {

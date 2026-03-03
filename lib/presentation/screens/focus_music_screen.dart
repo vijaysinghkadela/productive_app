@@ -186,7 +186,9 @@ class _FocusMusicScreenState extends State<FocusMusicScreen> {
                     Text(
                       name,
                       style: const TextStyle(
-                          color: AppColors.textPrimary, fontSize: 13,),
+                        color: AppColors.textPrimary,
+                        fontSize: 13,
+                      ),
                     ),
                     const Spacer(),
                     SizedBox(
@@ -239,13 +241,17 @@ class _FocusMusicScreenState extends State<FocusMusicScreen> {
               Text(
                 freq,
                 style: const TextStyle(
-                    color: AppColors.textTertiary, fontSize: 10,),
+                  color: AppColors.textTertiary,
+                  fontSize: 10,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 desc,
                 style: const TextStyle(
-                    color: AppColors.textSecondary, fontSize: 10,),
+                  color: AppColors.textSecondary,
+                  fontSize: 10,
+                ),
               ),
             ],
           ),
@@ -332,7 +338,9 @@ class _FocusMusicScreenState extends State<FocusMusicScreen> {
                   Text(
                     desc,
                     style: const TextStyle(
-                        color: AppColors.textTertiary, fontSize: 11,),
+                      color: AppColors.textTertiary,
+                      fontSize: 11,
+                    ),
                   ),
                 ],
               ),

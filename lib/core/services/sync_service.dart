@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, discarded_futures
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';

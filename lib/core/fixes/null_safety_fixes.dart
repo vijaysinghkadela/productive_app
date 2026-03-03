@@ -5,7 +5,7 @@ void safeNullAccess() {
   final user = <String, dynamic>{'displayName': 'John'};
 
   // FIXED: Provide default fallback
-  final name = user['displayName'] ?? 'User';
+  final name = user['displayName'] as String? ?? 'User';
   debugPrint(name);
 }
 

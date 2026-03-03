@@ -33,7 +33,8 @@ class UserModel {
         totalXp: json['totalXp'] as int? ?? 0,
         subscriptionTier: json['subscriptionTier'] as String? ?? 'free',
         accountabilityPartnerIds: List<String>.from(
-            json['accountabilityPartnerIds'] as Iterable<dynamic>? ?? [],),
+          json['accountabilityPartnerIds'] as Iterable<dynamic>? ?? [],
+        ),
         settings: Map<String, dynamic>.from(json['settings'] as Map? ?? {}),
       );
   final String uid;

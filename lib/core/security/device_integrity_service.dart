@@ -1,3 +1,4 @@
+// ignore_for_file: unawaited_futures
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -49,7 +50,6 @@ class DeviceIntegrityService {
       androidConfig: AndroidConfig(
         packageName: 'app.focusguardpro.productive',
         signingCertHashes: ['YOUR_CERT_HASH_HERE'],
-        supportedAlternativeStores: ['com.sec.android.app.samsungapps'],
       ),
       iosConfig: IOSConfig(
         bundleIds: ['app.focusguardpro.productive'],

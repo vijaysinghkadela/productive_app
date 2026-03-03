@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls, inference_failure_on_untyped_parameter, type_annotate_public_apis
 import 'package:flutter_test/flutter_test.dart';
 
 class Achievement {

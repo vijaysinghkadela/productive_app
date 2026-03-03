@@ -57,7 +57,7 @@ class StreakCalculator {
 
     if (diff == 1 && todayCompleted) {
       final newS = currentStreak + 1;
-      final int m = _checkMilestone(newS);
+      final m = _checkMilestone(newS);
       final newLong = newS > longestStreak ? newS : longestStreak;
       return StreakResult(
         newStreak: newS,

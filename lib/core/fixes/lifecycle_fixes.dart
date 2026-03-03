@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, inference_failure_on_instance_creation, inference_failure_on_untyped_parameter, unused_element, unused_field
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class _LifecycleFixesState extends State<LifecycleFixes>
   late final AnimationController _controller;
   StreamSubscription<int>? _subscription;
   String? _data;
-  dynamic _error;
+  dynamic _error; // Keeping this because it's required for setState
 
   @override
   void initState() {

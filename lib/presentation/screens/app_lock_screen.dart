@@ -45,8 +45,11 @@ class _AppLockScreenState extends State<AppLockScreen> {
                 ),
                 child: const Column(
                   children: [
-                    Icon(Icons.lock_rounded,
-                        color: AppColors.primary, size: 48,),
+                    Icon(
+                      Icons.lock_rounded,
+                      color: AppColors.primary,
+                      size: 48,
+                    ),
                     SizedBox(height: 12),
                     Text(
                       'Protect Your Progress',
@@ -187,7 +190,9 @@ class _AppLockScreenState extends State<AppLockScreen> {
                   Text(
                     desc,
                     style: const TextStyle(
-                        color: AppColors.textTertiary, fontSize: 11,),
+                      color: AppColors.textTertiary,
+                      fontSize: 11,
+                    ),
                   ),
                 ],
               ),

@@ -244,7 +244,9 @@ class ReportsScreen extends StatelessWidget {
                 Text(
                   item['d']!,
                   style: const TextStyle(
-                      color: AppColors.textTertiary, fontSize: 11,),
+                    color: AppColors.textTertiary,
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),
@@ -308,7 +310,9 @@ class ReportsScreen extends StatelessWidget {
                   Text(
                     desc,
                     style: const TextStyle(
-                        color: AppColors.textTertiary, fontSize: 11,),
+                      color: AppColors.textTertiary,
+                      fontSize: 11,
+                    ),
                   ),
                 ],
               ),

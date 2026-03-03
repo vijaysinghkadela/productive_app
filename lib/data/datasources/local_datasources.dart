@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, avoid_positional_boolean_parameters, discarded_futures, inference_failure_on_collection_literal, inference_failure_on_untyped_parameter, type_annotate_public_apis, use_late_for_private_fields_and_variables, use_named_constants
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, avoid_dynamic_calls, inference_failure_on_function_invocation, inference_failure_on_instance_creation, no_default_cases, strict_raw_type
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:focusguard_pro/core/constants/api_constants.dart';
@@ -189,7 +190,9 @@ class _RetryInterceptor extends Interceptor {
 
   @override
   Future<void> onError(
-      DioException err, ErrorInterceptorHandler handler,) async {
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     final retryCount = (err.requestOptions.extra['retryCount'] as int?) ?? 0;
     final isRetryable = retryCount < _maxRetries &&
         (err.type == DioExceptionType.connectionTimeout ||

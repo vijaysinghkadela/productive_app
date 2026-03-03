@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -224,8 +225,10 @@ class _Step1 extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Create Account',
-              style: Theme.of(context).textTheme.displaySmall,),
+          Text(
+            'Create Account',
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
           const SizedBox(height: 8),
           const Text(
             'Set up your email and password',

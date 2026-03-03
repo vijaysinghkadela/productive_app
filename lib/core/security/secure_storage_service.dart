@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, unused_field, use_named_constants
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

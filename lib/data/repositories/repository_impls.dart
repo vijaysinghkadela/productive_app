@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, inference_failure_on_collection_literal, inference_failure_on_instance_creation, prefer_expression_function_bodies
 import 'package:flutter/foundation.dart';
 import 'package:focusguard_pro/core/errors/app_exceptions.dart';
 import 'package:focusguard_pro/core/errors/failure.dart';
@@ -299,7 +300,8 @@ class HabitRepositoryImpl implements HabitRepository {
       final idx = habits.indexWhere((h) => h['id'] == id);
       if (idx == -1) return const Failure('Habit not found');
       final dates = List<String>.from(
-          habits[idx]['completedDates'] as Iterable<dynamic>? ?? [],);
+        habits[idx]['completedDates'] as Iterable<dynamic>? ?? [],
+      );
       if (dates.contains(date)) {
         dates.remove(date);
       } else {

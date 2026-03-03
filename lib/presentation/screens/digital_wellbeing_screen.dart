@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -243,7 +244,8 @@ class _DigitalWellbeingScreenState extends State<DigitalWellbeingScreen>
                             animation: _breatheCtrl,
                             builder: (context, _) {
                               final mode = _breathingModes[_selectedBreathing];
-                              final total = mode.inhale + mode.hold + mode.exhale;
+                              final total =
+                                  mode.inhale + mode.hold + mode.exhale;
                               final t = _breatheCtrl.value * total;
                               double scale;
                               if (t < mode.inhale) {

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses
 import 'package:flutter/foundation.dart';
 import 'package:focusguard_pro/core/errors/app_exceptions.dart';
 

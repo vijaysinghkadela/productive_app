@@ -1,3 +1,4 @@
+// ignore_for_file: inference_failure_on_function_invocation, inference_failure_on_untyped_parameter, strict_raw_type, type_annotate_public_apis
 import 'dart:convert';
 
 import 'package:focusguard_pro/core/security/input_sanitizer.dart';

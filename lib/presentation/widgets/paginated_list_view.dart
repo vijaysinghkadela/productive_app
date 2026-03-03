@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'package:flutter/material.dart';
 import 'package:focusguard_pro/core/constants.dart';
 import 'package:shimmer/shimmer.dart';

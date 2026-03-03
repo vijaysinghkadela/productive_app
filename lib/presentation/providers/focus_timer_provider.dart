@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ enum TimerPhase { idle, work, breakTime, completed }
 class FocusTimerState {
   const FocusTimerState({
     this.phase = TimerPhase.idle,
+    this.isPaused = false,
     this.remainingSeconds = 0,
     this.totalWorkSeconds = 1500,
     this.totalBreakSeconds = 300,
@@ -25,6 +27,7 @@ class FocusTimerState {
     this.targetPomodoros = 4,
   });
   final TimerPhase phase;
+  final bool isPaused;
   final int remainingSeconds;
   final int totalWorkSeconds;
   final int totalBreakSeconds;
@@ -37,6 +40,7 @@ class FocusTimerState {
 
   FocusTimerState copyWith({
     TimerPhase? phase,
+    bool? isPaused,
     int? remainingSeconds,
     int? totalWorkSeconds,
     int? totalBreakSeconds,
@@ -49,6 +53,7 @@ class FocusTimerState {
   }) =>
       FocusTimerState(
         phase: phase ?? this.phase,
+        isPaused: isPaused ?? this.isPaused,
         remainingSeconds: remainingSeconds ?? this.remainingSeconds,
         totalWorkSeconds: totalWorkSeconds ?? this.totalWorkSeconds,
         totalBreakSeconds: totalBreakSeconds ?? this.totalBreakSeconds,
@@ -110,6 +115,7 @@ class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
     );
     state = state.copyWith(
       phase: TimerPhase.work,
+      isPaused: false,
       remainingSeconds: state.totalWorkSeconds,
       currentSession: session,
     );
@@ -125,6 +131,7 @@ class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
         : state.totalBreakSeconds;
     state = state.copyWith(
       phase: TimerPhase.breakTime,
+      isPaused: false,
       remainingSeconds: breakSeconds,
     );
     _tick();
@@ -162,7 +169,11 @@ class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
       _ds.saveSession(completed);
       _loadTodaySessions();
     }
-    state = state.copyWith(phase: TimerPhase.completed, remainingSeconds: 0);
+    state = state.copyWith(
+      phase: TimerPhase.completed,
+      isPaused: false,
+      remainingSeconds: 0,
+    );
   }
 
   void stopSession() {
@@ -175,16 +186,39 @@ class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
       _ds.saveSession(stopped);
       _loadTodaySessions();
     }
-    state = state.copyWith(phase: TimerPhase.idle, remainingSeconds: 0);
+    state = state.copyWith(
+      phase: TimerPhase.idle,
+      isPaused: false,
+      remainingSeconds: 0,
+    );
   }
 
   void reset() {
     _timer?.cancel();
     state = state.copyWith(
       phase: TimerPhase.idle,
+      isPaused: false,
       remainingSeconds: state.totalWorkSeconds,
       completedPomodoros: 0,
     );
+  }
+
+  /// Pause the active work/break countdown without resetting progress.
+  void pause() {
+    if (state.phase == TimerPhase.idle ||
+        state.phase == TimerPhase.completed ||
+        state.isPaused) {
+      return;
+    }
+    _timer?.cancel();
+    state = state.copyWith(isPaused: true);
+  }
+
+  /// Resume countdown from paused state.
+  void resume() {
+    if (!state.isPaused) return;
+    state = state.copyWith(isPaused: false);
+    _tick();
   }
 
   @override

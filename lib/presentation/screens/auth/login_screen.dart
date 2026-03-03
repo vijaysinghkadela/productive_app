@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';

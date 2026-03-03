@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -118,7 +119,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   // Top bar: skip / back + dots
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12,),
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                     child: Row(
                       children: [
                         // Back button (slides 2-5)

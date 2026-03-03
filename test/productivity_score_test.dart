@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focus_guard/core/productivity_score.dart';
+import 'package:focusguard_pro/core/productivity_score.dart';
 
 void main() {
   group('ProductivityScoreCalculator', () {

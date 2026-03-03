@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use, discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:focusguard_pro/core/constants.dart';

@@ -1,13 +1,14 @@
+// ignore_for_file: inference_failure_on_instance_creation
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focus_guard/core/errors/app_exceptions.dart';
-import 'package:focus_guard/core/errors/failure.dart';
-import 'package:focus_guard/core/extensions/datetime_extensions.dart';
-import 'package:focus_guard/core/extensions/duration_extensions.dart';
-import 'package:focus_guard/core/extensions/string_extensions.dart';
-import 'package:focus_guard/core/services/score_calculator_service.dart';
-import 'package:focus_guard/data/models/feature_models.dart';
-import 'package:focus_guard/data/models/session_model.dart';
-import 'package:focus_guard/data/models/user_model.dart';
+import 'package:focusguard_pro/core/errors/app_exceptions.dart';
+import 'package:focusguard_pro/core/errors/failure.dart';
+import 'package:focusguard_pro/core/extensions/datetime_extensions.dart';
+import 'package:focusguard_pro/core/extensions/duration_extensions.dart';
+import 'package:focusguard_pro/core/extensions/string_extensions.dart';
+import 'package:focusguard_pro/core/services/score_calculator_service.dart';
+import 'package:focusguard_pro/data/models/feature_models.dart';
+import 'package:focusguard_pro/data/models/session_model.dart';
+import 'package:focusguard_pro/data/models/user_model.dart';
 
 void main() {
   // ============================================================
@@ -333,7 +334,7 @@ void main() {
 
   group('AchievementModel', () {
     test('rarity default is common', () {
-      final achievement = AchievementModel(
+      const achievement = AchievementModel(
         id: 'a1',
         name: 'First Session',
         description: 'Complete your first focus session',

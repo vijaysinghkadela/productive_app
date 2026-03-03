@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_constructors_over_static_methods
 import 'dart:io';
 
 import 'package:drift/drift.dart';

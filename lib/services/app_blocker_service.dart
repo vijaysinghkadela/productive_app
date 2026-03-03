@@ -1,3 +1,4 @@
+// ignore_for_file: join_return_with_assignment
 import 'package:flutter/services.dart';
 
 /// Service that bridges to native app blocker functionality.

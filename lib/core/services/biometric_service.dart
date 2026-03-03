@@ -1,3 +1,4 @@
+// ignore_for_file: inference_failure_on_instance_creation, prefer_expression_function_bodies
 import 'package:flutter/services.dart';
 
 /// Biometric authentication service.

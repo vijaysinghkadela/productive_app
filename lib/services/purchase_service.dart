@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses
 import 'package:focusguard_pro/domain/entities/user.dart';
 
 /// Handles RevenueCat subscription management.

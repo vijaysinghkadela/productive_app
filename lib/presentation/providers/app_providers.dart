@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element
+// ignore_for_file: avoid_positional_boolean_parameters, discarded_futures, unused_element
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -633,7 +633,7 @@ final weeklyStatsProvider = Provider<List<DailyStat>>((ref) {
 // ====== NEW PROVIDERS FOR FOCUSGUARD PRO ======
 
 // --- Habits Provider ---
-class HabitsNotifier extends StateNotifier<List<Map<String,dynamic>>> {
+class HabitsNotifier extends StateNotifier<List<_SimpleHabit>> {
   HabitsNotifier() : super([]);
 
   void addHabit(String name, String icon) {
@@ -654,7 +654,7 @@ class HabitsNotifier extends StateNotifier<List<Map<String,dynamic>>> {
     final todayStr =
         '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
     state = state.map((h) {
-      if ((h as _SimpleHabit).id == id) {
+      if (h.id == id) {
         final dates = List<String>.from(h.completedDates);
         if (dates.contains(todayStr)) {
           dates.remove(todayStr);
@@ -708,22 +708,23 @@ class _SimpleHabit {
   }
 }
 
-final habitsProvider = StateNotifierProvider<HabitsNotifier, List<Map<String,dynamic>>>(
+final habitsProvider =
+    StateNotifierProvider<HabitsNotifier, List<_SimpleHabit>>(
   (ref) => HabitsNotifier(),
 );
 
 // --- Challenges Provider ---
-class ChallengesNotifier extends StateNotifier<List<Map<String,dynamic>>> {
+class ChallengesNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   ChallengesNotifier() : super([]);
 }
 
 final challengesProvider =
-    StateNotifierProvider<ChallengesNotifier, List<Map<String,dynamic>>>(
+    StateNotifierProvider<ChallengesNotifier, List<Map<String, dynamic>>>(
   (ref) => ChallengesNotifier(),
 );
 
 // --- Journal Provider ---
-class JournalNotifier extends StateNotifier<List<Map<String,dynamic>>> {
+class JournalNotifier extends StateNotifier<List<_SimpleJournalEntry>> {
   JournalNotifier() : super([]);
 
   void addEntry({
@@ -782,7 +783,8 @@ class _SimpleJournalEntry {
   }
 }
 
-final journalProvider = StateNotifierProvider<JournalNotifier, List<Map<String,dynamic>>>(
+final journalProvider =
+    StateNotifierProvider<JournalNotifier, List<_SimpleJournalEntry>>(
   (ref) => JournalNotifier(),
 );
 

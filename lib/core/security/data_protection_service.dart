@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, library_private_types_in_public_api
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -36,7 +37,9 @@ class DataProtectionService {
     final emailRegex = RegExp(r'([a-zA-Z0-9.\-_]{1})(.*)@(.*)');
     if (emailRegex.hasMatch(input)) {
       return input.replaceAllMapped(
-          emailRegex, (match) => '${match.group(1)}***@${match.group(3)}',);
+        emailRegex,
+        (match) => '${match.group(1)}***@${match.group(3)}',
+      );
     }
 
     // Redact JWT or Bearer tokens

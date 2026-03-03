@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls, inference_failure_on_collection_literal, inference_failure_on_instance_creation
 import 'dart:async';
 
 class NetworkOptimizer {

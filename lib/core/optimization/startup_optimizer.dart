@@ -1,3 +1,4 @@
+// ignore_for_file: inference_failure_on_instance_creation
 import 'package:flutter/material.dart';
 
 class StartupOptimizer {

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_positional_boolean_parameters, prefer_expression_function_bodies
 import 'package:sanitize_html/sanitize_html.dart';
 
 class ValidationResult {

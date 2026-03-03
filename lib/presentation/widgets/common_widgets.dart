@@ -1,3 +1,4 @@
+// ignore_for_file: use_if_null_to_convert_nulls_to_bools
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:focusguard_pro/core/constants.dart';
@@ -51,8 +52,10 @@ class GradientHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: Theme.of(context).textTheme.headlineMedium,),
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                   if (subtitle != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 4),
@@ -119,7 +122,9 @@ class StatCard extends StatelessWidget {
                   if (changeText != null)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4,),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: (isPositiveChange == true
                                 ? AppColors.success

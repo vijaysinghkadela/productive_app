@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -113,7 +114,9 @@ class SettingsScreen extends ConsumerWidget {
 
               // Focus section
               const _SectionHeader(
-                  label: 'Focus', icon: Icons.gps_fixed_rounded,),
+                label: 'Focus',
+                icon: Icons.gps_fixed_rounded,
+              ),
               const SizedBox(height: 10),
               _SettingsGroup(
                 children: [
@@ -148,7 +151,9 @@ class SettingsScreen extends ConsumerWidget {
 
               // Data section
               const _SectionHeader(
-                  label: 'Data & Privacy', icon: Icons.shield_rounded,),
+                label: 'Data & Privacy',
+                icon: Icons.shield_rounded,
+              ),
               const SizedBox(height: 10),
               _SettingsGroup(
                 children: [
@@ -183,7 +188,9 @@ class SettingsScreen extends ConsumerWidget {
 
               // About section
               const _SectionHeader(
-                  label: 'About', icon: Icons.info_outline_rounded,),
+                label: 'About',
+                icon: Icons.info_outline_rounded,
+              ),
               const SizedBox(height: 10),
               _SettingsGroup(
                 children: [
@@ -365,7 +372,9 @@ class _NavRow extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                      fontSize: 13, color: AppColors.textTertiary,),
+                    fontSize: 13,
+                    color: AppColors.textTertiary,
+                  ),
                 ),
               const SizedBox(width: 6),
               Icon(

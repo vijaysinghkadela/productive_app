@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_renaming_method_parameters, deprecated_member_use, library_private_types_in_public_api, prefer_expression_function_bodies
 import 'package:flutter/material.dart';
 
 // Rule 1: Only animate transform and opacity — NEVER animate layout

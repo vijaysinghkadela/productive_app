@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, unawaited_futures
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -177,7 +178,9 @@ class BedtimeScreen extends ConsumerWidget {
                   .map(
                     (app) => Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 8,),
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.alert.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
@@ -188,7 +191,9 @@ class BedtimeScreen extends ConsumerWidget {
                       child: Text(
                         app,
                         style: const TextStyle(
-                            color: AppColors.alert, fontSize: 13,),
+                          color: AppColors.alert,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
                   )

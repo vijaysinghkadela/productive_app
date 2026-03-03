@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, join_return_with_assignment, use_if_null_to_convert_nulls_to_bools
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:timezone/timezone.dart' as tz;

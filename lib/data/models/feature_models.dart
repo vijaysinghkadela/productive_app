@@ -27,12 +27,16 @@ class HabitModel {
         icon: json['icon'] as String? ?? '🎯',
         category: json['category'] as String? ?? 'General',
         frequency: json['frequency'] as String? ?? 'daily',
-        targetDays: List<int>.from(json['targetDays'] as Iterable<dynamic>? ?? [1, 2, 3, 4, 5, 6, 7]),
+        targetDays: List<int>.from(
+          json['targetDays'] as Iterable<dynamic>? ?? [1, 2, 3, 4, 5, 6, 7],
+        ),
         reminderTime: json['reminderTime'] as String?,
         currentStreak: json['currentStreak'] as int? ?? 0,
         longestStreak: json['longestStreak'] as int? ?? 0,
         totalCompletions: json['totalCompletions'] as int? ?? 0,
-        completedDates: List<String>.from(json['completedDates'] as Iterable<dynamic>? ?? []),
+        completedDates: List<String>.from(
+          json['completedDates'] as Iterable<dynamic>? ?? [],
+        ),
         createdAt: DateTime.parse(json['createdAt'] as String),
         isActive: json['isActive'] as bool? ?? true,
         stackedWith: json['stackedWith'] as String?,
@@ -182,7 +186,8 @@ class JournalModel {
         content: json['content'] as String? ?? '',
         mood: json['mood'] as int? ?? 3,
         focusRating: json['focusRating'] as int? ?? 5,
-        gratitude: List<String>.from(json['gratitude'] as Iterable<dynamic>? ?? []),
+        gratitude:
+            List<String>.from(json['gratitude'] as Iterable<dynamic>? ?? []),
         tags: List<String>.from(json['tags'] as Iterable<dynamic>? ?? []),
         isPinned: json['isPinned'] as bool? ?? false,
         productivityScore: json['productivityScore'] as int?,
@@ -327,6 +332,36 @@ class LeaderboardModel {
 }
 
 /// Subscription data model
+enum BillingProvider {
+  revenueCat,
+  stripe,
+  appStore,
+  playStore,
+  unknown;
+
+  /// Parses persisted provider values from API/database payloads.
+  static BillingProvider fromJsonValue(String? value) {
+    final normalized = (value ?? '').trim().toLowerCase();
+    return switch (normalized) {
+      'revenuecat' => BillingProvider.revenueCat,
+      'stripe' => BillingProvider.stripe,
+      'appstore' => BillingProvider.appStore,
+      'playstore' => BillingProvider.playStore,
+      _ => BillingProvider.unknown,
+    };
+  }
+
+  /// Stable JSON value used for persistence.
+  String get jsonValue => switch (this) {
+        BillingProvider.revenueCat => 'revenueCat',
+        BillingProvider.stripe => 'stripe',
+        BillingProvider.appStore => 'appStore',
+        BillingProvider.playStore => 'playStore',
+        BillingProvider.unknown => 'unknown',
+      };
+}
+
+/// Subscription data model
 class SubscriptionModel {
   // appStore, playStore
 
@@ -338,8 +373,42 @@ class SubscriptionModel {
     this.expirationDate,
     this.isTrialActive = false,
     this.willRenew = false,
+    this.paymentProvider = BillingProvider.revenueCat,
     this.store = 'playStore',
+    this.stripeCustomerId,
+    this.stripeSubscriptionId,
+    this.stripePriceId,
+    this.metadata = const <String, String>{},
   });
+
+  /// Builds a Stripe-backed subscription model payload.
+  factory SubscriptionModel.stripe({
+    required String userId,
+    required String tier,
+    required String stripeCustomerId,
+    String? stripeSubscriptionId,
+    String? stripePriceId,
+    DateTime? purchaseDate,
+    DateTime? expirationDate,
+    bool isTrialActive = false,
+    bool willRenew = true,
+    Map<String, String> metadata = const <String, String>{},
+  }) =>
+      SubscriptionModel(
+        userId: userId,
+        tier: tier,
+        productId: stripePriceId,
+        purchaseDate: purchaseDate,
+        expirationDate: expirationDate,
+        isTrialActive: isTrialActive,
+        willRenew: willRenew,
+        paymentProvider: BillingProvider.stripe,
+        store: 'stripe',
+        stripeCustomerId: stripeCustomerId,
+        stripeSubscriptionId: stripeSubscriptionId,
+        stripePriceId: stripePriceId,
+        metadata: metadata,
+      );
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) =>
       SubscriptionModel(
@@ -354,7 +423,16 @@ class SubscriptionModel {
             : null,
         isTrialActive: json['isTrialActive'] as bool? ?? false,
         willRenew: json['willRenew'] as bool? ?? false,
+        paymentProvider: BillingProvider.fromJsonValue(
+          json['paymentProvider'] as String? ?? json['store'] as String?,
+        ),
         store: json['store'] as String? ?? 'playStore',
+        stripeCustomerId: json['stripeCustomerId'] as String?,
+        stripeSubscriptionId: json['stripeSubscriptionId'] as String?,
+        stripePriceId: json['stripePriceId'] as String?,
+        metadata: Map<String, String>.from(
+          json['metadata'] as Map? ?? const <String, String>{},
+        ),
       );
   final String userId;
   final String tier; // free, basic, pro, elite
@@ -363,7 +441,12 @@ class SubscriptionModel {
   final DateTime? expirationDate;
   final bool isTrialActive;
   final bool willRenew;
+  final BillingProvider paymentProvider;
   final String store;
+  final String? stripeCustomerId;
+  final String? stripeSubscriptionId;
+  final String? stripePriceId;
+  final Map<String, String> metadata;
 
   bool get isActive {
     if (tier == 'free') return true;
@@ -373,6 +456,7 @@ class SubscriptionModel {
 
   bool get isPro => tier == 'pro' || tier == 'elite';
   bool get isElite => tier == 'elite';
+  bool get isStripe => paymentProvider == BillingProvider.stripe;
 
   Map<String, dynamic> toJson() => {
         'userId': userId,
@@ -382,7 +466,12 @@ class SubscriptionModel {
         'expirationDate': expirationDate?.toIso8601String(),
         'isTrialActive': isTrialActive,
         'willRenew': willRenew,
+        'paymentProvider': paymentProvider.jsonValue,
         'store': store,
+        'stripeCustomerId': stripeCustomerId,
+        'stripeSubscriptionId': stripeSubscriptionId,
+        'stripePriceId': stripePriceId,
+        'metadata': metadata,
       };
 }
 
@@ -450,9 +539,12 @@ class RewardModel {
         userId: json['userId'] as String,
         totalXp: json['totalXp'] as int? ?? 0,
         level: json['level'] as int? ?? 1,
-        unlockedBadges: List<String>.from(json['unlockedBadges'] as Iterable<dynamic>? ?? []),
-        unlockedThemes:
-            List<String>.from(json['unlockedThemes'] as Iterable<dynamic>? ?? ['default']),
+        unlockedBadges: List<String>.from(
+          json['unlockedBadges'] as Iterable<dynamic>? ?? [],
+        ),
+        unlockedThemes: List<String>.from(
+          json['unlockedThemes'] as Iterable<dynamic>? ?? ['default'],
+        ),
         focusSessionsCompleted: json['focusSessionsCompleted'] as int? ?? 0,
         habitsCompleted: json['habitsCompleted'] as int? ?? 0,
         challengesCompleted: json['challengesCompleted'] as int? ?? 0,
@@ -586,8 +678,10 @@ class FocusModeModel {
         id: json['id'] as String,
         name: json['name'] as String,
         icon: json['icon'] as String? ?? '🎯',
-        blockedApps: List<String>.from(json['blockedApps'] as Iterable<dynamic>? ?? []),
-        allowedApps: List<String>.from(json['allowedApps'] as Iterable<dynamic>? ?? []),
+        blockedApps:
+            List<String>.from(json['blockedApps'] as Iterable<dynamic>? ?? []),
+        allowedApps:
+            List<String>.from(json['allowedApps'] as Iterable<dynamic>? ?? []),
         notificationFilter: json['notificationFilter'] as String? ?? 'none',
         soundProfile: json['soundProfile'] as String?,
         durationMinutes: json['durationMinutes'] as int?,
@@ -655,9 +749,13 @@ class ReportModel {
         habitsCompletedCount: json['habitsCompletedCount'] as int? ?? 0,
         goalsMetCount: json['goalsMetCount'] as int? ?? 0,
         achievementsUnlocked: json['achievementsUnlocked'] as int? ?? 0,
-        appUsageSummary: Map<String, int>.from(json['appUsageSummary'] as Map? ?? {}),
-        insights: List<String>.from(json['insights'] as Iterable<dynamic>? ?? []),
-        recommendations: List<String>.from(json['recommendations'] as Iterable<dynamic>? ?? []),
+        appUsageSummary:
+            Map<String, int>.from(json['appUsageSummary'] as Map? ?? {}),
+        insights:
+            List<String>.from(json['insights'] as Iterable<dynamic>? ?? []),
+        recommendations: List<String>.from(
+          json['recommendations'] as Iterable<dynamic>? ?? [],
+        ),
       );
   final String id;
   final String userId;

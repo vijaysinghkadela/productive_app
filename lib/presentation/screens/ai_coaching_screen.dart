@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -256,7 +257,9 @@ class _AiCoachingScreenState extends State<AiCoachingScreen> {
                         decoration: const InputDecoration(
                           hintText: 'Ask Alex anything...',
                           contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12,),
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                         ),
                         onSubmitted: _sendMessage,
                       ),
@@ -390,7 +393,8 @@ class _TypingIndicator extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Center(
-                  child: Text('🤖', style: TextStyle(fontSize: 14)),),
+                child: Text('🤖', style: TextStyle(fontSize: 14)),
+              ),
             ),
             const SizedBox(width: 8),
             Container(

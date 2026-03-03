@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,8 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focusguard_pro/core/constants.dart';
 import 'package:focusguard_pro/core/theme.dart';
 import 'package:focusguard_pro/core/utils.dart';
-import 'package:focusguard_pro/presentation/providers/app_providers.dart';
+import 'package:focusguard_pro/presentation/providers/focus_timer_provider.dart';
+import 'package:focusguard_pro/presentation/screens/focus/anti_gravity_overlay.dart';
 import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/floating_card.dart';
 import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 import 'package:focusguard_pro/presentation/widgets/particle_field.dart';
 import 'package:go_router/go_router.dart';
@@ -25,13 +28,6 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
   late final AnimationController _ringCtrl;
   late final AnimationController _breatheCtrl;
   int _selectedPreset = 0;
-  bool _isRunning = false;
-  bool _isPaused = false;
-  int _remainingSeconds = 25 * 60;
-  int _totalSeconds = 25 * 60;
-  final int _currentPhase = 1;
-  final int _totalPhases = 4;
-  final bool _isBreakPhase = false;
   String _selectedSound = 'Rain';
 
   @override
@@ -52,354 +48,396 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
     super.dispose();
   }
 
-  void _toggleSession() {
+  void _toggleSession(FocusTimerState timerState) {
     HapticFeedback.mediumImpact();
-    setState(() {
-      if (!_isRunning) {
-        _isRunning = true;
-        _totalSeconds = pomodoroPresets[_selectedPreset].workMinutes * 60;
-        _remainingSeconds = _totalSeconds;
-      } else {
-        _isPaused = !_isPaused;
-      }
-    });
+    final timerNotifier = ref.read(focusTimerProvider.notifier);
+    final phase = timerState.phase;
+
+    if (phase == TimerPhase.idle || phase == TimerPhase.completed) {
+      final preset = pomodoroPresets[_selectedPreset];
+      timerNotifier
+        ..setPreset(preset.workMinutes, preset.breakMinutes)
+        ..setAmbientSound(_selectedSound)
+        ..startWork();
+      return;
+    }
+
+    if (timerState.isPaused) {
+      timerNotifier.resume();
+      return;
+    }
+
+    timerNotifier.pause();
   }
 
   void _stopSession() {
     HapticFeedback.heavyImpact();
-    setState(() {
-      _isRunning = false;
-      _isPaused = false;
-      _remainingSeconds = pomodoroPresets[_selectedPreset].workMinutes * 60;
-      _totalSeconds = _remainingSeconds;
-    });
+    final timerNotifier = ref.read(focusTimerProvider.notifier);
+    timerNotifier
+      ..stopSession()
+      ..reset();
   }
-
-  double get _progress => _isRunning
-      ? 1.0 - (_remainingSeconds / _totalSeconds).clamp(0.0, 1.0)
-      : 0.0;
 
   @override
   Widget build(BuildContext context) {
-    final _ = ref.watch(focusTimerProvider);
+    final timerState = ref.watch(focusTimerProvider);
+    final isSessionRunning = timerState.phase == TimerPhase.work ||
+        timerState.phase == TimerPhase.breakTime;
+    final isBreakPhase = timerState.phase == TimerPhase.breakTime;
+
+    final displayedRemainingSeconds = isSessionRunning
+        ? timerState.remainingSeconds
+        : timerState.totalWorkSeconds;
+    final breakPhaseTotalSeconds = timerState.isLongBreak
+        ? timerState.totalBreakSeconds * 3
+        : timerState.totalBreakSeconds;
+    final activePhaseTotalSeconds =
+        isBreakPhase ? breakPhaseTotalSeconds : timerState.totalWorkSeconds;
+    final safePhaseTotalSeconds =
+        activePhaseTotalSeconds <= 0 ? 1 : activePhaseTotalSeconds;
+    final safeRemainingSeconds = displayedRemainingSeconds < 0
+        ? 0
+        : displayedRemainingSeconds > safePhaseTotalSeconds
+            ? safePhaseTotalSeconds
+            : displayedRemainingSeconds;
+    final progress = isSessionRunning
+        ? 1.0 - (safeRemainingSeconds / safePhaseTotalSeconds).clamp(0.0, 1.0)
+        : 0.0;
+
+    final currentPhase = timerState.completedPomodoros + 1;
+    final totalPhases = timerState.targetPomodoros;
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Stack(
-        children: [
-          // Calming particle background
-          Positioned.fill(
-            child: ParticleField(
-              particleCount: 18,
-              maxOpacity: 0.04,
-              tintColor: _isBreakPhase ? AppColors.success : AppColors.primary,
+      body: AntiGravityOverlay(
+        child: Stack(
+          children: [
+            // Calming particle background
+            Positioned.fill(
+              child: ParticleField(
+                particleCount: 18,
+                maxOpacity: 0.04,
+                tintColor: isBreakPhase ? AppColors.success : AppColors.primary,
+              ),
             ),
-          ),
-
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  // Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppIconButton(
-                        icon: Icons.arrow_back_rounded,
-                        onPressed: () =>
-                            context.canPop() ? context.pop() : null,
-                      ),
-                      Text(
-                        'Focus Session',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      const SizedBox(width: 44),
-                    ],
-                  ).animate().fadeIn(duration: 300.ms),
-
-                  const SizedBox(height: 32),
-
-                  // ──── MAIN TIMER ────
-                  SizedBox(
-                    width: 280,
-                    height: 280,
-                    child: Stack(
-                      alignment: Alignment.center,
+            SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    // Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Outer decorative ring (slow rotation)
-                        if (_isRunning)
-                          AnimatedBuilder(
-                            animation: _ringCtrl,
-                            builder: (context, _) => Transform.rotate(
-                              angle: _ringCtrl.value * 2 * pi * 0.02,
-                              child: CustomPaint(
-                                size: const Size(280, 280),
-                                painter: _DecoRingPainter(),
-                              ),
-                            ),
-                          ),
-
-                        // Main progress ring
-                        CustomPaint(
-                          size: const Size(260, 260),
-                          painter: _TimerRingPainter(
-                            progress: _progress,
-                            isBreak: _isBreakPhase,
-                          ),
+                        AppIconButton(
+                          icon: Icons.arrow_back_rounded,
+                          onPressed: () =>
+                              context.canPop() ? context.pop() : null,
                         ),
+                        Text(
+                          'Focus Session',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        const SizedBox(width: 44),
+                      ],
+                    ).animate().fadeIn(duration: 300.ms),
 
-                        // Breathing circle overlay (break phase)
-                        if (_isBreakPhase && _isRunning)
-                          AnimatedBuilder(
-                            animation: _breatheCtrl,
-                            builder: (context, _) {
-                              final scale =
-                                  0.7 + 0.3 * sin(_breatheCtrl.value * 2 * pi);
-                              return Transform.scale(
-                                scale: scale,
-                                child: Container(
-                                  width: 160,
-                                  height: 160,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.success
-                                        .withValues(alpha: 0.06),
-                                    border: Border.all(
-                                      color: AppColors.success
-                                          .withValues(alpha: 0.15),
-                                    ),
+                    const SizedBox(height: 32),
+
+                    // ──── MAIN TIMER ────
+                    FloatingCard(
+                      child: SizedBox(
+                        width: 280,
+                        height: 280,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Outer decorative ring (slow rotation)
+                            if (isSessionRunning)
+                              AnimatedBuilder(
+                                animation: _ringCtrl,
+                                builder: (context, _) => Transform.rotate(
+                                  angle: _ringCtrl.value * 2 * pi * 0.02,
+                                  child: CustomPaint(
+                                    size: const Size(280, 280),
+                                    painter: _DecoRingPainter(),
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-
-                        // Center text
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              formatTimerDisplay(_remainingSeconds),
-                              style: AppTheme.mono(56, FontWeight.w700),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              _isRunning
-                                  ? '${_isBreakPhase ? 'BREAK' : 'DEEP WORK'} · PHASE $_currentPhase OF $_totalPhases'
-                                  : 'READY',
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textTertiary,
-                                letterSpacing: 2,
                               ),
+
+                            // Main progress ring
+                            CustomPaint(
+                              size: const Size(260, 260),
+                              painter: _TimerRingPainter(
+                                progress: progress,
+                                isBreak: isBreakPhase,
+                              ),
+                            ),
+
+                            // Breathing circle overlay (break phase)
+                            if (isBreakPhase && isSessionRunning)
+                              AnimatedBuilder(
+                                animation: _breatheCtrl,
+                                builder: (context, _) {
+                                  final scale = 0.7 +
+                                      0.3 * sin(_breatheCtrl.value * 2 * pi);
+                                  return Transform.scale(
+                                    scale: scale,
+                                    child: Container(
+                                      width: 160,
+                                      height: 160,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.success
+                                            .withValues(alpha: 0.06),
+                                        border: Border.all(
+                                          color: AppColors.success
+                                              .withValues(alpha: 0.15),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+
+                            // Center text
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  formatTimerDisplay(safeRemainingSeconds),
+                                  style: AppTheme.mono(56, FontWeight.w700),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  isSessionRunning
+                                      ? '${isBreakPhase ? 'BREAK' : 'DEEP WORK'} · PHASE $currentPhase OF $totalPhases'
+                                      : 'READY',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textTertiary,
+                                    letterSpacing: 2,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ).animate(delay: 200.ms).fadeIn(duration: 600.ms).scale(
-                        begin: const Offset(0.9, 0.9),
-                        end: const Offset(1, 1),
-                        duration: 600.ms,
-                        curve: Curves.easeOut,
                       ),
+                    ).animate(delay: 200.ms).fadeIn(duration: 600.ms).scale(
+                          begin: const Offset(0.9, 0.9),
+                          end: const Offset(1, 1),
+                          duration: 600.ms,
+                          curve: Curves.easeOut,
+                        ),
 
-                  const SizedBox(height: 36),
+                    const SizedBox(height: 36),
 
-                  // ──── CONTROLS ────
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (_isRunning)
-                        AppIconButton(
-                          icon: Icons.stop_rounded,
-                          color: AppColors.alert,
-                          size: 48,
-                          onPressed: _stopSession,
-                        ).animate().fadeIn(duration: 200.ms),
+                    // ──── CONTROLS ────
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (isSessionRunning)
+                          AppIconButton(
+                            icon: Icons.stop_rounded,
+                            color: AppColors.alert,
+                            size: 48,
+                            onPressed: _stopSession,
+                          ).animate().fadeIn(duration: 200.ms),
 
-                      if (_isRunning) const SizedBox(width: 24),
+                        if (isSessionRunning) const SizedBox(width: 24),
 
-                      // Play/Pause
-                      GestureDetector(
-                        onTap: _toggleSession,
-                        child: Container(
-                          width: 72,
-                          height: 72,
-                          decoration: BoxDecoration(
-                            gradient: _isBreakPhase
-                                ? AppGradients.mint
-                                : AppGradients.hero,
-                            shape: BoxShape.circle,
-                            boxShadow: AppShadows.elevatedGlow(
-                              _isBreakPhase
-                                  ? AppColors.success
-                                  : AppColors.primary,
+                        // Play/Pause
+                        GestureDetector(
+                          onTap: () => _toggleSession(timerState),
+                          child: Container(
+                            width: 72,
+                            height: 72,
+                            decoration: BoxDecoration(
+                              gradient: isBreakPhase
+                                  ? AppGradients.mint
+                                  : AppGradients.hero,
+                              shape: BoxShape.circle,
+                              boxShadow: AppShadows.elevatedGlow(
+                                isBreakPhase
+                                    ? AppColors.success
+                                    : AppColors.primary,
+                              ),
+                            ),
+                            child: Icon(
+                              isSessionRunning && !timerState.isPaused
+                                  ? Icons.pause_rounded
+                                  : Icons.play_arrow_rounded,
+                              size: 36,
+                              color: Colors.white,
                             ),
                           ),
-                          child: Icon(
-                            _isRunning && !_isPaused
-                                ? Icons.pause_rounded
-                                : Icons.play_arrow_rounded,
-                            size: 36,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ).animate(delay: 300.ms).scale(
-                            begin: const Offset(0.8, 0.8),
-                            duration: 400.ms,
-                            curve: Curves.elasticOut,
-                          ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // ──── SESSION TYPE SELECTOR (when not running) ────
-                  if (!_isRunning) ...[
-                    Text(
-                      'Session Type',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(letterSpacing: 2),
+                        ).animate(delay: 300.ms).scale(
+                              begin: const Offset(0.8, 0.8),
+                              duration: 400.ms,
+                              curve: Curves.elasticOut,
+                            ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 80,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemCount: pomodoroPresets.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 10),
-                        itemBuilder: (context, i) {
-                          final p = pomodoroPresets[i];
-                          final isSelected = i == _selectedPreset;
-                          return GestureDetector(
-                            onTap: () {
-                              HapticFeedback.selectionClick();
-                              setState(() {
-                                _selectedPreset = i;
-                                _totalSeconds = p.workMinutes * 60;
-                                _remainingSeconds = _totalSeconds;
-                              });
-                            },
-                            child: AnimatedContainer(
-                              duration: Anim.normal,
-                              width: 100,
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                gradient: isSelected ? AppGradients.hero : null,
-                                color:
-                                    isSelected ? null : AppColors.surfaceLight,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
+
+                    const SizedBox(height: 32),
+
+                    // ──── SESSION TYPE SELECTOR (when not running) ────
+                    if (!isSessionRunning) ...[
+                      Text(
+                        'Session Type',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(letterSpacing: 2),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 80,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemCount: pomodoroPresets.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 10),
+                          itemBuilder: (context, i) {
+                            final preset = pomodoroPresets[i];
+                            final isSelected = i == _selectedPreset;
+                            return GestureDetector(
+                              onTap: () {
+                                HapticFeedback.selectionClick();
+                                setState(() {
+                                  _selectedPreset = i;
+                                });
+                                ref.read(focusTimerProvider.notifier).setPreset(
+                                      preset.workMinutes,
+                                      preset.breakMinutes,
+                                    );
+                              },
+                              child: AnimatedContainer(
+                                duration: Anim.normal,
+                                width: 100,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  gradient:
+                                      isSelected ? AppGradients.hero : null,
                                   color: isSelected
-                                      ? AppColors.primary.withValues(alpha: 0.5)
-                                      : AppColors.cardBorder,
+                                      ? null
+                                      : AppColors.surfaceLight,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? AppColors.primary
+                                            .withValues(alpha: 0.5)
+                                        : AppColors.cardBorder,
+                                  ),
+                                  boxShadow: isSelected
+                                      ? AppShadows.glow(
+                                          AppColors.primary,
+                                          blur: 12,
+                                        )
+                                      : null,
                                 ),
-                                boxShadow: isSelected
-                                    ? AppShadows.glow(
-                                        AppColors.primary,
-                                        blur: 12,
-                                      )
-                                    : null,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      preset.emoji,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      preset.label,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        color: isSelected
+                                            ? Colors.white
+                                            : AppColors.textSecondary,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${preset.workMinutes}m',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: isSelected
+                                            ? Colors.white70
+                                            : AppColors.textTertiary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
+                            );
+                          },
+                        ),
+                      ).animate(delay: 400.ms).fadeIn(duration: 400.ms),
+                    ],
+
+                    const SizedBox(height: 20),
+
+                    // ──── AMBIENT SOUND ────
+                    FloatingCard(
+                      child: GlassCard(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color:
+                                    AppColors.secondary.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(
+                                Icons.music_note_rounded,
+                                color: AppColors.secondary,
+                                size: 22,
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    p.emoji,
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    p.label,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: isSelected
-                                          ? Colors.white
-                                          : AppColors.textSecondary,
-                                    ),
+                                    'Ambient Sound',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                   Text(
-                                    '${p.workMinutes}m',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: isSelected
-                                          ? Colors.white70
-                                          : AppColors.textTertiary,
-                                    ),
+                                    _selectedSound,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               ),
                             ),
-                          );
-                        },
+                            AppIconButton(
+                              icon: Icons.tune_rounded,
+                              color: AppColors.secondary,
+                              onPressed: () => _showSoundPicker(context),
+                            ),
+                          ],
+                        ),
                       ),
-                    ).animate(delay: 400.ms).fadeIn(duration: 400.ms),
+                    ).animate(delay: 500.ms).fadeIn(duration: 400.ms),
+
+                    const SizedBox(height: 100), // Bottom padding for nav
                   ],
-
-                  const SizedBox(height: 20),
-
-                  // ──── AMBIENT SOUND ────
-                  GlassCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: AppColors.secondary.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(
-                            Icons.music_note_rounded,
-                            color: AppColors.secondary,
-                            size: 22,
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Ambient Sound',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              Text(
-                                _selectedSound,
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                        AppIconButton(
-                          icon: Icons.tune_rounded,
-                          color: AppColors.secondary,
-                          onPressed: () => _showSoundPicker(context),
-                        ),
-                      ],
-                    ),
-                  ).animate(delay: 500.ms).fadeIn(duration: 400.ms),
-
-                  const SizedBox(height: 100), // Bottom padding for nav
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   void _showSoundPicker(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -440,12 +478,19 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                 itemCount: ambientSounds.length,
                 itemBuilder: (context, i) {
                   final sound = ambientSounds[i];
-                  final isSelected = sound['name'] == _selectedSound;
+                  final soundName = sound['name'] ?? 'Sound';
+                  final soundIcon = sound['icon'] ?? '🎵';
+                  final isSelected = soundName == _selectedSound;
                   return GestureDetector(
                     onTap: () {
                       HapticFeedback.selectionClick();
-                      setState(() => _selectedSound = sound['name']!);
-                      Navigator.pop(context);
+                      setState(() => _selectedSound = soundName);
+                      ref
+                          .read(focusTimerProvider.notifier)
+                          .setAmbientSound(_selectedSound);
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      }
                     },
                     child: DecoratedBox(
                       decoration: BoxDecoration(
@@ -462,12 +507,12 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            sound['icon']!,
+                            soundIcon,
                             style: const TextStyle(fontSize: 24),
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            sound['name']!,
+                            soundName,
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w600,

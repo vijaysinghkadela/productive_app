@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, inference_failure_on_instance_creation, inference_failure_on_untyped_parameter, prefer_expression_function_bodies
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

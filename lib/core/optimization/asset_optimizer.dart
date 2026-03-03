@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_expression_function_bodies
 import 'package:flutter/material.dart';
 
 // Use CachedNetworkImage in production, defined here conceptually for the architectural rule

@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focus_guard/domain/entities/goal.dart';
+import 'package:focusguard_pro/domain/entities/goal.dart';
 
 void main() {
   group('AppGoal', () {
     test('creates AppGoal with required fields', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -17,7 +17,7 @@ void main() {
     });
 
     test('calculates minutesOver correctly when over limit', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -28,7 +28,7 @@ void main() {
     });
 
     test('minutesOver is 0 when under limit', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -39,7 +39,7 @@ void main() {
     });
 
     test('minutesOver is 0 when exactly at limit', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -50,7 +50,7 @@ void main() {
     });
 
     test('progress calculates correctly', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 60,
@@ -61,7 +61,7 @@ void main() {
     });
 
     test('progress is capped at 2.0 when way over limit', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -72,7 +72,7 @@ void main() {
     });
 
     test('isOverLimit is true when exceeded', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -83,7 +83,7 @@ void main() {
     });
 
     test('isOverLimit is false when under or at limit', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -94,7 +94,7 @@ void main() {
     });
 
     test('isGoalMet is true when at or under limit', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -105,7 +105,7 @@ void main() {
     });
 
     test('minutesRemaining calculates correctly', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 60,
@@ -116,7 +116,7 @@ void main() {
     });
 
     test('minutesRemaining is 0 when over limit', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -127,7 +127,7 @@ void main() {
     });
 
     test('copyWith creates a modified copy', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 30,
@@ -142,7 +142,7 @@ void main() {
     });
 
     test('toMap and fromMap roundtrip preserves data', () {
-      final goal = AppGoal(
+      const goal = AppGoal(
         packageName: 'com.instagram.android',
         appName: 'Instagram',
         dailyLimitMinutes: 45,

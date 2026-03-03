@@ -1,19 +1,27 @@
+// ignore_for_file: discarded_futures
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/core/services/stripe_service.dart';
+import 'package:focusguard_pro/data/models/feature_models.dart';
+import 'package:focusguard_pro/domain/entities/user.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart';
 import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
 import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 import 'package:focusguard_pro/presentation/widgets/particle_field.dart';
 
-class SubscriptionScreen extends StatefulWidget {
+class SubscriptionScreen extends ConsumerStatefulWidget {
   const SubscriptionScreen({super.key});
 
   @override
-  State<SubscriptionScreen> createState() => _SubscriptionScreenState();
+  ConsumerState<SubscriptionScreen> createState() => _SubscriptionScreenState();
 }
 
-class _SubscriptionScreenState extends State<SubscriptionScreen> {
+class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   bool _isYearly = true;
   int _selectedPlan = 1; // Pro default
 
@@ -35,7 +43,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       alignment: Alignment.topRight,
                       child: AppIconButton(
                         icon: Icons.close_rounded,
-                        onPressed: () => Navigator.maybePop(context),
+                        onPressed: () {
+                          unawaited(Navigator.maybePop(context));
+                        },
                       ),
                     ),
 
@@ -208,7 +218,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     PrimaryButton(
                       label: 'Start 7-Day Free Trial',
                       icon: Icons.rocket_launch_rounded,
-                      onPressed: () {},
+                      onPressed: _startStripeCheckout,
                     ).animate(delay: 700.ms).fadeIn(duration: 400.ms),
 
                     const SizedBox(height: 8),
@@ -256,6 +266,78 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           ],
         ),
       );
+
+  Future<void> _startStripeCheckout() async {
+    try {
+      final stripeService = ref.read(stripeServiceProvider);
+
+      // Replace with secure runtime config before production release.
+      const stripeKey = 'pk_test_placeholder';
+      await stripeService.initStripe(stripeKey);
+
+      // Maps to _selectedPlan (0: Basic, 1: Pro, 2: Elite)
+      final planIds = ['basic', 'pro', 'elite'];
+      final tierId = planIds[_selectedPlan];
+
+      final checkoutResult =
+          await stripeService.presentSubscriptionSheet(tierId);
+      if (checkoutResult.success && mounted) {
+        final currentUserId = ref.read(authProvider).user?.uid ?? 'local_user';
+        final stripeCustomerId =
+            checkoutResult.customerId ?? 'unknown_customer';
+
+        final stripeSubscription = SubscriptionModel.stripe(
+          userId: currentUserId,
+          tier: tierId,
+          stripeCustomerId: stripeCustomerId,
+          stripeSubscriptionId: checkoutResult.subscriptionId,
+          stripePriceId: checkoutResult.priceId,
+          purchaseDate: DateTime.now(),
+          isTrialActive: true,
+          willRenew: true,
+          metadata: <String, String>{
+            'currencyCode': checkoutResult.currencyCode,
+            'billingCycle': _isYearly ? 'yearly' : 'monthly',
+            'checkoutProvider': 'stripe',
+          },
+        );
+
+        ref.read(authProvider.notifier).updateTier(_tierFromId(tierId));
+
+        debugPrint(
+          'Stripe subscription payload: ${stripeSubscription.toJson()}',
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Subscription successful! Welcome aboard.'),
+          ),
+        );
+        unawaited(Navigator.maybePop(context));
+      } else if (mounted) {
+        final message = checkoutResult.message ?? 'Checkout cancelled.';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      }
+    } on Exception catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Checkout failed: $error'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  SubscriptionTier _tierFromId(String tierId) => switch (tierId) {
+        'basic' => SubscriptionTier.basic,
+        'pro' => SubscriptionTier.pro,
+        'elite' => SubscriptionTier.elite,
+        _ => SubscriptionTier.free,
+      };
 }
 
 class _TogglePill extends StatelessWidget {

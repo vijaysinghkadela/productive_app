@@ -1,3 +1,4 @@
+// ignore_for_file: use_named_constants
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';

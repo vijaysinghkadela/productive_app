@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_expression_function_bodies
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreOptimizer {
@@ -61,7 +62,7 @@ class FirestoreCostOptimizer {
   static Future<void> flushBatchQueue(List<Map<String, dynamic>> ops) async {
     final batch = FirebaseFirestore.instance.batch();
     for (final op in ops) {
-      final ref = FirebaseFirestore.instance.doc(op['path']);
+      final ref = FirebaseFirestore.instance.doc(op['path'] as String);
       batch.set(ref, op['data'], SetOptions(merge: true));
     }
     await batch.commit();

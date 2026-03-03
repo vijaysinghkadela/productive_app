@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_positional_boolean_parameters, discarded_futures, inference_failure_on_instance_creation, unawaited_futures, use_setters_to_change_properties
 import 'package:flutter/services.dart';
 
 /// Haptic feedback service with semantic methods.

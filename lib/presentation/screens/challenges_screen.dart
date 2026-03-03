@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:focusguard_pro/core/constants.dart';
@@ -276,8 +277,11 @@ class _ChallengeCard extends StatelessWidget {
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.check_rounded,
-                        color: AppColors.success, size: 16,),
+                    Icon(
+                      Icons.check_rounded,
+                      color: AppColors.success,
+                      size: 16,
+                    ),
                     SizedBox(width: 4),
                     Text(
                       'Joined',

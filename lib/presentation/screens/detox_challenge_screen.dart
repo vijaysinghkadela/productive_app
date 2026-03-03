@@ -192,13 +192,18 @@ class DetoxChallengeScreen extends StatelessWidget {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    const Icon(Icons.access_time,
-                        size: 12, color: AppColors.textTertiary,),
+                    const Icon(
+                      Icons.access_time,
+                      size: 12,
+                      color: AppColors.textTertiary,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       d['time']!,
                       style: const TextStyle(
-                          color: AppColors.textTertiary, fontSize: 11,),
+                        color: AppColors.textTertiary,
+                        fontSize: 11,
+                      ),
                     ),
                   ],
                 ),

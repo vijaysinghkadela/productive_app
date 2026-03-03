@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type
 import 'package:flutter/material.dart';
 import 'package:focusguard_pro/presentation/screens/accountability_screen.dart';
 import 'package:focusguard_pro/presentation/screens/achievements_screen.dart';

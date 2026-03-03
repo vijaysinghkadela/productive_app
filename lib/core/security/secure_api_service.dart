@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
@@ -38,7 +39,8 @@ class SecureApiService {
           final nonce = const Uuid().v4();
           final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
 
-          final bodyString = options.data != null ? jsonEncode(options.data) : '';
+          final bodyString =
+              options.data != null ? jsonEncode(options.data) : '';
 
           final signature = generateRequestSignature(
             options.path,

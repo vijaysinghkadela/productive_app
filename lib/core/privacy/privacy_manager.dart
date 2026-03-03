@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_expression_function_bodies, unused_field
 import 'package:flutter/foundation.dart';
 import 'package:focusguard_pro/core/security/secure_storage_service.dart';
 

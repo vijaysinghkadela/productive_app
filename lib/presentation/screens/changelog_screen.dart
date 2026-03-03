@@ -19,10 +19,16 @@ class ChangelogScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           children: [
             _release('2.0.0', 'Mar 2026', true, [
-              _f('🧠', 'AI Coaching',
-                  'Chat with Alex, your AI productivity coach',),
-              _f('📝', 'Habits',
-                  'Track daily habits with streaks and templates',),
+              _f(
+                '🧠',
+                'AI Coaching',
+                'Chat with Alex, your AI productivity coach',
+              ),
+              _f(
+                '📝',
+                'Habits',
+                'Track daily habits with streaks and templates',
+              ),
               _f('⚔️', 'Challenges', 'Join community challenges and compete'),
               _f('📊', 'Leaderboard', 'See how you rank globally'),
               _f('🎵', 'Focus Sounds', 'Mix ambient sounds and binaural beats'),
@@ -85,7 +91,9 @@ class ChangelogScreen extends StatelessWidget {
                 Text(
                   date,
                   style: const TextStyle(
-                      color: AppColors.textTertiary, fontSize: 13,),
+                    color: AppColors.textTertiary,
+                    fontSize: 13,
+                  ),
                 ),
                 const Spacer(),
                 if (isLatest)

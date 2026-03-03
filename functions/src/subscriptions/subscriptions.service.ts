@@ -1,4 +1,5 @@
 import * as functions from 'firebase-functions';
+import Stripe from 'stripe';
 import * as crypto from 'crypto';
 import { Timestamp } from 'firebase-admin/firestore';
 import { getFirestore, getAuth, getSecret, REGION } from '../shared/config/firebase.config';
@@ -260,4 +261,63 @@ export const checkEntitlements = functions.region(REGION).https.onCall(async (da
     reason: hasAccess ? 'Feature is available' : `Requires ${allowedTiers[0]} or higher`,
     upgradeRequired: !hasAccess,
   };
+});
+
+// ─── Stripe Setup Intent (Callable) ───
+export const createStripeSubscription = functions
+  .region(REGION)
+  .runWith({ secrets: ['stripe-secret-key'] })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
+    
+    const uid = context.auth.uid;
+    const email = context.auth.token.email || '';
+    const db = getFirestore();
+    const { tierId } = data;
+
+    if (!tierId) {
+      throw new functions.https.HttpsError('invalid-argument', 'tierId is required');
+    }
+
+    try {
+      const stripeSecret = await getSecret('stripe-secret-key');
+      // Initialize Stripe
+      const stripe = new Stripe(stripeSecret, { apiVersion: '2023-10-16' });
+
+      // 1. Fetch or create Stripe Customer
+      const userRef = db.collection(Collections.USERS).doc(uid);
+      const userSnap = await userRef.get();
+      let customerId = userSnap.data()?.stripeCustomerId as string | undefined;
+
+      if (!customerId) {
+        const customer = await stripe.customers.create({ 
+          email: email, 
+          metadata: { firebaseUID: uid } 
+        });
+        customerId = customer.id;
+        await userRef.update({ stripeCustomerId: customerId });
+      }
+
+      // 2. Create Ephemeral Key
+      const ephemeralKey = await stripe.ephemeralKeys.create(
+        { customer: customerId },
+        { apiVersion: '2023-10-16' }
+      );
+
+      // 3. Create Setup Intent to collect payment method for future off-session subscriptions
+      const setupIntent = await stripe.setupIntents.create({
+        customer: customerId,
+        usage: 'off_session',
+        metadata: { firebaseUID: uid, tierId: tierId }
+      });
+
+      return {
+        clientSecret: setupIntent.client_secret,
+        ephemeralKey: ephemeralKey.secret,
+        customer: customerId,
+      };
+    } catch (error) {
+      console.error('Error creating Stripe SetupIntent:', error);
+      throw new functions.https.HttpsError('internal', 'Unable to create payment session');
+    }
 });

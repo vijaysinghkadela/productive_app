@@ -96,7 +96,12 @@ class ScoreResult {
 }
 
 class ScoreCalculator {
-  ScoreCalculator();
+  ScoreCalculator({
+    required this.goalRepository,
+    required this.habitRepository,
+  });
+  final GoalRepository goalRepository;
+  final HabitRepository habitRepository;
 
   Future<ScoreResult> calculate(
     DailyStats stats, {

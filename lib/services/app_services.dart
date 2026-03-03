@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, strict_raw_type
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -171,10 +172,7 @@ class UsageTrackerService {
         'start': start.millisecondsSinceEpoch,
         'end': end.millisecondsSinceEpoch,
       });
-      return result
-              ?.map(Map<String, dynamic>.from)
-              .toList() ??
-          [];
+      return result?.map(Map<String, dynamic>.from).toList() ?? [];
     } on MissingPluginException {
       return []; // Demo
     }

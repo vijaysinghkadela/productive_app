@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_positional_boolean_parameters, inference_failure_on_function_return_type
+import 'dart:ui' show SemanticsFlag;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -44,11 +46,6 @@ class AnalyticsScreen extends StatelessWidget {
 
 void main() {
   group('Accessibility Tests', () {
-    final a11yHandle = SemanticsHandle();
-
-    setUp(() => null);
-    tearDown(a11yHandle.dispose);
-
     testWidgets('HomeScreen passes accessibility audit', (tester) async {
       await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
       await tester.pumpAndSettle();

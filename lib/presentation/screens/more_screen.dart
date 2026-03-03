@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:focusguard_pro/core/constants.dart';
@@ -121,8 +122,13 @@ class MoreScreen extends StatelessWidget {
                   'Configure widget',
                   '/widget-config',
                 ),
-                _row(context, '🎁', 'Refer & Earn', 'Invite friends',
-                    '/referral',),
+                _row(
+                  context,
+                  '🎁',
+                  'Refer & Earn',
+                  'Invite friends',
+                  '/referral',
+                ),
                 const SizedBox(height: 16),
                 const Text(
                   'Info',

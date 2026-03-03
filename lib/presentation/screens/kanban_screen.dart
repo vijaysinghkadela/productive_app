@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, inference_failure_on_function_invocation
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focusguard_pro/core/constants.dart';

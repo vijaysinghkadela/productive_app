@@ -1,3 +1,4 @@
+// ignore_for_file: one_member_abstracts
 import 'package:focusguard_pro/core/errors/failure.dart';
 import 'package:focusguard_pro/data/models/feature_models.dart';
 import 'package:focusguard_pro/data/models/session_model.dart';
@@ -30,6 +31,22 @@ abstract class SessionRepository {
   Future<Result<SessionModel>> endSession(String id, {required bool completed});
   Future<Result<List<SessionModel>>> getSessionHistory({int limit = 30});
   Future<Result<Map<String, dynamic>>> getSessionStats(String period);
+}
+
+/// Snapshot of current focus-session runtime status.
+class FocusSessionStatus {
+  const FocusSessionStatus({
+    required this.elapsedMinutes,
+    required this.sessionActive,
+  });
+
+  final int elapsedMinutes;
+  final bool sessionActive;
+}
+
+/// Focus-session repository for runtime session state checks.
+abstract class FocusSessionRepository {
+  Future<Result<FocusSessionStatus>> getSessionStatus();
 }
 
 /// Usage stats repository

@@ -224,8 +224,11 @@ class ReferralScreen extends StatelessWidget {
             if (reached)
               Icon(Icons.check_circle, color: color, size: 24)
             else
-              const Icon(Icons.lock_outline,
-                  color: AppColors.textTertiary, size: 20,),
+              const Icon(
+                Icons.lock_outline,
+                color: AppColors.textTertiary,
+                size: 20,
+              ),
           ],
         ),
       ).animate().fadeIn(delay: 200.ms, duration: 300.ms);

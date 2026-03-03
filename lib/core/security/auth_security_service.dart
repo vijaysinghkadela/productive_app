@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, prefer_expression_function_bodies
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';

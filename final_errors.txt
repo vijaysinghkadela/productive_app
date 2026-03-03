@@ -1,0 +1,11 @@
+  error - lib/core/optimization/provider_optimizer.dart:8:42 - Expected a type name. - expected_type_name
+  error - lib/core/optimization/provider_optimizer.dart:35:5 - The argument type 'Stream<dynamic> Function(dynamic)' can't be assigned to the parameter type 'dynamic Function()'.  - argument_type_not_assignable
+  error - lib/core/optimization/provider_optimizer.dart:39:5 - The argument type 'Stream<dynamic> Function(dynamic)' can't be assigned to the parameter type 'dynamic Function()'.  - argument_type_not_assignable
+  error - lib/core/optimization/provider_optimizer.dart:44:5 - The argument type 'Stream<dynamic> Function(dynamic)' can't be assigned to the parameter type 'dynamic Function()'.  - argument_type_not_assignable
+  error - lib/core/optimization/provider_optimizer.dart:49:62 - The argument type 'Null Function(Object?, dynamic)' can't be assigned to the parameter type 'dynamic Function(InvalidType)'.  - argument_type_not_assignable
+  error - lib/core/optimization/provider_optimizer.dart:65:5 - The argument type '_HomeScreenData Function(dynamic)' can't be assigned to the parameter type 'dynamic Function()'.  - argument_type_not_assignable
+  error - test/widget/screens/home_screen_test.dart:105:51 - The constructor being called isn't a const constructor. Try removing 'const' from the constructor invocation. - const_with_non_const
+  error - test/widget/screens/home_screen_test.dart:120:42 - The constructor being called isn't a const constructor. Try removing 'const' from the constructor invocation. - const_with_non_const
+  error - test/widget/screens/home_screen_test.dart:121:48 - The constructor being called isn't a const constructor. Try removing 'const' from the constructor invocation. - const_with_non_const
+warning - lib/core/fixes/firebase_fixes.dart:19:21 - The type of error can't be inferred; a type must be explicitly provided. Try specifying the type of the parameter. - inference_failure_on_untyped_parameter
+warning - lib/core/fixes/lifecycle_fixes.dart:42:29 - The type of error can't be inferred; a type must be explicitly provided. Try specifying the type of the parameter. - inference_failure_on_untyped_parameter

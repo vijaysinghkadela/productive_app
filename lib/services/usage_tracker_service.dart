@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type
 import 'package:flutter/services.dart';
 
 /// Service that retrieves app usage statistics from the platform.

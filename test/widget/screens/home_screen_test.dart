@@ -1,3 +1,4 @@
+// ignore_for_file: inference_failure_on_instance_creation, inference_failure_on_untyped_parameter, type_annotate_public_apis
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,24 +15,26 @@ class ProviderScope extends StatelessWidget {
   Widget build(BuildContext context) => child;
 }
 
-class AsyncValue {
+class AsyncValue<T> {
   const AsyncValue();
-  const factory AsyncValue.loading() = AsyncLoading;
-  factory AsyncValue.data(T value) => AsyncData(value);
-  const factory AsyncValue.error(Object error, StackTrace stackTrace) =
-      AsyncError;
+  factory AsyncValue.loading() = AsyncLoading<T>;
+  factory AsyncValue.data(T value) = AsyncData<T>;
+  factory AsyncValue.error(Object error, StackTrace stackTrace) = AsyncError<T>;
 }
 
-class AsyncData<T> extends AsyncValue implements AsyncValue {
-  const AsyncData();
+class AsyncData<T> extends AsyncValue<T> {
+  const AsyncData(this.value);
+  final T value;
 }
 
-class AsyncLoading<T> extends AsyncValue implements AsyncValue {
+class AsyncLoading<T> extends AsyncValue<T> {
   const AsyncLoading();
 }
 
-class AsyncError<T> extends AsyncValue implements AsyncValue {
-  const AsyncError();
+class AsyncError<T> extends AsyncValue<T> {
+  const AsyncError(this.error, this.stackTrace);
+  final Object error;
+  final StackTrace stackTrace;
 }
 
 class ProviderOverride {
@@ -100,7 +103,7 @@ void main() {
         overrides: [
           userProvider.overrideWithValue(AsyncValue.data('user')),
           dailyScoreProvider.overrideWithValue(AsyncValue.data(85)),
-          activeSessionProvider.overrideWithValue(const AsyncValue.data(null)),
+          activeSessionProvider.overrideWithValue(AsyncValue.data(null)),
         ],
         child: const MaterialApp(home: HomeScreen()),
       ),
@@ -115,8 +118,8 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          userProvider.overrideWithValue(const AsyncValue.loading()),
-          dailyScoreProvider.overrideWithValue(const AsyncValue.loading()),
+          userProvider.overrideWithValue(AsyncValue.loading()),
+          dailyScoreProvider.overrideWithValue(AsyncValue.loading()),
         ],
         child: const MaterialApp(home: HomeScreen()),
       ),

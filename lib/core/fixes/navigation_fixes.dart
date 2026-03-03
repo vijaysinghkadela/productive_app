@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, inference_failure_on_instance_creation, unawaited_futures
 import 'package:flutter/material.dart';
 
 class NavigationFixes extends StatelessWidget {

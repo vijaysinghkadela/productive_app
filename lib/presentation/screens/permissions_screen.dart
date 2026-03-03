@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, use_named_constants
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';

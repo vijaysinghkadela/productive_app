@@ -1,11 +1,12 @@
+// ignore_for_file: avoid_annotating_with_dynamic, avoid_dynamic_calls, prefer_expression_function_bodies, type_annotate_public_apis
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 // Provides standard definitions mimicking Riverpod's core primitives:
 // The optimizer applies rules over these.
 class _MockStreamProvider {
-  static dynamic autoDispose(dynamic Function() create) => null;
-  static dynamic family(dynamic Function(, ) create) => null;
+  static dynamic autoDispose(dynamic Function(dynamic) create) => null;
+  static dynamic family(dynamic Function(dynamic, dynamic) create) => null;
 }
 
 class _HomeScreenData {
@@ -36,7 +37,8 @@ class ProviderOptimizer {
   );
 
   final dynamic userScoreProvider = _MockStreamProvider.autoDispose(
-    (ref) => _userDataStream().map((u) => u?.stats?.productivityScore).distinct(),
+    (ref) =>
+        _userDataStream().map((u) => u?.stats?.productivityScore).distinct(),
   );
 
   final dynamic userStreakProvider = _MockStreamProvider.autoDispose(
@@ -60,11 +62,13 @@ class ProviderOptimizer {
   }
 
   // RIGHT: combine related providers into one derived provider structurally
-  final dynamic homeScreenDataProvider = _MockStreamProvider.autoDispose((ref) => _HomeScreenData(
+  final dynamic homeScreenDataProvider = _MockStreamProvider.autoDispose(
+    (dynamic ref) => _HomeScreenData(
       userName: '',
       sessionActive: true,
       score: 0,
-    ),);
+    ),
+  );
 
   static Stream<dynamic> _userDataStream() => const Stream.empty();
 }

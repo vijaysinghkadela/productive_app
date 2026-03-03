@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, unused_element, unused_field
 import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/material.dart';

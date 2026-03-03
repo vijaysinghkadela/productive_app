@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_positional_boolean_parameters, type_annotate_public_apis, use_setters_to_change_properties
 import 'package:flutter_test/flutter_test.dart';
 
 class ValidationException implements Exception {
@@ -68,9 +69,11 @@ class MockAchievementService {
 class HabitService {
   HabitService({
     required this.repository,
+    required this.notifications,
     required this.achievements,
   });
   final MockHabitRepository repository;
+  final MockNotificationService notifications;
   final MockAchievementService achievements;
 
   Future<TrackResult> trackHabit({

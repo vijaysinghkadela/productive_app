@@ -23,7 +23,7 @@ export { createHabit, trackHabit, calculateHabitStreaks } from './habits/habits.
 export { getAICoaching } from './ai/ai.service';
 
 // ─── Subscription Webhooks ───
-export { revenuecatWebhook, checkEntitlements } from './subscriptions/subscriptions.service';
+export { revenuecatWebhook, checkEntitlements, createStripeSubscription } from './subscriptions/subscriptions.service';
 
 // ─── Leaderboard ───
 export { getLeaderboard, rebuildLeaderboard } from './leaderboard/leaderboard.service';

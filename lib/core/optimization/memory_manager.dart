@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_dynamic_calls, avoid_positional_boolean_parameters, inference_failure_on_untyped_parameter, type_annotate_public_apis
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';

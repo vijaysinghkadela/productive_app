@@ -75,7 +75,11 @@ class SupportScreen extends StatelessWidget {
                 AppColors.primary,
               ),
               _contactOption(
-                  '🐦', 'Twitter', '@FocusGuardApp', AppColors.accent,),
+                '🐦',
+                'Twitter',
+                '@FocusGuardApp',
+                AppColors.accent,
+              ),
             ]),
           ],
         ),
@@ -167,7 +171,9 @@ class SupportScreen extends StatelessWidget {
                   Text(
                     desc,
                     style: const TextStyle(
-                        color: AppColors.textTertiary, fontSize: 11,),
+                      color: AppColors.textTertiary,
+                      fontSize: 11,
+                    ),
                   ),
                 ],
               ),

@@ -107,7 +107,9 @@ class _FocusModesScreenState extends State<FocusModesScreen> {
                 Text(
                   'Notifications: ${mode.notificationFilter}',
                   style: const TextStyle(
-                      color: AppColors.textTertiary, fontSize: 12,),
+                    color: AppColors.textTertiary,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),

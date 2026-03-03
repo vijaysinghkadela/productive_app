@@ -31,9 +31,6 @@ class AppListScreen extends StatelessWidget {
 void main() {
   group('Startup Performance', () {
     testWidgets('first frame renders within 1200ms', (tester) async {
-      final binding = tester.binding;
-      binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.onlyPumps;
-
       final stopwatch = Stopwatch()..start();
 
       await tester.pumpWidget(const FocusGuardApp());
@@ -57,10 +54,7 @@ void main() {
 
       // Wait until home screen quick actions are tappable:
       await tester.pumpAndSettle();
-      await tester.waitUntil(
-        () => tester.any(find.byKey(const Key('quick_action_focus'))),
-        timeout: const Duration(milliseconds: 2000),
-      );
+      expect(find.byKey(const Key('quick_action_focus')), findsOneWidget);
 
       stopwatch.stop();
       expect(stopwatch.elapsedMilliseconds, lessThan(2000));

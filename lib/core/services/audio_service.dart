@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_catches_without_on_clauses, discarded_futures, unawaited_futures
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 

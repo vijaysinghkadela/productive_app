@@ -1,3 +1,4 @@
+// ignore_for_file: discarded_futures, inference_failure_on_untyped_parameter
 import 'dart:async';
 
 class OfflineFirstManager {
@@ -51,7 +52,7 @@ class OfflineFirstManager {
   final StreamController<bool> _connectivityStream =
       StreamController.broadcast();
 
-  Future<void> queueOfflineOperation(operation) async {
+  Future<void> queueOfflineOperation(Map<String, dynamic> operation) async {
     _operationQueue.add(operation);
   }
 
