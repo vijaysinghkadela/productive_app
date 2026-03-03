@@ -5,6 +5,7 @@ import 'constants.dart';
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,
@@ -275,6 +276,120 @@ class AppTheme {
   static TextStyle mono(double size, [FontWeight weight = FontWeight.w400]) =>
       GoogleFonts.jetBrainsMono(
           fontSize: size, fontWeight: weight, color: AppColors.textPrimary);
+
+  // ──────── LIGHT THEME ────────
+
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: const Color(0xFFF8F9FC),
+      primaryColor: AppColors.primary,
+      colorScheme: ColorScheme.light(
+        primary: AppColors.primary,
+        secondary: const Color(0xFF0095CC),
+        tertiary: const Color(0xFFE84580),
+        surface: Colors.white,
+        error: const Color(0xFFD32F2F),
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: const Color(0xFF1A1A2E),
+        onError: Colors.white,
+        outline: const Color(0xFFDADCE0),
+      ),
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.spaceGrotesk(
+          fontSize: 48,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF1A1A2E),
+          letterSpacing: -1.5,
+        ),
+        displayMedium: GoogleFonts.spaceGrotesk(
+          fontSize: 36,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF1A1A2E),
+          letterSpacing: -1.0,
+        ),
+        displaySmall: GoogleFonts.spaceGrotesk(
+          fontSize: 28,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF1A1A2E),
+          letterSpacing: -0.5,
+        ),
+        headlineLarge: GoogleFonts.spaceGrotesk(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF1A1A2E),
+        ),
+        headlineMedium: GoogleFonts.spaceGrotesk(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF1A1A2E),
+        ),
+        headlineSmall: GoogleFonts.spaceGrotesk(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF1A1A2E),
+        ),
+        titleLarge: GoogleFonts.plusJakartaSans(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF1A1A2E),
+        ),
+        bodyLarge: GoogleFonts.plusJakartaSans(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF1A1A2E),
+        ),
+        bodyMedium: GoogleFonts.plusJakartaSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF5A5A7A),
+        ),
+        bodySmall: GoogleFonts.plusJakartaSans(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF9A9ABE),
+        ),
+        labelLarge: GoogleFonts.plusJakartaSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF1A1A2E),
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: const Color(0xFFF8F9FC),
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        centerTitle: true,
+        titleTextStyle: GoogleFonts.spaceGrotesk(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF1A1A2E),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF1A1A2E), size: 22),
+      ),
+      cardTheme: CardTheme(
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: Color(0xFFE8EAF0)),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
+          minimumSize: const Size(64, 56),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        ),
+      ),
+    );
+  }
 }
 
 // ──────── GLASSMORPHISM DECORATION ────────

@@ -452,9 +452,9 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     state = state.copyWith(
       hasCompletedOnboarding: _dataSource.getHasCompletedOnboarding(),
       hasAcceptedTerms: _dataSource.getHasAcceptedTerms(),
-      strictModePin: _dataSource.getStrictModePin(),
-      strictModeEnabled: _dataSource.getStrictModePin() != null,
     );
+    // Load PIN asynchronously from secure enclave
+    _loadSecurePin();
     final bedtime = _dataSource.getBedtimeConfig();
     if (bedtime != null) {
       state = state.copyWith(
@@ -479,6 +479,14 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> acceptTerms() async {
     await _dataSource.setHasAcceptedTerms();
     state = state.copyWith(hasAcceptedTerms: true);
+  }
+
+  Future<void> _loadSecurePin() async {
+    final pin = await _dataSource.getStrictModePin();
+    state = state.copyWith(
+      strictModePin: pin,
+      strictModeEnabled: pin != null,
+    );
   }
 
   Future<void> setStrictModePin(String pin) async {

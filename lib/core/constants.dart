@@ -136,6 +136,54 @@ class AppDurations {
 }
 
 // ════════════════════════════════════════════════════════════════
+// SPACING SCALE (Material 3 / HIG aligned)
+// ════════════════════════════════════════════════════════════════
+
+class AppSpacing {
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 20;
+  static const double xxl = 24;
+  static const double xxxl = 32;
+  static const double huge = 48;
+}
+
+// ════════════════════════════════════════════════════════════════
+// BORDER RADII
+// ════════════════════════════════════════════════════════════════
+
+class AppRadius {
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 20;
+  static const double xxl = 24;
+  static const double pill = 100;
+}
+
+// ════════════════════════════════════════════════════════════════
+// SIZE CONSTRAINTS (a11y compliant)
+// ════════════════════════════════════════════════════════════════
+
+class AppSizes {
+  /// Minimum touch target per Material 3 (48dp) & HIG (44pt)
+  static const double minTouchTarget = 48;
+  static const double iconSm = 16;
+  static const double iconMd = 20;
+  static const double iconLg = 24;
+  static const double iconXl = 32;
+  static const double avatarSm = 32;
+  static const double avatarMd = 48;
+  static const double avatarLg = 64;
+  static const double cardMinHeight = 80;
+  static const double bottomNavHeight = 72;
+  static const double appBarHeight = 56;
+}
+
+// ════════════════════════════════════════════════════════════════
 // SHADOWS & EFFECTS
 // ════════════════════════════════════════════════════════════════
 

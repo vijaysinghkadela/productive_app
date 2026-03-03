@@ -80,7 +80,7 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
 
   @override
   Widget build(BuildContext context) {
-    final timerState = ref.watch(focusTimerProvider);
+    final _ = ref.watch(focusTimerProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,

@@ -55,6 +55,12 @@ dependencies:
   in_app_review: ^2.0.10
   wakelock_plus: ^1.2.10
   badges: ^3.1.2
+  # Offline-first database
+  drift: ^2.22.1
+  sqlite3_flutter_libs: ^0.5.28
+  path: ^1.9.0
+  # Calendar integration
+  device_calendar: ^4.3.3
   # Localization
   flutter_localizations:
     sdk: flutter
@@ -64,8 +70,8 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   mocktail: ^1.0.4
-
   build_runner: ^2.4.13
+  drift_dev: ^2.22.1
 
 flutter:
   generate: true

@@ -25,6 +25,7 @@ import '../presentation/screens/settings_screen.dart';
 import '../presentation/screens/overlay_nudge_screen.dart';
 import '../presentation/screens/accountability_screen.dart';
 import '../presentation/screens/shell_screen.dart';
+import '../presentation/screens/kanban_screen.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -132,5 +133,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
         path: '/accountability',
         pageBuilder: (c, s) => _slidePage(s, const AccountabilityScreen())),
+    GoRoute(
+        path: '/kanban',
+        pageBuilder: (c, s) => _slidePage(s, const KanbanScreen())),
   ],
 );

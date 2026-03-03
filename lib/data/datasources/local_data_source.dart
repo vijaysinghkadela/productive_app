@@ -5,7 +5,11 @@ import '../../domain/entities/daily_stat.dart';
 import '../../domain/entities/goal.dart';
 import '../../domain/entities/app_info.dart';
 import '../../domain/entities/achievement.dart';
+import '../../core/services/secure_storage_service.dart';
+import '../../core/security/input_sanitizer.dart';
 
+/// Local data source backed by encrypted Hive boxes.
+/// All boxes are encrypted with AES-256-GCM via platform secure enclaves.
 class LocalDataSource {
   static const String _sessionsBox = 'sessions';
   static const String _statsBox = 'daily_stats';
@@ -16,12 +20,15 @@ class LocalDataSource {
 
   static Future<void> init() async {
     await Hive.initFlutter();
-    await Hive.openBox(_sessionsBox);
-    await Hive.openBox(_statsBox);
-    await Hive.openBox(_goalsBox);
-    await Hive.openBox(_blockerBox);
-    await Hive.openBox(_settingsBox);
-    await Hive.openBox(_achievementsBox);
+    // Initialize encryption service first
+    await SecureStorageService.init();
+    // Open all boxes with AES-256 encryption
+    await SecureStorageService.openEncryptedBox(_sessionsBox);
+    await SecureStorageService.openEncryptedBox(_statsBox);
+    await SecureStorageService.openEncryptedBox(_goalsBox);
+    await SecureStorageService.openEncryptedBox(_blockerBox);
+    await SecureStorageService.openEncryptedBox(_settingsBox);
+    await SecureStorageService.openEncryptedBox(_achievementsBox);
   }
 
   // --- Focus Sessions ---
@@ -43,6 +50,14 @@ class LocalDataSource {
     return getSessions()
         .where((s) => s.startTime.toIso8601String().startsWith(dateKey))
         .toList();
+  }
+
+  /// Paginated session retrieval for lazy-loading lists.
+  List<FocusSession> getSessionsPaginated({int page = 0, int pageSize = 20}) {
+    final all = getSessions();
+    final start = page * pageSize;
+    if (start >= all.length) return [];
+    return all.sublist(start, (start + pageSize).clamp(0, all.length));
   }
 
   Future<void> deleteSession(String id) async {
@@ -112,7 +127,7 @@ class LocalDataSource {
     await _blocker.delete(packageName);
   }
 
-  // --- Settings ---
+  // --- Settings (sensitive values use secure enclave) ---
   Box get _settingsData => Hive.box(_settingsBox);
 
   Future<void> saveSetting(String key, dynamic value) async {
@@ -133,9 +148,17 @@ class LocalDataSource {
   bool getHasAcceptedTerms() => getSetting<bool>('terms_accepted') ?? false;
   Future<void> setHasAcceptedTerms() => saveSetting('terms_accepted', true);
 
-  String? getStrictModePin() => getSetting<String>('strict_mode_pin');
-  Future<void> setStrictModePin(String pin) =>
-      saveSetting('strict_mode_pin', pin);
+  /// PIN stored in secure enclave, not in Hive.
+  Future<String?> getStrictModePin() async {
+    return SecureStorageService.readSecure('strict_mode_pin');
+  }
+
+  Future<void> setStrictModePin(String pin) async {
+    final sanitized = InputSanitizer.sanitizePin(pin);
+    if (sanitized != null) {
+      await SecureStorageService.writeSecure('strict_mode_pin', sanitized);
+    }
+  }
 
   // --- Bedtime ---
   Map<String, dynamic>? getBedtimeConfig() {
@@ -176,5 +199,6 @@ class LocalDataSource {
     await _blocker.clear();
     await _settingsData.clear();
     await _achievementsData.clear();
+    await SecureStorageService.clearAll();
   }
 }

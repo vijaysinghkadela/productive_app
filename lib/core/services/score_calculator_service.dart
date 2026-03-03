@@ -91,12 +91,15 @@ class ScoreCalculatorService {
   }) {
     return {
       'base': 100,
-      'social_media_penalty': -(socialMediaOverGoalMinutes * 0.8).clamp(0, 35),
-      'screen_time_penalty': -(screenTimeOverGoalMinutes * 0.3).clamp(0, 20),
-      'override_penalty': -(overrideTaps * 3.0).clamp(0, 15),
-      'incomplete_sessions_penalty': -(incompleteSessions * 5.0).clamp(0, 15),
+      'social_media_penalty':
+          -(socialMediaOverGoalMinutes * 0.8).clamp(0, 35).toDouble(),
+      'screen_time_penalty':
+          -(screenTimeOverGoalMinutes * 0.3).clamp(0, 20).toDouble(),
+      'override_penalty': -(overrideTaps * 3.0).clamp(0, 15).toDouble(),
+      'incomplete_sessions_penalty':
+          -(incompleteSessions * 5.0).clamp(0, 15).toDouble(),
       'no_morning_session_penalty': noSessionBy11am ? -5.0 : 0,
-      'habits_penalty': -(habitsNotCompleted * 3.0).clamp(0, 15),
+      'habits_penalty': -(habitsNotCompleted * 3.0).clamp(0, 15).toDouble(),
       'poor_sleep_penalty': poorSleep ? -10.0 : 0,
       'focus_sessions_bonus': (completedSessions * 8.0).clamp(0, 40),
       'apps_beat_goal_bonus': (appsBeatGoal * 5.0).clamp(0, 15),
