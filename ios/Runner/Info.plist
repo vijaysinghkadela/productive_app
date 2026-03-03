@@ -73,5 +73,18 @@
 			</array>
 		</dict>
 	</array>
+
+	<!-- Security and Privacy Settings -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	<key>NSFaceIDUsageDescription</key>
+	<string>FaceID is used to securely unlock FocusGuard Pro and prevent unauthorized access.</string>
+	<key>UIFileSharingEnabled</key>
+	<false/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
 </dict>
 </plist>

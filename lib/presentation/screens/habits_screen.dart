@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/constants.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/app_buttons.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 
 class HabitsScreen extends ConsumerWidget {
   const HabitsScreen({super.key});
@@ -40,14 +40,16 @@ class HabitsScreen extends ConsumerWidget {
                     final isPast = i + 1 < weekday;
                     return Column(
                       children: [
-                        Text(days[i],
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: isToday
-                                  ? AppColors.primary
-                                  : AppColors.textTertiary,
-                            )),
+                        Text(
+                          days[i],
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: isToday
+                                ? AppColors.primary
+                                : AppColors.textTertiary,
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         AnimatedContainer(
                           duration: Anim.normal,
@@ -65,8 +67,11 @@ class HabitsScreen extends ConsumerWidget {
                           ),
                           child: Center(
                             child: isPast
-                                ? const Icon(Icons.check_rounded,
-                                    color: Colors.white, size: 18)
+                                ? const Icon(
+                                    Icons.check_rounded,
+                                    color: Colors.white,
+                                    size: 18,
+                                  )
                                 : Text(
                                     '${now.day - weekday + i + 1}',
                                     style: TextStyle(
@@ -95,24 +100,27 @@ class HabitsScreen extends ConsumerWidget {
                 height: 95,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: [
+                  children: const [
                     _StreakCard(
-                        emoji: '🔥',
-                        label: 'Current Streak',
-                        value: '12 days',
-                        color: AppColors.streak),
-                    const SizedBox(width: 10),
+                      emoji: '🔥',
+                      label: 'Current Streak',
+                      value: '12 days',
+                      color: AppColors.streak,
+                    ),
+                    SizedBox(width: 10),
                     _StreakCard(
-                        emoji: '🏆',
-                        label: 'Best Streak',
-                        value: '28 days',
-                        color: AppColors.warning),
-                    const SizedBox(width: 10),
+                      emoji: '🏆',
+                      label: 'Best Streak',
+                      value: '28 days',
+                      color: AppColors.warning,
+                    ),
+                    SizedBox(width: 10),
                     _StreakCard(
-                        emoji: '⚡',
-                        label: 'This Week',
-                        value: '5/7',
-                        color: AppColors.secondary),
+                      emoji: '⚡',
+                      label: 'This Week',
+                      value: '5/7',
+                      color: AppColors.secondary,
+                    ),
                   ],
                 ),
               ).animate(delay: 100.ms).fadeIn(duration: 400.ms),
@@ -123,8 +131,10 @@ class HabitsScreen extends ConsumerWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-              child: Text("Today's Habits",
-                  style: Theme.of(context).textTheme.headlineSmall),
+              child: Text(
+                "Today's Habits",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
             ),
           ),
 
@@ -135,7 +145,11 @@ class HabitsScreen extends ConsumerWidget {
               final h = _sampleHabits[i];
               return Padding(
                 padding: EdgeInsets.fromLTRB(
-                    20, 0, 20, i < _sampleHabits.length - 1 ? 10 : 0),
+                  20,
+                  0,
+                  20,
+                  i < _sampleHabits.length - 1 ? 10 : 0,
+                ),
                 child: _HabitCard(habit: h, index: i),
               );
             },
@@ -144,7 +158,7 @@ class HabitsScreen extends ConsumerWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 40)),
         ],
       ),
-      floatingActionButton: Container(
+      floatingActionButton: DecoratedBox(
         decoration: BoxDecoration(
           gradient: AppGradients.hero,
           borderRadius: BorderRadius.circular(16),
@@ -155,9 +169,10 @@ class HabitsScreen extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           icon: const Icon(Icons.add_rounded, color: Colors.white),
-          label: const Text('New Habit',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+          label: const Text(
+            'New Habit',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );
@@ -165,51 +180,56 @@ class HabitsScreen extends ConsumerWidget {
 }
 
 class _StreakCard extends StatelessWidget {
-  final String emoji, label, value;
+  const _StreakCard({
+    required this.emoji,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+  final String emoji;
+  final String label;
+  final String value;
   final Color color;
 
-  const _StreakCard(
-      {required this.emoji,
-      required this.label,
-      required this.value,
-      required this.color});
-
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 140,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            color.withValues(alpha: 0.12),
-            color.withValues(alpha: 0.04)
+  Widget build(BuildContext context) => Container(
+        width: 140,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              color.withValues(alpha: 0.12),
+              color.withValues(alpha: 0.04),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 20)),
+            const Spacer(),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
+            Text(label, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(emoji, style: const TextStyle(fontSize: 20)),
-          const Spacer(),
-          Text(value,
-              style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.w700, color: color)),
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
-        ],
-      ),
-    );
-  }
+      );
 }
 
 class _HabitCard extends StatefulWidget {
+  const _HabitCard({required this.habit, required this.index});
   final _HabitData habit;
   final int index;
-  const _HabitCard({required this.habit, required this.index});
 
   @override
   State<_HabitCard> createState() => _HabitCardState();
@@ -225,7 +245,10 @@ class _HabitCardState extends State<_HabitCard>
     super.initState();
     _completed = widget.habit.completed;
     _checkCtrl = AnimationController(
-        vsync: this, duration: Anim.normal, value: _completed ? 1.0 : 0.0);
+      vsync: this,
+      duration: Anim.normal,
+      value: _completed ? 1.0 : 0.0,
+    );
   }
 
   @override
@@ -247,47 +270,54 @@ class _HabitCardState extends State<_HabitCard>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      padding: const EdgeInsets.all(16),
-      borderRadius: 16,
-      borderColor: _completed ? AppColors.success.withValues(alpha: 0.3) : null,
-      child: Row(
-        children: [
-          // Animated checkbox
-          GestureDetector(
-            onTap: _toggle,
-            child: AnimatedBuilder(
-              animation: _checkCtrl,
-              builder: (context, _) {
-                final t = _checkCtrl.value;
-                return Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    gradient: t > 0.5 ? AppGradients.mint : null,
-                    color: t <= 0.5 ? AppColors.surfaceLight : null,
-                    border: Border.all(
-                      color: Color.lerp(
-                          AppColors.cardBorderLight, AppColors.success, t)!,
-                      width: 1.5,
+  Widget build(BuildContext context) => GlassCard(
+        padding: const EdgeInsets.all(16),
+        borderRadius: 16,
+        borderColor:
+            _completed ? AppColors.success.withValues(alpha: 0.3) : null,
+        child: Row(
+          children: [
+            // Animated checkbox
+            GestureDetector(
+              onTap: _toggle,
+              child: AnimatedBuilder(
+                animation: _checkCtrl,
+                builder: (context, _) {
+                  final t = _checkCtrl.value;
+                  return Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      gradient: t > 0.5 ? AppGradients.mint : null,
+                      color: t <= 0.5 ? AppColors.surfaceLight : null,
+                      border: Border.all(
+                        color: Color.lerp(
+                          AppColors.cardBorderLight,
+                          AppColors.success,
+                          t,
+                        )!,
+                        width: 1.5,
+                      ),
                     ),
-                  ),
-                  child: t > 0.3
-                      ? Icon(Icons.check_rounded,
-                          size: 18, color: Colors.white.withValues(alpha: t))
-                      : null,
-                );
-              },
+                    child: t > 0.3
+                        ? Icon(
+                            Icons.check_rounded,
+                            size: 18,
+                            color: Colors.white.withValues(alpha: t),
+                          )
+                        : null,
+                  );
+                },
+              ),
             ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.habit.name,
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.habit.name,
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -296,81 +326,92 @@ class _HabitCardState extends State<_HabitCard>
                       color: _completed
                           ? AppColors.textTertiary
                           : AppColors.textPrimary,
-                    )),
-                if (widget.habit.streak > 0)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text('🔥 ${widget.habit.streak} day streak',
-                        style: const TextStyle(
-                            fontSize: 11,
-                            color: AppColors.streak,
-                            fontWeight: FontWeight.w500)),
+                    ),
                   ),
-              ],
+                  if (widget.habit.streak > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        '🔥 ${widget.habit.streak} day streak',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.streak,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: widget.habit.color.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(10),
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: widget.habit.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child:
+                  Icon(widget.habit.icon, color: widget.habit.color, size: 20),
             ),
-            child: Icon(widget.habit.icon, color: widget.habit.color, size: 20),
-          ),
-        ],
-      ),
-    )
-        .animate(delay: (100 + widget.index * 50).ms)
-        .fadeIn(duration: 300.ms)
-        .slideX(begin: 0.02, end: 0);
-  }
+          ],
+        ),
+      )
+          .animate(delay: (100 + widget.index * 50).ms)
+          .fadeIn(duration: 300.ms)
+          .slideX(begin: 0.02, end: 0);
 }
 
 class _HabitData {
+  const _HabitData({
+    required this.name,
+    required this.streak,
+    required this.icon,
+    required this.color,
+    this.completed = false,
+  });
   final String name;
   final int streak;
   final IconData icon;
   final Color color;
   final bool completed;
-  const _HabitData(
-      {required this.name,
-      required this.streak,
-      required this.icon,
-      required this.color,
-      this.completed = false});
 }
 
 const _sampleHabits = [
   _HabitData(
-      name: 'No phone first 30 min',
-      streak: 12,
-      icon: Icons.phone_disabled_rounded,
-      color: AppColors.primary,
-      completed: true),
+    name: 'No phone first 30 min',
+    streak: 12,
+    icon: Icons.phone_disabled_rounded,
+    color: AppColors.primary,
+    completed: true,
+  ),
   _HabitData(
-      name: 'Morning focus session',
-      streak: 8,
-      icon: Icons.wb_sunny_rounded,
-      color: AppColors.warning),
+    name: 'Morning focus session',
+    streak: 8,
+    icon: Icons.wb_sunny_rounded,
+    color: AppColors.warning,
+  ),
   _HabitData(
-      name: 'Exercise 30 min',
-      streak: 5,
-      icon: Icons.fitness_center_rounded,
-      color: AppColors.success),
+    name: 'Exercise 30 min',
+    streak: 5,
+    icon: Icons.fitness_center_rounded,
+    color: AppColors.success,
+  ),
   _HabitData(
-      name: 'Read 20 pages',
-      streak: 3,
-      icon: Icons.auto_stories_rounded,
-      color: AppColors.secondary),
+    name: 'Read 20 pages',
+    streak: 3,
+    icon: Icons.auto_stories_rounded,
+    color: AppColors.secondary,
+  ),
   _HabitData(
-      name: 'Digital sunset at 9 PM',
-      streak: 15,
-      icon: Icons.dark_mode_rounded,
-      color: AppColors.tertiary),
+    name: 'Digital sunset at 9 PM',
+    streak: 15,
+    icon: Icons.dark_mode_rounded,
+    color: AppColors.tertiary,
+  ),
   _HabitData(
-      name: 'Meditate 10 min',
-      streak: 7,
-      icon: Icons.spa_rounded,
-      color: AppColors.primary),
+    name: 'Meditate 10 min',
+    streak: 7,
+    icon: Icons.spa_rounded,
+    color: AppColors.primary,
+  ),
 ];

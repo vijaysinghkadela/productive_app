@@ -9,13 +9,13 @@ sealed class Result<T> {
   bool get isFailure => this is Failure<T>;
 
   T? get valueOrNull => switch (this) {
-        Success<T> s => s.value,
+        final Success<T> s => s.value,
         Failure<T> _ => null,
       };
 
   String? get errorOrNull => switch (this) {
         Success<T> _ => null,
-        Failure<T> f => f.message,
+        final Failure<T> f => f.message,
       };
 
   R when<R>({
@@ -23,18 +23,18 @@ sealed class Result<T> {
     required R Function(String message, String? code) failure,
   }) =>
       switch (this) {
-        Success<T> s => success(s.value),
-        Failure<T> f => failure(f.message, f.code),
+        final Success<T> s => success(s.value),
+        final Failure<T> f => failure(f.message, f.code),
       };
 }
 
 final class Success<T> extends Result<T> {
-  final T value;
   const Success(this.value);
+  final T value;
 }
 
 final class Failure<T> extends Result<T> {
+  const Failure(this.message, {this.code});
   final String message;
   final String? code;
-  const Failure(this.message, {this.code});
 }

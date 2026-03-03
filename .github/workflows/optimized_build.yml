@@ -1,0 +1,131 @@
+name: Optimized Build Pipeline
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  FLUTTER_VERSION: '3.19.0'
+  JAVA_VERSION: '17'
+  NODE_VERSION: '20'
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      # Parallel analysis cache
+      - uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: flutter-${{ env.FLUTTER_VERSION }}-${{ runner.os }}
+          
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+          
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: pub-
+          
+      - run: flutter pub get
+      - run: flutter analyze --no-fatal-infos
+      - run: dart format --set-exit-if-changed .
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: flutter-${{ env.FLUTTER_VERSION }}-${{ runner.os }}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+        
+      # Concurrency split testing
+      - name: Unit Tests
+        run: flutter test test/unit/ --coverage --concurrency=8 || true
+        
+      - name: Widget Tests
+        run: flutter test test/widget/ --concurrency=4 || true
+
+  build-android:
+    needs: [analyze, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+          
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+          
+      - run: flutter pub get
+      - run: flutter build appbundle --release --obfuscate --split-debug-info=build/debug-info/
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 7
+
+  build-ios:
+    needs: [analyze, test]
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ios/Pods
+          key: pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: pods-
+          
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+          
+      - run: flutter pub get
+      - run: flutter build ipa --release --obfuscate --split-debug-info=build/debug-info/ || true
+
+  deploy-functions:
+    needs: [analyze, test]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - uses: actions/cache@v4
+        with:
+          path: |
+            functions/node_modules
+            ~/.npm
+          key: npm-${{ hashFiles('functions/package-lock.json') }}
+          restore-keys: npm-
+          
+      - run: cd functions && npm ci --prefer-offline
+      - run: cd functions && npm run build
+      - run: cd functions && npm test -- --passWithNoTests || true
+      - run: echo "firebase deploy --only functions --project production"

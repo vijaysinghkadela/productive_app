@@ -1,5 +1,42 @@
 /// Habit data model
 class HabitModel {
+  // habit id to chain with
+
+  const HabitModel({
+    required this.id,
+    required this.userId,
+    required this.name,
+    required this.createdAt,
+    this.icon = '🎯',
+    this.category = 'General',
+    this.frequency = 'daily',
+    this.targetDays = const [1, 2, 3, 4, 5, 6, 7],
+    this.reminderTime,
+    this.currentStreak = 0,
+    this.longestStreak = 0,
+    this.totalCompletions = 0,
+    this.completedDates = const [],
+    this.isActive = true,
+    this.stackedWith,
+  });
+
+  factory HabitModel.fromJson(Map<String, dynamic> json) => HabitModel(
+        id: json['id'] as String,
+        userId: json['userId'] as String,
+        name: json['name'] as String,
+        icon: json['icon'] as String? ?? '🎯',
+        category: json['category'] as String? ?? 'General',
+        frequency: json['frequency'] as String? ?? 'daily',
+        targetDays: List<int>.from(json['targetDays'] as Iterable<dynamic>? ?? [1, 2, 3, 4, 5, 6, 7]),
+        reminderTime: json['reminderTime'] as String?,
+        currentStreak: json['currentStreak'] as int? ?? 0,
+        longestStreak: json['longestStreak'] as int? ?? 0,
+        totalCompletions: json['totalCompletions'] as int? ?? 0,
+        completedDates: List<String>.from(json['completedDates'] as Iterable<dynamic>? ?? []),
+        createdAt: DateTime.parse(json['createdAt'] as String),
+        isActive: json['isActive'] as bool? ?? true,
+        stackedWith: json['stackedWith'] as String?,
+      );
   final String id;
   final String userId;
   final String name;
@@ -14,49 +51,13 @@ class HabitModel {
   final List<String> completedDates; // yyyy-MM-dd
   final DateTime createdAt;
   final bool isActive;
-  final String? stackedWith; // habit id to chain with
-
-  const HabitModel({
-    required this.id,
-    required this.userId,
-    required this.name,
-    this.icon = '🎯',
-    this.category = 'General',
-    this.frequency = 'daily',
-    this.targetDays = const [1, 2, 3, 4, 5, 6, 7],
-    this.reminderTime,
-    this.currentStreak = 0,
-    this.longestStreak = 0,
-    this.totalCompletions = 0,
-    this.completedDates = const [],
-    required this.createdAt,
-    this.isActive = true,
-    this.stackedWith,
-  });
+  final String? stackedWith;
 
   double get completionRate {
     final daysSinceCreation = DateTime.now().difference(createdAt).inDays;
     if (daysSinceCreation <= 0) return 0;
     return (totalCompletions / daysSinceCreation).clamp(0.0, 1.0);
   }
-
-  factory HabitModel.fromJson(Map<String, dynamic> json) => HabitModel(
-        id: json['id'] as String,
-        userId: json['userId'] as String,
-        name: json['name'] as String,
-        icon: json['icon'] as String? ?? '🎯',
-        category: json['category'] as String? ?? 'General',
-        frequency: json['frequency'] as String? ?? 'daily',
-        targetDays: List<int>.from(json['targetDays'] ?? [1, 2, 3, 4, 5, 6, 7]),
-        reminderTime: json['reminderTime'] as String?,
-        currentStreak: json['currentStreak'] as int? ?? 0,
-        longestStreak: json['longestStreak'] as int? ?? 0,
-        totalCompletions: json['totalCompletions'] as int? ?? 0,
-        completedDates: List<String>.from(json['completedDates'] ?? []),
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        isActive: json['isActive'] as bool? ?? true,
-        stackedWith: json['stackedWith'] as String?,
-      );
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -79,27 +80,12 @@ class HabitModel {
 
 /// Challenge data model
 class ChallengeModel {
-  final String id;
-  final String title;
-  final String description;
-  final String type; // community, personal, friend
-  final String category;
-  final int durationDays;
-  final int participantCount;
-  final int currentDay;
-  final double progress; // 0.0-1.0
-  final int xpReward;
-  final String? badgeReward;
-  final DateTime startDate;
-  final DateTime endDate;
-  final bool isActive;
-  final bool isCompleted;
-  final Map<String, dynamic> rules;
-
   const ChallengeModel({
     required this.id,
     required this.title,
     required this.description,
+    required this.startDate,
+    required this.endDate,
     this.type = 'community',
     this.category = 'general',
     this.durationDays = 7,
@@ -108,17 +94,10 @@ class ChallengeModel {
     this.progress = 0.0,
     this.xpReward = 500,
     this.badgeReward,
-    required this.startDate,
-    required this.endDate,
     this.isActive = true,
     this.isCompleted = false,
     this.rules = const {},
   });
-
-  int get daysRemaining {
-    final diff = endDate.difference(DateTime.now()).inDays;
-    return diff.clamp(0, durationDays);
-  }
 
   factory ChallengeModel.fromJson(Map<String, dynamic> json) => ChallengeModel(
         id: json['id'] as String,
@@ -136,8 +115,29 @@ class ChallengeModel {
         endDate: DateTime.parse(json['endDate'] as String),
         isActive: json['isActive'] as bool? ?? true,
         isCompleted: json['isCompleted'] as bool? ?? false,
-        rules: Map<String, dynamic>.from(json['rules'] ?? {}),
+        rules: Map<String, dynamic>.from(json['rules'] as Map? ?? {}),
       );
+  final String id;
+  final String title;
+  final String description;
+  final String type; // community, personal, friend
+  final String category;
+  final int durationDays;
+  final int participantCount;
+  final int currentDay;
+  final double progress; // 0.0-1.0
+  final int xpReward;
+  final String? badgeReward;
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool isActive;
+  final bool isCompleted;
+  final Map<String, dynamic> rules;
+
+  int get daysRemaining {
+    final diff = endDate.difference(DateTime.now()).inDays;
+    return diff.clamp(0, durationDays);
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -161,18 +161,6 @@ class ChallengeModel {
 
 /// Journal entry data model
 class JournalModel {
-  final String id;
-  final String userId;
-  final DateTime date;
-  final String content;
-  final int mood; // 1-5
-  final int focusRating; // 1-10
-  final List<String> gratitude;
-  final List<String> tags;
-  final bool isPinned;
-  final int? productivityScore;
-  final String? topDistraction;
-
   const JournalModel({
     required this.id,
     required this.userId,
@@ -186,6 +174,31 @@ class JournalModel {
     this.productivityScore,
     this.topDistraction,
   });
+
+  factory JournalModel.fromJson(Map<String, dynamic> json) => JournalModel(
+        id: json['id'] as String,
+        userId: json['userId'] as String,
+        date: DateTime.parse(json['date'] as String),
+        content: json['content'] as String? ?? '',
+        mood: json['mood'] as int? ?? 3,
+        focusRating: json['focusRating'] as int? ?? 5,
+        gratitude: List<String>.from(json['gratitude'] as Iterable<dynamic>? ?? []),
+        tags: List<String>.from(json['tags'] as Iterable<dynamic>? ?? []),
+        isPinned: json['isPinned'] as bool? ?? false,
+        productivityScore: json['productivityScore'] as int?,
+        topDistraction: json['topDistraction'] as String?,
+      );
+  final String id;
+  final String userId;
+  final DateTime date;
+  final String content;
+  final int mood; // 1-5
+  final int focusRating; // 1-10
+  final List<String> gratitude;
+  final List<String> tags;
+  final bool isPinned;
+  final int? productivityScore;
+  final String? topDistraction;
 
   String get moodEmoji {
     switch (mood) {
@@ -204,20 +217,6 @@ class JournalModel {
     }
   }
 
-  factory JournalModel.fromJson(Map<String, dynamic> json) => JournalModel(
-        id: json['id'] as String,
-        userId: json['userId'] as String,
-        date: DateTime.parse(json['date'] as String),
-        content: json['content'] as String? ?? '',
-        mood: json['mood'] as int? ?? 3,
-        focusRating: json['focusRating'] as int? ?? 5,
-        gratitude: List<String>.from(json['gratitude'] ?? []),
-        tags: List<String>.from(json['tags'] ?? []),
-        isPinned: json['isPinned'] as bool? ?? false,
-        productivityScore: json['productivityScore'] as int?,
-        topDistraction: json['topDistraction'] as String?,
-      );
-
   Map<String, dynamic> toJson() => {
         'id': id,
         'userId': userId,
@@ -235,12 +234,7 @@ class JournalModel {
 
 /// AI Coaching message model
 class AiCoachingModel {
-  final String id;
-  final String userId;
-  final String role; // user, assistant
-  final String content;
-  final DateTime timestamp;
-  final String? insightType; // pattern, review, challenge, wellness
+  // pattern, review, challenge, wellness
 
   const AiCoachingModel({
     required this.id,
@@ -260,6 +254,12 @@ class AiCoachingModel {
         timestamp: DateTime.parse(json['timestamp'] as String),
         insightType: json['insightType'] as String?,
       );
+  final String id;
+  final String userId;
+  final String role; // user, assistant
+  final String content;
+  final DateTime timestamp;
+  final String? insightType;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -273,31 +273,18 @@ class AiCoachingModel {
 
 /// Leaderboard entry model
 class LeaderboardModel {
-  final String userId;
-  final String displayName;
-  final String? avatarUrl;
-  final int rank;
-  final int previousRank;
-  final int score;
-  final String category; // productivity, focus, streak, etc.
-  final String period; // today, week, month, allTime
-  final String? country;
-  final String? levelBadge;
-
   const LeaderboardModel({
     required this.userId,
     required this.displayName,
-    this.avatarUrl,
     required this.rank,
-    this.previousRank = 0,
     required this.score,
+    this.avatarUrl,
+    this.previousRank = 0,
     this.category = 'productivity',
     this.period = 'week',
     this.country,
     this.levelBadge,
   });
-
-  int get rankChange => previousRank == 0 ? 0 : previousRank - rank;
 
   factory LeaderboardModel.fromJson(Map<String, dynamic> json) =>
       LeaderboardModel(
@@ -312,6 +299,18 @@ class LeaderboardModel {
         country: json['country'] as String?,
         levelBadge: json['levelBadge'] as String?,
       );
+  final String userId;
+  final String displayName;
+  final String? avatarUrl;
+  final int rank;
+  final int previousRank;
+  final int score;
+  final String category; // productivity, focus, streak, etc.
+  final String period; // today, week, month, allTime
+  final String? country;
+  final String? levelBadge;
+
+  int get rankChange => previousRank == 0 ? 0 : previousRank - rank;
 
   Map<String, dynamic> toJson() => {
         'userId': userId,
@@ -329,14 +328,7 @@ class LeaderboardModel {
 
 /// Subscription data model
 class SubscriptionModel {
-  final String userId;
-  final String tier; // free, basic, pro, elite
-  final String? productId;
-  final DateTime? purchaseDate;
-  final DateTime? expirationDate;
-  final bool isTrialActive;
-  final bool willRenew;
-  final String store; // appStore, playStore
+  // appStore, playStore
 
   const SubscriptionModel({
     required this.userId,
@@ -348,15 +340,6 @@ class SubscriptionModel {
     this.willRenew = false,
     this.store = 'playStore',
   });
-
-  bool get isActive {
-    if (tier == 'free') return true;
-    if (expirationDate == null) return false;
-    return expirationDate!.isAfter(DateTime.now());
-  }
-
-  bool get isPro => tier == 'pro' || tier == 'elite';
-  bool get isElite => tier == 'elite';
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) =>
       SubscriptionModel(
@@ -373,6 +356,23 @@ class SubscriptionModel {
         willRenew: json['willRenew'] as bool? ?? false,
         store: json['store'] as String? ?? 'playStore',
       );
+  final String userId;
+  final String tier; // free, basic, pro, elite
+  final String? productId;
+  final DateTime? purchaseDate;
+  final DateTime? expirationDate;
+  final bool isTrialActive;
+  final bool willRenew;
+  final String store;
+
+  bool get isActive {
+    if (tier == 'free') return true;
+    if (expirationDate == null) return false;
+    return expirationDate!.isAfter(DateTime.now());
+  }
+
+  bool get isPro => tier == 'pro' || tier == 'elite';
+  bool get isElite => tier == 'elite';
 
   Map<String, dynamic> toJson() => {
         'userId': userId,
@@ -388,15 +388,6 @@ class SubscriptionModel {
 
 /// Notification data model
 class NotificationModel {
-  final String id;
-  final String userId;
-  final String title;
-  final String body;
-  final String type; // blocking, goal, achievement, social, ai_coach, system
-  final DateTime timestamp;
-  final bool isRead;
-  final Map<String, dynamic>? actionData;
-
   const NotificationModel({
     required this.id,
     required this.userId,
@@ -419,6 +410,14 @@ class NotificationModel {
         isRead: json['isRead'] as bool? ?? false,
         actionData: json['actionData'] as Map<String, dynamic>?,
       );
+  final String id;
+  final String userId;
+  final String title;
+  final String body;
+  final String type; // blocking, goal, achievement, social, ai_coach, system
+  final DateTime timestamp;
+  final bool isRead;
+  final Map<String, dynamic>? actionData;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -434,17 +433,6 @@ class NotificationModel {
 
 /// Reward/XP system model
 class RewardModel {
-  final String userId;
-  final int totalXp;
-  final int level;
-  final List<String> unlockedBadges;
-  final List<String> unlockedThemes;
-  final int focusSessionsCompleted;
-  final int habitsCompleted;
-  final int challengesCompleted;
-  final int goalsAchieved;
-  final int loginStreak;
-
   const RewardModel({
     required this.userId,
     this.totalXp = 0,
@@ -458,11 +446,35 @@ class RewardModel {
     this.loginStreak = 0,
   });
 
+  factory RewardModel.fromJson(Map<String, dynamic> json) => RewardModel(
+        userId: json['userId'] as String,
+        totalXp: json['totalXp'] as int? ?? 0,
+        level: json['level'] as int? ?? 1,
+        unlockedBadges: List<String>.from(json['unlockedBadges'] as Iterable<dynamic>? ?? []),
+        unlockedThemes:
+            List<String>.from(json['unlockedThemes'] as Iterable<dynamic>? ?? ['default']),
+        focusSessionsCompleted: json['focusSessionsCompleted'] as int? ?? 0,
+        habitsCompleted: json['habitsCompleted'] as int? ?? 0,
+        challengesCompleted: json['challengesCompleted'] as int? ?? 0,
+        goalsAchieved: json['goalsAchieved'] as int? ?? 0,
+        loginStreak: json['loginStreak'] as int? ?? 0,
+      );
+  final String userId;
+  final int totalXp;
+  final int level;
+  final List<String> unlockedBadges;
+  final List<String> unlockedThemes;
+  final int focusSessionsCompleted;
+  final int habitsCompleted;
+  final int challengesCompleted;
+  final int goalsAchieved;
+  final int loginStreak;
+
   int get xpForNextLevel => (100 * level * 1.3).toInt();
 
   double get levelProgress {
-    int total = 0;
-    for (int i = 1; i < level; i++) {
+    var total = 0;
+    for (var i = 1; i < level; i++) {
       total += (100 * i * 1.3).toInt();
     }
     final xpInLevel = totalXp - total;
@@ -480,20 +492,6 @@ class RewardModel {
     return 'Novice';
   }
 
-  factory RewardModel.fromJson(Map<String, dynamic> json) => RewardModel(
-        userId: json['userId'] as String,
-        totalXp: json['totalXp'] as int? ?? 0,
-        level: json['level'] as int? ?? 1,
-        unlockedBadges: List<String>.from(json['unlockedBadges'] ?? []),
-        unlockedThemes:
-            List<String>.from(json['unlockedThemes'] ?? ['default']),
-        focusSessionsCompleted: json['focusSessionsCompleted'] as int? ?? 0,
-        habitsCompleted: json['habitsCompleted'] as int? ?? 0,
-        challengesCompleted: json['challengesCompleted'] as int? ?? 0,
-        goalsAchieved: json['goalsAchieved'] as int? ?? 0,
-        loginStreak: json['loginStreak'] as int? ?? 0,
-      );
-
   Map<String, dynamic> toJson() => {
         'userId': userId,
         'totalXp': totalXp,
@@ -510,16 +508,6 @@ class RewardModel {
 
 /// App restriction model for app blocker
 class AppRestrictionModel {
-  final String packageName;
-  final String appName;
-  final String? category;
-  final bool isBlocked;
-  final int? dailyLimitMinutes;
-  final int usedTodayMinutes;
-  final List<String>? blockedTimeRanges; // "09:00-18:00"
-  final List<int>? blockedDays; // 1=Mon
-  final int gracePeriodMinutes;
-
   const AppRestrictionModel({
     required this.packageName,
     required this.appName,
@@ -532,13 +520,6 @@ class AppRestrictionModel {
     this.gracePeriodMinutes = 5,
   });
 
-  bool get isOverLimit =>
-      dailyLimitMinutes != null && usedTodayMinutes >= dailyLimitMinutes!;
-
-  int get remainingMinutes => dailyLimitMinutes != null
-      ? (dailyLimitMinutes! - usedTodayMinutes).clamp(0, 999)
-      : 999;
-
   factory AppRestrictionModel.fromJson(Map<String, dynamic> json) =>
       AppRestrictionModel(
         packageName: json['packageName'] as String,
@@ -548,13 +529,29 @@ class AppRestrictionModel {
         dailyLimitMinutes: json['dailyLimitMinutes'] as int?,
         usedTodayMinutes: json['usedTodayMinutes'] as int? ?? 0,
         blockedTimeRanges: json['blockedTimeRanges'] != null
-            ? List<String>.from(json['blockedTimeRanges'])
+            ? List<String>.from(json['blockedTimeRanges'] as Iterable<dynamic>)
             : null,
         blockedDays: json['blockedDays'] != null
-            ? List<int>.from(json['blockedDays'])
+            ? List<int>.from(json['blockedDays'] as Iterable<dynamic>)
             : null,
         gracePeriodMinutes: json['gracePeriodMinutes'] as int? ?? 5,
       );
+  final String packageName;
+  final String appName;
+  final String? category;
+  final bool isBlocked;
+  final int? dailyLimitMinutes;
+  final int usedTodayMinutes;
+  final List<String>? blockedTimeRanges; // "09:00-18:00"
+  final List<int>? blockedDays; // 1=Mon
+  final int gracePeriodMinutes;
+
+  bool get isOverLimit =>
+      dailyLimitMinutes != null && usedTodayMinutes >= dailyLimitMinutes!;
+
+  int get remainingMinutes => dailyLimitMinutes != null
+      ? (dailyLimitMinutes! - usedTodayMinutes).clamp(0, 999)
+      : 999;
 
   Map<String, dynamic> toJson() => {
         'packageName': packageName,
@@ -571,18 +568,6 @@ class AppRestrictionModel {
 
 /// Focus mode data model
 class FocusModeModel {
-  final String id;
-  final String name;
-  final String icon;
-  final List<String> blockedApps;
-  final List<String> allowedApps;
-  final String notificationFilter; // none, calls_only, all
-  final String? soundProfile;
-  final int? durationMinutes;
-  final bool isBuiltIn;
-  final bool isActive;
-  final Map<String, dynamic>? schedule;
-
   const FocusModeModel({
     required this.id,
     required this.name,
@@ -601,8 +586,8 @@ class FocusModeModel {
         id: json['id'] as String,
         name: json['name'] as String,
         icon: json['icon'] as String? ?? '🎯',
-        blockedApps: List<String>.from(json['blockedApps'] ?? []),
-        allowedApps: List<String>.from(json['allowedApps'] ?? []),
+        blockedApps: List<String>.from(json['blockedApps'] as Iterable<dynamic>? ?? []),
+        allowedApps: List<String>.from(json['allowedApps'] as Iterable<dynamic>? ?? []),
         notificationFilter: json['notificationFilter'] as String? ?? 'none',
         soundProfile: json['soundProfile'] as String?,
         durationMinutes: json['durationMinutes'] as int?,
@@ -610,6 +595,17 @@ class FocusModeModel {
         isActive: json['isActive'] as bool? ?? false,
         schedule: json['schedule'] as Map<String, dynamic>?,
       );
+  final String id;
+  final String name;
+  final String icon;
+  final List<String> blockedApps;
+  final List<String> allowedApps;
+  final String notificationFilter; // none, calls_only, all
+  final String? soundProfile;
+  final int? durationMinutes;
+  final bool isBuiltIn;
+  final bool isActive;
+  final Map<String, dynamic>? schedule;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -628,22 +624,6 @@ class FocusModeModel {
 
 /// Report data model
 class ReportModel {
-  final String id;
-  final String userId;
-  final String type; // weekly, monthly
-  final DateTime periodStart;
-  final DateTime periodEnd;
-  final DateTime generatedAt;
-  final int averageScore;
-  final int totalFocusMinutes;
-  final int totalSocialMediaMinutes;
-  final int habitsCompletedCount;
-  final int goalsMetCount;
-  final int achievementsUnlocked;
-  final Map<String, int> appUsageSummary;
-  final List<String> insights;
-  final List<String> recommendations;
-
   const ReportModel({
     required this.id,
     required this.userId,
@@ -675,10 +655,25 @@ class ReportModel {
         habitsCompletedCount: json['habitsCompletedCount'] as int? ?? 0,
         goalsMetCount: json['goalsMetCount'] as int? ?? 0,
         achievementsUnlocked: json['achievementsUnlocked'] as int? ?? 0,
-        appUsageSummary: Map<String, int>.from(json['appUsageSummary'] ?? {}),
-        insights: List<String>.from(json['insights'] ?? []),
-        recommendations: List<String>.from(json['recommendations'] ?? []),
+        appUsageSummary: Map<String, int>.from(json['appUsageSummary'] as Map? ?? {}),
+        insights: List<String>.from(json['insights'] as Iterable<dynamic>? ?? []),
+        recommendations: List<String>.from(json['recommendations'] as Iterable<dynamic>? ?? []),
       );
+  final String id;
+  final String userId;
+  final String type; // weekly, monthly
+  final DateTime periodStart;
+  final DateTime periodEnd;
+  final DateTime generatedAt;
+  final int averageScore;
+  final int totalFocusMinutes;
+  final int totalSocialMediaMinutes;
+  final int habitsCompletedCount;
+  final int goalsMetCount;
+  final int achievementsUnlocked;
+  final Map<String, int> appUsageSummary;
+  final List<String> insights;
+  final List<String> recommendations;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -701,16 +696,6 @@ class ReportModel {
 
 /// Accountability pair model
 class AccountabilityModel {
-  final String id;
-  final String user1Id;
-  final String user2Id;
-  final DateTime createdAt;
-  final bool isActive;
-  final int messageCount;
-  final int cheersCount;
-  final int nudgesCount;
-  final int daysPartnered;
-
   const AccountabilityModel({
     required this.id,
     required this.user1Id,
@@ -735,6 +720,15 @@ class AccountabilityModel {
         nudgesCount: json['nudgesCount'] as int? ?? 0,
         daysPartnered: json['daysPartnered'] as int? ?? 0,
       );
+  final String id;
+  final String user1Id;
+  final String user2Id;
+  final DateTime createdAt;
+  final bool isActive;
+  final int messageCount;
+  final int cheersCount;
+  final int nudgesCount;
+  final int daysPartnered;
 
   Map<String, dynamic> toJson() => {
         'id': id,

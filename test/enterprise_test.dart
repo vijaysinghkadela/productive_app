@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focus_guard/core/services/score_calculator_service.dart';
-import 'package:focus_guard/core/extensions/string_extensions.dart';
-import 'package:focus_guard/core/extensions/duration_extensions.dart';
-import 'package:focus_guard/core/extensions/datetime_extensions.dart';
-import 'package:focus_guard/core/errors/failure.dart';
 import 'package:focus_guard/core/errors/app_exceptions.dart';
-import 'package:focus_guard/data/models/user_model.dart';
-import 'package:focus_guard/data/models/session_model.dart';
+import 'package:focus_guard/core/errors/failure.dart';
+import 'package:focus_guard/core/extensions/datetime_extensions.dart';
+import 'package:focus_guard/core/extensions/duration_extensions.dart';
+import 'package:focus_guard/core/extensions/string_extensions.dart';
+import 'package:focus_guard/core/services/score_calculator_service.dart';
 import 'package:focus_guard/data/models/feature_models.dart';
+import 'package:focus_guard/data/models/session_model.dart';
+import 'package:focus_guard/data/models/user_model.dart';
 
 void main() {
   // ============================================================
@@ -97,14 +97,14 @@ void main() {
     });
 
     test('when() dispatches correctly', () {
-      const Result<int> success = Success(42);
+      const success = Success(42);
       final value = success.when(
         success: (v) => 'got $v',
         failure: (m, c) => 'error: $m',
       );
       expect(value, 'got 42');
 
-      const Result<int> failure = Failure('oops');
+      const failure = Failure('oops');
       final error = failure.when(
         success: (v) => 'got $v',
         failure: (m, c) => 'error: $m',
@@ -118,29 +118,45 @@ void main() {
   // ============================================================
   group('AppExceptions', () {
     test('NetworkException status code messages', () {
-      expect(const NetworkException('', 401).userMessage,
-          'Session expired. Please sign in again.');
+      expect(
+        const NetworkException('', 401).userMessage,
+        'Session expired. Please sign in again.',
+      );
       expect(const NetworkException('', 403).userMessage, 'Access denied.');
-      expect(const NetworkException('', 429).userMessage,
-          'Too many requests. Please wait a moment.');
-      expect(const NetworkException('', 500).userMessage,
-          'Server error. Please try again later.');
+      expect(
+        const NetworkException('', 429).userMessage,
+        'Too many requests. Please wait a moment.',
+      );
+      expect(
+        const NetworkException('', 500).userMessage,
+        'Server error. Please try again later.',
+      );
     });
 
     test('AuthException error code messages', () {
-      expect(const AuthException('', 'user-not-found').userMessage,
-          'No account found with this email.');
-      expect(const AuthException('', 'wrong-password').userMessage,
-          'Incorrect password.');
-      expect(const AuthException('', 'email-already-in-use').userMessage,
-          'This email is already registered.');
+      expect(
+        const AuthException('', 'user-not-found').userMessage,
+        'No account found with this email.',
+      );
+      expect(
+        const AuthException('', 'wrong-password').userMessage,
+        'Incorrect password.',
+      );
+      expect(
+        const AuthException('', 'email-already-in-use').userMessage,
+        'This email is already registered.',
+      );
     });
 
     test('PermissionException permission messages', () {
-      expect(const PermissionException('', 'usage_stats').userMessage,
-          contains('Usage access'));
-      expect(const PermissionException('', 'overlay').userMessage,
-          contains('Display over other apps'));
+      expect(
+        const PermissionException('', 'usage_stats').userMessage,
+        contains('Usage access'),
+      );
+      expect(
+        const PermissionException('', 'overlay').userMessage,
+        contains('Display over other apps'),
+      );
     });
   });
 
@@ -205,12 +221,14 @@ void main() {
   group('DateTimeExtension', () {
     test('isToday', () {
       expect(DateTime.now().isToday, true);
-      expect(DateTime(2020, 1, 1).isToday, false);
+      expect(DateTime(2020).isToday, false);
     });
 
     test('isYesterday', () {
       expect(
-          DateTime.now().subtract(const Duration(days: 1)).isYesterday, true);
+        DateTime.now().subtract(const Duration(days: 1)).isYesterday,
+        true,
+      );
       expect(DateTime.now().isYesterday, false);
     });
 
@@ -349,12 +367,16 @@ void main() {
     test('levelTitle progresses correctly', () {
       expect(const RewardModel(userId: 'u1', level: 1).levelTitle, 'Novice');
       expect(
-          const RewardModel(userId: 'u1', level: 5).levelTitle, 'Apprentice');
+        const RewardModel(userId: 'u1', level: 5).levelTitle,
+        'Apprentice',
+      );
       expect(const RewardModel(userId: 'u1', level: 10).levelTitle, 'Adept');
       expect(const RewardModel(userId: 'u1', level: 20).levelTitle, 'Expert');
       expect(const RewardModel(userId: 'u1', level: 30).levelTitle, 'Master');
       expect(
-          const RewardModel(userId: 'u1', level: 50).levelTitle, 'Focus God');
+        const RewardModel(userId: 'u1', level: 50).levelTitle,
+        'Focus God',
+      );
     });
   });
 
@@ -374,13 +396,15 @@ void main() {
   group('JournalModel', () {
     test('moodEmoji maps correctly', () {
       expect(
-          JournalModel(id: 'j1', userId: 'u1', date: DateTime(2026), mood: 1)
-              .moodEmoji,
-          '😞');
+        JournalModel(id: 'j1', userId: 'u1', date: DateTime(2026), mood: 1)
+            .moodEmoji,
+        '😞',
+      );
       expect(
-          JournalModel(id: 'j2', userId: 'u1', date: DateTime(2026), mood: 5)
-              .moodEmoji,
-          '🤩');
+        JournalModel(id: 'j2', userId: 'u1', date: DateTime(2026), mood: 5)
+            .moodEmoji,
+        '🤩',
+      );
     });
   });
 }

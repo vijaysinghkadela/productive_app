@@ -1,0 +1,597 @@
+Analyzing productive_app...                                     
+
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/errors/error_handler.dart:56:7 • avoid_catches_without_on_clauses
+warning • The value of the field '_userId' isn't used • lib/core/fixes/async_fixes.dart:6:10 • unused_field
+warning • The value of the field '_userData' isn't used • lib/core/fixes/async_fixes.dart:7:10 • unused_field
+warning • The declaration '_loadUserData' isn't referenced • lib/core/fixes/async_fixes.dart:10:16 • unused_element
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/fixes/async_fixes.dart:28:7 • avoid_catches_without_on_clauses
+   info • Unnecessary use of a block function body • lib/core/fixes/firebase_fixes.dart:8:66 • prefer_expression_function_bodies
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/fixes/firebase_fixes.dart:14:9 • avoid_catches_without_on_clauses
+warning • The type of error can't be inferred; a type must be explicitly provided • lib/core/fixes/firebase_fixes.dart:19:21 • inference_failure_on_untyped_parameter
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/fixes/firebase_fixes.dart:43:17 • inference_failure_on_instance_creation
+warning • The value of the field '_error' isn't used • lib/core/fixes/lifecycle_fixes.dart:20:11 • unused_field
+   info • Asynchronous function invoked in a non-'async' function • lib/core/fixes/lifecycle_fixes.dart:42:5 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/fixes/lifecycle_fixes.dart:42:17 • discarded_futures
+warning • The type of error can't be inferred; a type must be explicitly provided • lib/core/fixes/lifecycle_fixes.dart:42:29 • inference_failure_on_untyped_parameter
+   info • Asynchronous function invoked in a non-'async' function • lib/core/fixes/lifecycle_fixes.dart:54:20 • discarded_futures
+warning • The declaration '_showResult' isn't referenced • lib/core/fixes/lifecycle_fixes.dart:68:16 • unused_element
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/fixes/lifecycle_fixes.dart:69:11 • inference_failure_on_instance_creation
+   info • Asynchronous function invoked in a non-'async' function • lib/core/fixes/navigation_fixes.dart:8:26 • discarded_futures
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/fixes/navigation_fixes.dart:14:11 • inference_failure_on_instance_creation
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/core/fixes/navigation_fixes.dart:18:5 • unawaited_futures
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'String?'.  • lib/core/fixes/null_safety_fixes.dart:9:14 • argument_type_not_assignable
+   info • The expression has no effect and can be removed • lib/core/fixes/riverpod_fixes.dart:15:27 • noop_primitive_operations
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/fixes/riverpod_fixes.dart:30:7 • avoid_catches_without_on_clauses
+   info • Method invocation or property access on a 'dynamic' target • lib/core/network/dio_client.dart:115:11 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/network/dio_client.dart:115:11 • avoid_dynamic_calls
+   info • Invalid use of 'default' member in a switch • lib/core/network/dio_client.dart:120:7 • no_default_cases
+warning • The generic type 'Response<dynamic>' should have explicit type arguments but doesn't • lib/core/network/dio_client.dart:165:19 • strict_raw_type
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/network/dio_client.dart:201:13 • inference_failure_on_instance_creation
+warning • The type argument(s) of the function 'fetch' can't be inferred • lib/core/network/dio_client.dart:204:37 • inference_failure_on_function_invocation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/network/dio_client.dart:207:9 • avoid_catches_without_on_clauses
+   info • Unnecessary use of a block function body • lib/core/optimization/animation_optimizer.dart:14:38 • prefer_expression_function_bodies
+   info • Invalid use of a private type in a public API • lib/core/optimization/animation_optimizer.dart:33:14 • library_private_types_in_public_api
+   info • The parameter name 'old' doesn't match the name 'oldDelegate' in the overridden method • lib/core/optimization/animation_optimizer.dart:54:43 • avoid_renaming_method_parameters
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/core/optimization/animation_optimizer.dart:87:50 • deprecated_member_use
+   info • Unnecessary use of a block function body • lib/core/optimization/asset_optimizer.dart:16:38 • prefer_expression_function_bodies
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/database_optimizer.dart:5:46 • avoid_annotating_with_dynamic
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/database_optimizer.dart:6:10 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/database_optimizer.dart:6:10 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/database_optimizer.dart:7:10 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/database_optimizer.dart:7:10 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/database_optimizer.dart:7:28 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/database_optimizer.dart:7:28 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/database_optimizer.dart:8:13 • avoid_dynamic_calls
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/database_optimizer.dart:13:43 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/database_optimizer.dart:40:5 • avoid_annotating_with_dynamic
+   info • Unnecessary use of a block function body • lib/core/optimization/firestore_optimizer.dart:26:62 • prefer_expression_function_bodies
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'String'.  • lib/core/optimization/firestore_optimizer.dart:64:50 • argument_type_not_assignable
+  error • Target of URI doesn't exist: 'dart:typedData' • lib/core/optimization/isolate_runner.dart:1:8 • uri_does_not_exist
+   info • Missing type annotation on a public API • lib/core/optimization/isolate_runner.dart:8:41 • type_annotate_public_apis
+warning • The type of input can't be inferred; a type must be explicitly provided • lib/core/optimization/isolate_runner.dart:8:41 • inference_failure_on_untyped_parameter
+   info • Missing type annotation on a public API • lib/core/optimization/isolate_runner.dart:16:42 • type_annotate_public_apis
+warning • The type of data can't be inferred; a type must be explicitly provided • lib/core/optimization/isolate_runner.dart:16:42 • inference_failure_on_untyped_parameter
+   info • Missing type annotation on a public API • lib/core/optimization/isolate_runner.dart:24:39 • type_annotate_public_apis
+warning • The type of input can't be inferred; a type must be explicitly provided • lib/core/optimization/isolate_runner.dart:24:39 • inference_failure_on_untyped_parameter
+   info • Unnecessary use of a block function body • lib/core/optimization/list_optimizer.dart:20:39 • prefer_expression_function_bodies
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/list_optimizer.dart:25:17 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/list_optimizer.dart:27:25 • avoid_dynamic_calls
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'String'.  • lib/core/optimization/list_optimizer.dart:27:25 • argument_type_not_assignable
+   info • Missing type annotation on a public API • lib/core/optimization/memory_manager.dart:36:5 • type_annotate_public_apis
+warning • The type of isarInstance can't be inferred; a type must be explicitly provided • lib/core/optimization/memory_manager.dart:36:5 • inference_failure_on_untyped_parameter
+   info • 'bool' parameters should be named parameters • lib/core/optimization/memory_manager.dart:37:5 • avoid_positional_boolean_parameters
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/memory_manager.dart:40:13 • avoid_dynamic_calls
+warning • The type argument(s) of 'Map' can't be inferred • lib/core/optimization/network_optimizer.dart:72:38 • inference_failure_on_collection_literal
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/network_optimizer.dart:76:11 • avoid_dynamic_calls
+warning • The type argument(s) of the constructor 'Map.from' can't be inferred • lib/core/optimization/network_optimizer.dart:80:24 • inference_failure_on_instance_creation
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/offline_manager.dart:41:24 • avoid_annotating_with_dynamic
+   info • Missing type annotation on a public API • lib/core/optimization/offline_manager.dart:54:38 • type_annotate_public_apis
+warning • The type of operation can't be inferred; a type must be explicitly provided • lib/core/optimization/offline_manager.dart:54:38 • inference_failure_on_untyped_parameter
+   info • Asynchronous function invoked in a non-'async' function • lib/core/optimization/offline_manager.dart:64:25 • discarded_futures
+   info • Invalid use of a private type in a public API • lib/core/optimization/performance_tier.dart:5:19 • library_private_types_in_public_api
+   info • Invalid use of a private type in a public API • lib/core/optimization/performance_tier.dart:8:19 • library_private_types_in_public_api
+   info • Invalid use of a private type in a public API • lib/core/optimization/performance_tier.dart:13:9 • library_private_types_in_public_api
+   info • Invalid use of a private type in a public API • lib/core/optimization/performance_tier.dart:16:9 • library_private_types_in_public_api
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:7:47 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:8:42 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:8:51 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:35:6 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:35:45 • avoid_annotating_with_dynamic
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/provider_optimizer.dart:35:59 • avoid_dynamic_calls
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:39:6 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:39:45 • avoid_annotating_with_dynamic
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/provider_optimizer.dart:39:59 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/provider_optimizer.dart:39:59 • avoid_dynamic_calls
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:43:6 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:43:45 • avoid_annotating_with_dynamic
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/provider_optimizer.dart:43:59 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/core/optimization/provider_optimizer.dart:43:59 • avoid_dynamic_calls
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:48:63 • avoid_annotating_with_dynamic
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:48:76 • avoid_annotating_with_dynamic
+   info • Unnecessary use of a block function body • lib/core/optimization/provider_optimizer.dart:48:95 • prefer_expression_function_bodies
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:55:43 • avoid_annotating_with_dynamic
+   info • Unnecessary use of a block function body • lib/core/optimization/provider_optimizer.dart:55:56 • prefer_expression_function_bodies
+   info • Unnecessary 'dynamic' type annotation • lib/core/optimization/provider_optimizer.dart:63:75 • avoid_annotating_with_dynamic
+   info • Unnecessary use of a block function body • lib/core/optimization/provider_optimizer.dart:63:88 • prefer_expression_function_bodies
+   info • The parameter name 'old' doesn't match the name 'oldDelegate' in the overridden method • lib/core/optimization/rendering_optimizer.dart:10:46 • avoid_renaming_method_parameters
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/optimization/startup_optimizer.dart:24:13 • inference_failure_on_instance_creation
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/optimization/startup_optimizer.dart:26:13 • inference_failure_on_instance_creation
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/optimization/startup_optimizer.dart:28:13 • inference_failure_on_instance_creation
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/optimization/startup_optimizer.dart:30:13 • inference_failure_on_instance_creation
+warning • Unused import: 'dart:convert' • lib/core/privacy/privacy_manager.dart:1:8 • unused_import
+warning • The value of the field '_consentKey' isn't used • lib/core/privacy/privacy_manager.dart:45:23 • unused_field
+   info • Unnecessary use of a block function body • lib/core/privacy/privacy_manager.dart:73:62 • prefer_expression_function_bodies
+warning • The generic type 'CustomTransitionPage<dynamic>' should have explicit type arguments but doesn't • lib/core/router.dart:33:1 • strict_raw_type
+warning • The generic type 'CustomTransitionPage<dynamic>' should have explicit type arguments but doesn't • lib/core/router.dart:41:1 • strict_raw_type
+   info • Asynchronous function invoked in a non-'async' function • lib/core/security/auth_security_service.dart:56:5 • discarded_futures
+   info • Unnecessary use of a block function body • lib/core/security/auth_security_service.dart:140:37 • prefer_expression_function_bodies
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/security/certificate_pinning.dart:92:7 • avoid_catches_without_on_clauses
+   info • Invalid use of a private type in a public API • lib/core/security/data_protection_service.dart:67:3 • library_private_types_in_public_api
+   info • Asynchronous function invoked in a non-'async' function • lib/core/security/data_protection_service.dart:74:27 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/security/data_protection_service.dart:79:27 • discarded_futures
+  error • The named parameter 'supportedAlternativeStores' isn't defined • lib/core/security/device_integrity_service.dart:52:9 • undefined_named_parameter
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/core/security/device_integrity_service.dart:76:5 • unawaited_futures
+   info • 'bool' parameters should be named parameters • lib/core/security/input_validator.dart:4:20 • avoid_positional_boolean_parameters
+   info • Unnecessary use of a block function body • lib/core/security/input_validator.dart:100:56 • prefer_expression_function_bodies
+warning • Unused import: 'package:flutter/services.dart' • lib/core/security/integrity_service.dart:3:8 • unused_import
+   info • Unnecessary use of a block function body • lib/core/security/integrity_service.dart:74:41 • prefer_expression_function_bodies
+warning • The generic type 'Response<dynamic>' should have explicit type arguments but doesn't • lib/core/security/secure_api_service.dart:63:34 • strict_raw_type
+   info • Use the constant 'AndroidOptions.defaultOptions' rather than a constructor returning the same object • lib/core/security/secure_storage_service.dart:10:21 • use_named_constants
+warning • The value of the field '_userPrefsKey' isn't used • lib/core/security/secure_storage_service.dart:21:16 • unused_field
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/security/secure_storage_service.dart:69:7 • avoid_catches_without_on_clauses
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/core/services/audio_service.dart:26:7 • unawaited_futures
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/audio_service.dart:40:7 • avoid_catches_without_on_clauses
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/audio_service.dart:81:14 • discarded_futures
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/services/biometric_service.dart:26:13 • inference_failure_on_instance_creation
+   info • Unnecessary use of a block function body • lib/core/services/biometric_service.dart:34:51 • prefer_expression_function_bodies
+   info • Use an if-null operator to convert a 'null' to a 'bool' • lib/core/services/calendar_service.dart:42:16 • use_if_null_to_convert_nulls_to_bools
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/calendar_service.dart:56:7 • avoid_catches_without_on_clauses
+   info • Use an if-null operator to convert a 'null' to a 'bool' • lib/core/services/calendar_service.dart:85:11 • use_if_null_to_convert_nulls_to_bools
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/calendar_service.dart:90:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/calendar_service.dart:102:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/calendar_service.dart:128:7 • avoid_catches_without_on_clauses
+   info • Assignment could be inlined in 'return' statement • lib/core/services/calendar_service.dart:157:5 • join_return_with_assignment
+   info • The method is used to change a property • lib/core/services/haptic_service.dart:11:8 • use_setters_to_change_properties
+   info • 'bool' parameters should be named parameters • lib/core/services/haptic_service.dart:11:19 • avoid_positional_boolean_parameters
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/haptic_service.dart:15:34 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/haptic_service.dart:20:34 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/haptic_service.dart:25:34 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/haptic_service.dart:30:34 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/haptic_service.dart:35:34 • discarded_futures
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/core/services/haptic_service.dart:50:5 • unawaited_futures
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/services/haptic_service.dart:51:11 • inference_failure_on_instance_creation
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/core/services/haptic_service.dart:52:5 • unawaited_futures
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/core/services/haptic_service.dart:53:11 • inference_failure_on_instance_creation
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/core/services/haptic_service.dart:54:5 • unawaited_futures
+   info • The imported package 'hive' isn't a dependency of the importing package • lib/core/services/secure_storage_service.dart:5:8 • depend_on_referenced_packages
+   info • Use the constant 'AndroidOptions.defaultOptions' rather than a constructor returning the same object • lib/core/services/secure_storage_service.dart:14:15 • use_named_constants
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/sync_service.dart:29:71 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/sync_service.dart:34:7 • discarded_futures
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/sync_service.dart:54:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/sync_service.dart:89:9 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/sync_service.dart:119:9 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/sync_service.dart:151:9 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/core/services/sync_service.dart:201:7 • avoid_catches_without_on_clauses
+   info • Asynchronous function invoked in a non-'async' function • lib/core/services/sync_service.dart:209:23 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/utils.dart:71:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/utils.dart:72:39 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/utils.dart:73:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/core/utils.dart:74:42 • discarded_futures
+   info • Sort directive sections alphabetically • lib/data/database/app_database.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/data/database/app_database.dart:6:1 • directives_ordering
+   info • Static method should be a constructor • lib/data/database/app_database.dart:18:26 • prefer_constructors_over_static_methods
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:27:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:28:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:29:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:30:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:31:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:32:32 • inference_failure_on_function_invocation
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:36:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:68:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:96:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:113:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:130:3 • strict_raw_type
+   info • Missing type annotation on a public API • lib/data/datasources/local_data_source.dart:132:40 • type_annotate_public_apis
+warning • The type of value can't be inferred; a type must be explicitly provided • lib/data/datasources/local_data_source.dart:132:40 • inference_failure_on_untyped_parameter
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:173:3 • strict_raw_type
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:26:48 • type_annotate_public_apis
+warning • The type of value can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:26:48 • inference_failure_on_untyped_parameter
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:34:44 • type_annotate_public_apis
+warning • The type of defaultValue can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:34:44 • inference_failure_on_untyped_parameter
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/datasources/local_datasources.dart:40:9 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/datasources/local_datasources.dart:58:11 • avoid_catches_without_on_clauses
+warning • The type argument(s) of 'List' can't be inferred • lib/data/datasources/local_datasources.dart:84:61 • inference_failure_on_collection_literal
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:100:40 • type_annotate_public_apis
+warning • The type of value can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:100:40 • inference_failure_on_untyped_parameter
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:101:35 • type_annotate_public_apis
+warning • The type of defaultValue can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:101:35 • inference_failure_on_untyped_parameter
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:107:5 • type_annotate_public_apis
+warning • The type of data can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:107:5 • inference_failure_on_untyped_parameter
+   info • Asynchronous function invoked in a non-'async' function • lib/data/datasources/local_datasources.dart:119:7 • discarded_futures
+   info • Unnecessary 'await' • lib/data/datasources/local_datasources.dart:124:35 • unnecessary_await_in_return
+   info • Use the constant 'AndroidOptions.defaultOptions' rather than a constructor returning the same object • lib/data/datasources/local_datasources.dart:130:15 • use_named_constants
+   info • Use 'late' for private members with a non-nullable type • lib/data/datasources/local_datasources.dart:151:22 • use_late_for_private_fields_and_variables
+   info • 'bool' parameters should be named parameters • lib/data/datasources/local_datasources.dart:193:40 • avoid_positional_boolean_parameters
+   info • 'bool' parameters should be named parameters • lib/data/datasources/local_datasources.dart:198:36 • avoid_positional_boolean_parameters
+   info • 'bool' parameters should be named parameters • lib/data/datasources/local_datasources.dart:203:34 • avoid_positional_boolean_parameters
+   info • Missing a required trailing comma • lib/data/models/user_model.dart:36:73 • require_trailing_commas
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:23:7 • avoid_catches_without_on_clauses
+   info • Unnecessary use of a block function body • lib/data/repositories/repository_impls.dart:29:53 • prefer_expression_function_bodies
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:39:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:50:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/data/repositories/repository_impls.dart:59:13 • inference_failure_on_instance_creation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:69:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/data/repositories/repository_impls.dart:81:13 • inference_failure_on_instance_creation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:91:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:102:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/data/repositories/repository_impls.dart:109:11 • inference_failure_on_instance_creation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:133:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:151:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:161:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:183:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of 'List' can't be inferred • lib/data/repositories/repository_impls.dart:197:64 • inference_failure_on_collection_literal
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:213:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:224:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:238:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:249:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of 'List' can't be inferred • lib/data/repositories/repository_impls.dart:263:64 • inference_failure_on_collection_literal
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:279:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:290:7 • avoid_catches_without_on_clauses
+   info • Missing a required trailing comma • lib/data/repositories/repository_impls.dart:302:68 • require_trailing_commas
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:312:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:323:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:339:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of 'List' can't be inferred • lib/data/repositories/repository_impls.dart:353:64 • inference_failure_on_collection_literal
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:368:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:379:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:393:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:404:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:417:7 • avoid_catches_without_on_clauses
+   info • Missing type annotation on a public API • lib/main.dart:7:38 • type_annotate_public_apis
+warning • The generic type 'List<dynamic>' should have explicit type arguments but doesn't • lib/main.dart:20:9 • strict_raw_type
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/main.dart:55:3 • unawaited_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/providers/app_providers.dart:205:19 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/providers/app_providers.dart:218:19 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/providers/app_providers.dart:450:5 • discarded_futures
+   info • 'bool' parameters should be named parameters • lib/presentation/providers/app_providers.dart:490:36 • avoid_positional_boolean_parameters
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/providers/focus_timer_provider.dart:162:11 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/providers/focus_timer_provider.dart:175:11 • discarded_futures
+   info • 'Share' is deprecated and shouldn't be used. Use SharePlus instead • lib/presentation/screens/accountability_screen.dart:65:27 • deprecated_member_use
+   info • 'share' is deprecated and shouldn't be used. Use SharePlus.instance.share() instead • lib/presentation/screens/accountability_screen.dart:65:33 • deprecated_member_use
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/accountability_screen.dart:65:33 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/achievements_screen.dart:33:54 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/ai_coaching_screen.dart:36:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/ai_coaching_screen.dart:64:21 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/ai_coaching_screen.dart:98:50 • discarded_futures
+   info • The imported package 'fl_chart' isn't a dependency of the importing package • lib/presentation/screens/analytics_screen.dart:2:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:fl_chart/fl_chart.dart' • lib/presentation/screens/analytics_screen.dart:2:8 • uri_does_not_exist
+   info • Sort directive sections alphabetically • lib/presentation/screens/analytics_screen.dart:9:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/analytics_screen.dart:49:44 • discarded_futures
+  error • The method 'FlSpot' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:254:14 • undefined_method
+  error • The method 'LineChart' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:257:12 • undefined_method
+  error • The method 'LineChartData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:258:7 • undefined_method
+  error • The method 'FlGridData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:259:19 • undefined_method
+  error • The method 'FlLine' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:263:44 • undefined_method
+  error • The name 'FlTitlesData' isn't a class • lib/presentation/screens/analytics_screen.dart:268:27 • creation_with_non_type
+  error • The method 'FlBorderData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:269:21 • undefined_method
+  error • The method 'LineChartBarData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:275:11 • undefined_method
+  error • The method 'FlDotData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:282:22 • undefined_method
+warning • The type of spot can't be inferred; a type must be explicitly provided • lib/presentation/screens/analytics_screen.dart:284:31 • inference_failure_on_untyped_parameter
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/analytics_screen.dart:284:52 • avoid_dynamic_calls
+  error • The method 'FlDotCirclePainter' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:285:21 • undefined_method
+  error • The method 'FlDotCirclePainter' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:290:21 • undefined_method
+  error • The method 'BarAreaData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:296:27 • undefined_method
+  error • The method 'LineTouchData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:309:24 • undefined_method
+  error • The method 'LineTouchTooltipData' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:310:29 • undefined_method
+warning • The type of spots can't be inferred; a type must be explicitly provided • lib/presentation/screens/analytics_screen.dart:313:31 • inference_failure_on_untyped_parameter
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/analytics_screen.dart:313:41 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/analytics_screen.dart:313:41 • avoid_dynamic_calls
+warning • The type of s can't be inferred; a type must be explicitly provided • lib/presentation/screens/analytics_screen.dart:315:20 • inference_failure_on_untyped_parameter
+  error • The method 'LineTooltipItem' isn't defined for the type '_AnalyticsScreenState' • lib/presentation/screens/analytics_screen.dart:315:26 • undefined_method
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/analytics_screen.dart:316:31 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/analytics_screen.dart:316:31 • avoid_dynamic_calls
+   info • Sort directive sections alphabetically • lib/presentation/screens/app_blocker_screen.dart:7:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/app_blocker_screen.dart:171:44 • discarded_futures
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/presentation/screens/auth/login_screen.dart:47:7 • avoid_catches_without_on_clauses
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/auth/login_screen.dart:257:50 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/auth/login_screen.dart:291:48 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/auth/login_screen.dart:331:26 • discarded_futures
+   info • Sort directive sections alphabetically • lib/presentation/screens/auth/signup_screen.dart:6:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/presentation/screens/auth/signup_screen.dart:8:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/auth/signup_screen.dart:47:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/bedtime_screen.dart:108:28 • discarded_futures
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/presentation/screens/bedtime_screen.dart:138:25 • unawaited_futures
+   info • Missing an 'await' for the 'Future' computed by this expression • lib/presentation/screens/bedtime_screen.dart:155:25 • unawaited_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/challenges_screen.dart:24:52 • discarded_futures
+   info • Sort directive sections alphabetically • lib/presentation/screens/digital_wellbeing_screen.dart:7:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/digital_wellbeing_screen.dart:69:52 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/digital_wellbeing_screen.dart:199:44 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/digital_wellbeing_screen.dart:352:44 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/focus_session_screen.dart:56:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/focus_session_screen.dart:69:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/focus_session_screen.dart:282:46 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/focus_session_screen.dart:402:5 • discarded_futures
+warning • The type argument(s) of the function 'showModalBottomSheet' can't be inferred • lib/presentation/screens/focus_session_screen.dart:402:5 • inference_failure_on_function_invocation
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/focus_session_screen.dart:446:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/focus_spaces_screen.dart:91:52 • discarded_futures
+   info • Use the constant 'Offset.zero' rather than a constructor returning the same object • lib/presentation/screens/focus_spaces_screen.dart:275:42 • use_named_constants
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/goals_screen.dart:23:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/goals_screen.dart:100:5 • discarded_futures
+warning • The type argument(s) of the function 'showModalBottomSheet' can't be inferred • lib/presentation/screens/goals_screen.dart:100:5 • inference_failure_on_function_invocation
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:203:21 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:204:20 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:205:19 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:205:20 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:206:25 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:207:24 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:211:9 • avoid_dynamic_calls
+  error • Conditions must have a static type of 'bool' • lib/presentation/screens/goals_screen.dart:211:9 • non_bool_condition
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:213:16 • avoid_dynamic_calls
+  error • Conditions must have a static type of 'bool' • lib/presentation/screens/goals_screen.dart:213:16 • non_bool_condition
+  error • Conditions must have a static type of 'bool' • lib/presentation/screens/goals_screen.dart:223:11 • non_bool_condition
+  error • Conditions must have a static type of 'bool' • lib/presentation/screens/goals_screen.dart:237:19 • non_bool_condition
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:248:23 • avoid_dynamic_calls
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'String'.  • lib/presentation/screens/goals_screen.dart:248:23 • argument_type_not_assignable
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:262:20 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:262:20 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:262:21 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:276:43 • avoid_dynamic_calls
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'double?'.  • lib/presentation/screens/goals_screen.dart:276:43 • argument_type_not_assignable
+   info • Method invocation or property access on a 'dynamic' target • lib/presentation/screens/goals_screen.dart:304:15 • avoid_dynamic_calls
+  error • Conditions must have a static type of 'bool' • lib/presentation/screens/goals_screen.dart:304:15 • non_bool_condition
+   info • Sort directive sections alphabetically • lib/presentation/screens/habits_screen.dart:7:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/habits_screen.dart:24:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/habits_screen.dart:261:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:40:44 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:86:44 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:125:48 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:139:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:140:31 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:189:44 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:268:48 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:286:48 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:293:48 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/home_screen.dart:300:48 • discarded_futures
+   info • Sort directive sections alphabetically • lib/presentation/screens/journal_screen.dart:6:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/journal_screen.dart:48:40 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/journal_screen.dart:92:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/kanban_screen.dart:187:26 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/kanban_screen.dart:198:30 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/kanban_screen.dart:201:59 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/kanban_screen.dart:216:5 • discarded_futures
+warning • The type argument(s) of the function 'showModalBottomSheet' can't be inferred • lib/presentation/screens/kanban_screen.dart:216:5 • inference_failure_on_function_invocation
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/kanban_screen.dart:273:53 • discarded_futures
+   info • Sort directive sections alphabetically • lib/presentation/screens/leaderboard_screen.dart:7:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/leaderboard_screen.dart:34:52 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/leaderboard_screen.dart:56:44 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/more_screen.dart:160:30 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/more_screen.dart:194:30 • discarded_futures
+   info • Sort directive sections alphabetically • lib/presentation/screens/onboarding_screen.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/presentation/screens/onboarding_screen.dart:7:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/onboarding_screen.dart:75:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/onboarding_screen.dart:77:17 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/onboarding_screen.dart:84:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/onboarding_screen.dart:131:51 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/overlay_nudge_screen.dart:215:40 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/overlay_nudge_screen.dart:216:35 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/overlay_nudge_screen.dart:231:50 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/permissions_screen.dart:51:20 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/permissions_screen.dart:79:48 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/permissions_screen.dart:83:48 • discarded_futures
+   info • Use the constant 'Offset.zero' rather than a constructor returning the same object • lib/presentation/screens/permissions_screen.dart:201:42 • use_named_constants
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/permissions_screen.dart:294:46 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/profile_screen.dart:44:56 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/profile_screen.dart:48:54 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/profile_screen.dart:156:42 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/settings_screen.dart:20:40 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/settings_screen.dart:33:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/settings_screen.dart:72:48 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/settings_screen.dart:177:42 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/settings_screen.dart:344:26 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/shell_screen.dart:95:40 • discarded_futures
+   info • Sort directive sections alphabetically • lib/presentation/screens/splash_screen.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/presentation/screens/subscription_screen.dart:7:1 • directives_ordering
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/subscription_screen.dart:38:52 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/subscription_screen.dart:274:26 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/subscription_screen.dart:318:24 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/terms_screen.dart:54:38 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/terms_screen.dart:152:38 • discarded_futures
+   info • Use the constant 'Offset.zero' rather than a constructor returning the same object • lib/presentation/screens/terms_screen.dart:178:42 • use_named_constants
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/screens/terms_screen.dart:206:53 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/widgets/app_buttons.dart:57:30 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/widgets/app_buttons.dart:162:30 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/widgets/app_buttons.dart:245:24 • discarded_futures
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/widgets/app_buttons.dart:331:24 • discarded_futures
+   info • Use an if-null operator to convert a 'null' to a 'bool' • lib/presentation/widgets/common_widgets.dart:124:33 • use_if_null_to_convert_nulls_to_bools
+   info • Use an if-null operator to convert a 'null' to a 'bool' • lib/presentation/widgets/common_widgets.dart:133:34 • use_if_null_to_convert_nulls_to_bools
+   info • Asynchronous function invoked in a non-'async' function • lib/presentation/widgets/paginated_list_view.dart:56:7 • discarded_futures
+   info • Assignment could be inlined in 'return' statement • lib/services/app_blocker_service.dart:27:7 • join_return_with_assignment
+   info • Asynchronous function invoked in a non-'async' function • lib/services/app_services.dart:66:5 • discarded_futures
+warning • The generic type 'Map<dynamic, dynamic>' should have explicit type arguments but doesn't • lib/services/app_services.dart:127:50 • strict_raw_type
+warning • The generic type 'List<dynamic>' should have explicit type arguments but doesn't • lib/services/app_services.dart:169:50 • strict_raw_type
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/services/app_services.dart:325:11 • inference_failure_on_instance_creation
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/services/app_services.dart:332:11 • inference_failure_on_instance_creation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/auth_service.dart:19:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/auth_service.dart:37:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/auth_service.dart:59:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/auth_service.dart:80:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/auth_service.dart:92:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/auth_service.dart:105:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/auth_service.dart:121:7 • avoid_catches_without_on_clauses
+   info • Use 'const' with the constructor to improve performance • lib/services/notification_service.dart:188:24 • prefer_const_constructors
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/purchase_service.dart:26:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/purchase_service.dart:40:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/purchase_service.dart:66:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/purchase_service.dart:93:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/purchase_service.dart:111:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/purchase_service.dart:121:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/services/purchase_service.dart:132:7 • avoid_catches_without_on_clauses
+warning • The generic type 'Map<dynamic, dynamic>' should have explicit type arguments but doesn't • lib/services/usage_tracker_service.dart:17:50 • strict_raw_type
+warning • The generic type 'List<dynamic>' should have explicit type arguments but doesn't • lib/services/usage_tracker_service.dart:50:50 • strict_raw_type
+   info • Dependencies not sorted alphabetically • pubspec.yaml:15:3 • sort_pub_dependencies
+   info • Dependencies not sorted alphabetically • pubspec.yaml:57:3 • sort_pub_dependencies
+warning • The return type of ' Function(bool)' cannot be inferred • test/accessibility/accessibility_test.dart:12:9 • inference_failure_on_function_return_type
+   info • 'bool' parameters should be named parameters • test/accessibility/accessibility_test.dart:12:18 • avoid_positional_boolean_parameters
+  error • The class 'SemanticsHandle' doesn't have an unnamed constructor • test/accessibility/accessibility_test.dart:47:24 • new_with_undefined_constructor_default
+  error • Undefined name 'SemanticsFlag' • test/accessibility/accessibility_test.dart:120:32 • undefined_identifier
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:2:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/core/errors/app_exceptions.dart' • test/enterprise_test.dart:2:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:3:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/core/errors/failure.dart' • test/enterprise_test.dart:3:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:4:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/core/extensions/datetime_extensions.dart' • test/enterprise_test.dart:4:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:5:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/core/extensions/duration_extensions.dart' • test/enterprise_test.dart:5:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:6:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/core/extensions/string_extensions.dart' • test/enterprise_test.dart:6:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:7:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/core/services/score_calculator_service.dart' • test/enterprise_test.dart:7:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:8:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/data/models/feature_models.dart' • test/enterprise_test.dart:8:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:9:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/data/models/session_model.dart' • test/enterprise_test.dart:9:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/enterprise_test.dart:10:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/data/models/user_model.dart' • test/enterprise_test.dart:10:8 • uri_does_not_exist
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:18:21 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:32:21 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:45:21 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:51:11 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:56:21 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:61:25 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:71:14 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:72:14 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:73:14 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:74:14 • undefined_identifier
+  error • Undefined name 'ScoreCalculatorService' • test/enterprise_test.dart:75:14 • undefined_identifier
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:84:22 • const_initialized_with_non_constant_value
+  error • The function 'Success' isn't defined • test/enterprise_test.dart:84:22 • undefined_function
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:92:22 • const_initialized_with_non_constant_value
+  error • The function 'Failure' isn't defined • test/enterprise_test.dart:92:22 • undefined_function
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:100:23 • const_initialized_with_non_constant_value
+  error • The function 'Success' isn't defined • test/enterprise_test.dart:100:23 • undefined_function
+warning • The type of v can't be inferred; a type must be explicitly provided • test/enterprise_test.dart:102:19 • inference_failure_on_untyped_parameter
+warning • The type of m can't be inferred; a type must be explicitly provided • test/enterprise_test.dart:103:19 • inference_failure_on_untyped_parameter
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:107:23 • const_initialized_with_non_constant_value
+  error • The function 'Failure' isn't defined • test/enterprise_test.dart:107:23 • undefined_function
+warning • The type of v can't be inferred; a type must be explicitly provided • test/enterprise_test.dart:109:19 • inference_failure_on_untyped_parameter
+warning • The type of m can't be inferred; a type must be explicitly provided • test/enterprise_test.dart:110:19 • inference_failure_on_untyped_parameter
+  error • The name 'NetworkException' isn't a class • test/enterprise_test.dart:122:15 • creation_with_non_type
+  error • The name 'NetworkException' isn't a class • test/enterprise_test.dart:125:20 • creation_with_non_type
+  error • The name 'NetworkException' isn't a class • test/enterprise_test.dart:127:15 • creation_with_non_type
+  error • The name 'NetworkException' isn't a class • test/enterprise_test.dart:131:15 • creation_with_non_type
+  error • The name 'AuthException' isn't a class • test/enterprise_test.dart:138:15 • creation_with_non_type
+  error • The name 'AuthException' isn't a class • test/enterprise_test.dart:142:15 • creation_with_non_type
+  error • The name 'AuthException' isn't a class • test/enterprise_test.dart:146:15 • creation_with_non_type
+  error • The name 'PermissionException' isn't a class • test/enterprise_test.dart:153:15 • creation_with_non_type
+  error • The name 'PermissionException' isn't a class • test/enterprise_test.dart:157:15 • creation_with_non_type
+  error • The getter 'capitalized' isn't defined for the type 'String' • test/enterprise_test.dart:168:22 • undefined_getter
+  error • The getter 'capitalized' isn't defined for the type 'String' • test/enterprise_test.dart:169:17 • undefined_getter
+  error • The getter 'titleCase' isn't defined for the type 'String' • test/enterprise_test.dart:173:28 • undefined_getter
+  error • The getter 'isValidEmail' isn't defined for the type 'String' • test/enterprise_test.dart:177:33 • undefined_getter
+  error • The getter 'isValidEmail' isn't defined for the type 'String' • test/enterprise_test.dart:178:24 • undefined_getter
+  error • The getter 'isValidEmail' isn't defined for the type 'String' • test/enterprise_test.dart:179:17 • undefined_getter
+  error • The method 'truncate' isn't defined for the type 'String' • test/enterprise_test.dart:183:28 • undefined_method
+  error • The method 'truncate' isn't defined for the type 'String' • test/enterprise_test.dart:184:19 • undefined_method
+  error • The getter 'initials' isn't defined for the type 'String' • test/enterprise_test.dart:188:25 • undefined_getter
+  error • The getter 'initials' isn't defined for the type 'String' • test/enterprise_test.dart:189:22 • undefined_getter
+  error • The getter 'initials' isn't defined for the type 'String' • test/enterprise_test.dart:190:17 • undefined_getter
+  error • The getter 'maskedEmail' isn't defined for the type 'String' • test/enterprise_test.dart:194:33 • undefined_getter
+  error • The getter 'shortFormat' isn't defined for the type 'Duration' • test/enterprise_test.dart:200:52 • undefined_getter
+  error • The getter 'shortFormat' isn't defined for the type 'Duration' • test/enterprise_test.dart:201:42 • undefined_getter
+  error • The getter 'shortFormat' isn't defined for the type 'Duration' • test/enterprise_test.dart:202:39 • undefined_getter
+  error • The getter 'timerFormat' isn't defined for the type 'Duration' • test/enterprise_test.dart:206:54 • undefined_getter
+  error • The getter 'timerFormat' isn't defined for the type 'Duration' • test/enterprise_test.dart:207:51 • undefined_getter
+  error • The getter 'totalMinutes' isn't defined for the type 'Duration' • test/enterprise_test.dart:211:52 • undefined_getter
+  error • The method 'percentOf' isn't defined for the type 'Duration' • test/enterprise_test.dart:217:19 • undefined_method
+  error • The getter 'isToday' isn't defined for the type 'DateTime' • test/enterprise_test.dart:223:29 • undefined_getter
+  error • The getter 'isToday' isn't defined for the type 'DateTime' • test/enterprise_test.dart:224:29 • undefined_getter
+  error • The getter 'isYesterday' isn't defined for the type 'DateTime' • test/enterprise_test.dart:229:58 • undefined_getter
+  error • The getter 'isYesterday' isn't defined for the type 'DateTime' • test/enterprise_test.dart:232:29 • undefined_getter
+  error • The getter 'startOfDay' isn't defined for the type 'DateTime' • test/enterprise_test.dart:237:17 • undefined_getter
+  error • The getter 'dateKey' isn't defined for the type 'DateTime' • test/enterprise_test.dart:241:35 • undefined_getter
+  error • Undefined name 'UserModel' • test/enterprise_test.dart:261:20 • undefined_identifier
+  error • The function 'UserModel' isn't defined • test/enterprise_test.dart:272:20 • undefined_function
+  error • Undefined name 'SessionModel' • test/enterprise_test.dart:295:23 • undefined_identifier
+  error • The function 'GoalModel' isn't defined • test/enterprise_test.dart:304:20 • undefined_function
+  error • Undefined name 'HabitModel' • test/enterprise_test.dart:328:21 • undefined_identifier
+  error • The function 'AchievementModel' isn't defined • test/enterprise_test.dart:336:27 • undefined_function
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:348:19 • const_initialized_with_non_constant_value
+  error • The function 'SubscriptionModel' isn't defined • test/enterprise_test.dart:348:19 • undefined_function
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:354:19 • const_initialized_with_non_constant_value
+  error • The function 'SubscriptionModel' isn't defined • test/enterprise_test.dart:354:19 • undefined_function
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:360:19 • const_initialized_with_non_constant_value
+  error • The function 'SubscriptionModel' isn't defined • test/enterprise_test.dart:360:19 • undefined_function
+  error • The name 'RewardModel' isn't a class • test/enterprise_test.dart:368:20 • creation_with_non_type
+  error • The name 'RewardModel' isn't a class • test/enterprise_test.dart:370:15 • creation_with_non_type
+  error • The name 'RewardModel' isn't a class • test/enterprise_test.dart:373:20 • creation_with_non_type
+  error • The name 'RewardModel' isn't a class • test/enterprise_test.dart:374:20 • creation_with_non_type
+  error • The name 'RewardModel' isn't a class • test/enterprise_test.dart:375:20 • creation_with_non_type
+  error • The name 'RewardModel' isn't a class • test/enterprise_test.dart:377:15 • creation_with_non_type
+  error • Const variables must be initialized with a constant value • test/enterprise_test.dart:385:21 • const_initialized_with_non_constant_value
+  error • The function 'LeaderboardModel' isn't defined • test/enterprise_test.dart:385:21 • undefined_function
+  error • The function 'JournalModel' isn't defined • test/enterprise_test.dart:399:9 • undefined_function
+  error • The function 'JournalModel' isn't defined • test/enterprise_test.dart:404:9 • undefined_function
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/goal_repository_test.dart:2:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/domain/entities/goal.dart' • test/goal_repository_test.dart:2:8 • uri_does_not_exist
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:7:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:20:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:31:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:42:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:53:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:64:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:75:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:86:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:97:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:108:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:119:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:130:20 • undefined_function
+  error • The function 'AppGoal' isn't defined • test/goal_repository_test.dart:145:20 • undefined_function
+  error • Undefined name 'AppGoal' • test/goal_repository_test.dart:153:24 • undefined_identifier
+  error • The setter 'framePolicy' isn't defined for the type 'TestWidgetsFlutterBinding' • test/performance/startup_performance_test.dart:35:15 • undefined_setter
+  error • The method 'waitUntil' isn't defined for the type 'WidgetTester' • test/performance/startup_performance_test.dart:60:20 • undefined_method
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/productivity_score_test.dart:2:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/core/productivity_score.dart' • test/productivity_score_test.dart:2:8 • uri_does_not_exist
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:7:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:18:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:30:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:42:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:54:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:66:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:78:22 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:85:22 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:97:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:109:24 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:118:25 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:129:21 • undefined_identifier
+  error • Undefined name 'ProductivityScoreCalculator' • test/productivity_score_test.dart:141:21 • undefined_identifier
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/subscription_service_test.dart:2:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/domain/entities/user.dart' • test/subscription_service_test.dart:2:8 • uri_does_not_exist
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/subscription_service_test.dart:3:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/services/purchase_service.dart' • test/subscription_service_test.dart:3:8 • uri_does_not_exist
+  error • Undefined class 'PurchaseService' • test/subscription_service_test.dart:6:8 • undefined_class
+  error • The function 'PurchaseService' isn't defined • test/subscription_service_test.dart:9:15 • undefined_function
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:14:35 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:35:33 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:36:33 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:37:33 • undefined_identifier
+warning • The type of o can't be inferred; a type must be explicitly provided • test/subscription_service_test.dart:43:33 • inference_failure_on_untyped_parameter
+   info • Method invocation or property access on a 'dynamic' target • test/subscription_service_test.dart:43:39 • avoid_dynamic_calls
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:51:27 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:52:35 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:58:27 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:59:35 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:65:27 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:66:35 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:77:20 • undefined_identifier
+  error • Undefined name 'SubscriptionTier' • test/subscription_service_test.dart:84:35 • undefined_identifier
+   info • Missing type annotation on a public API • test/unit/services/achievement_engine_test.dart:45:5 • type_annotate_public_apis
+warning • The type of data can't be inferred; a type must be explicitly provided • test/unit/services/achievement_engine_test.dart:45:5 • inference_failure_on_untyped_parameter
+   info • Method invocation or property access on a 'dynamic' target • test/unit/services/achievement_engine_test.dart:52:13 • avoid_dynamic_calls
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • test/unit/services/encryption_service_test.dart:65:11 • inference_failure_on_instance_creation
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • test/unit/services/encryption_service_test.dart:92:13 • inference_failure_on_instance_creation
+   info • The method is used to change a property • test/unit/services/habit_service_test.dart:48:8 • use_setters_to_change_properties
+   info • The method is used to change a property • test/unit/services/habit_service_test.dart:49:8 • use_setters_to_change_properties
+   info • 'bool' parameters should be named parameters • test/unit/services/habit_service_test.dart:52:44 • avoid_positional_boolean_parameters
+   info • Missing type annotation on a public API • test/unit/services/habit_service_test.dart:54:30 • type_annotate_public_apis
+   info • Missing type annotation on a public API • test/unit/services/habit_service_test.dart:63:39 • type_annotate_public_apis
+  error • The named parameter 'notifications' isn't defined • test/unit/services/habit_service_test.dart:130:7 • undefined_named_parameter
+  error • The named parameter 'goalRepository' isn't defined • test/unit/services/score_calculator_test.dart:179:7 • undefined_named_parameter
+  error • The named parameter 'habitRepository' isn't defined • test/unit/services/score_calculator_test.dart:180:7 • undefined_named_parameter
+  error • A value of type 'int?' can't be assigned to a variable of type 'int' • test/unit/services/streak_calculator_test.dart:60:21 • invalid_assignment
+   info • The imported package 'focus_guard' isn't a dependency of the importing package • test/usage_tracker_test.dart:3:8 • depend_on_referenced_packages
+  error • Target of URI doesn't exist: 'package:focus_guard/services/usage_tracker_service.dart' • test/usage_tracker_test.dart:3:8 • uri_does_not_exist
+  error • Undefined class 'UsageTrackerService' • test/usage_tracker_test.dart:8:8 • undefined_class
+  error • The function 'UsageTrackerService' isn't defined • test/usage_tracker_test.dart:11:15 • undefined_function
+warning • The generic type 'AsyncLoading<dynamic>' should have explicit type arguments but doesn't • test/widget/screens/home_screen_test.dart:19:40 • strict_raw_type
+  error • Undefined class 'T' • test/widget/screens/home_screen_test.dart:20:27 • undefined_class
+warning • The type argument(s) of the constructor 'AsyncData' can't be inferred • test/widget/screens/home_screen_test.dart:20:39 • inference_failure_on_instance_creation
+  error • Too many positional arguments: 0 expected, but 1 found • test/widget/screens/home_screen_test.dart:20:49 • extra_positional_arguments
+warning • The generic type 'AsyncError<dynamic>' should have explicit type arguments but doesn't • test/widget/screens/home_screen_test.dart:22:7 • strict_raw_type
+  error • The redirected constructor 'AsyncError<dynamic> Function()' has incompatible parameters with 'AsyncValue Function(Object, StackTrace)' • test/widget/screens/home_screen_test.dart:22:7 • redirect_to_invalid_function_type
+  error • 'class AsyncValue' can't be used in both the 'extends' and 'implements' clauses • test/widget/screens/home_screen_test.dart:25:50 • implements_super_class
+  error • 'class AsyncValue' can't be used in both the 'extends' and 'implements' clauses • test/widget/screens/home_screen_test.dart:29:53 • implements_super_class
+  error • 'class AsyncValue' can't be used in both the 'extends' and 'implements' clauses • test/widget/screens/home_screen_test.dart:33:51 • implements_super_class
+   info • Missing type annotation on a public API • test/widget/screens/home_screen_test.dart:49:38 • type_annotate_public_apis
+warning • The type of v can't be inferred; a type must be explicitly provided • test/widget/screens/home_screen_test.dart:49:38 • inference_failure_on_untyped_parameter
+  error • The constructor being called isn't a const constructor • test/widget/screens/home_screen_test.dart:103:51 • const_with_non_const
+

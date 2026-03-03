@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../core/constants.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/app_buttons.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 
 class AiCoachingScreen extends StatefulWidget {
   const AiCoachingScreen({super.key});
@@ -17,9 +17,10 @@ class _AiCoachingScreenState extends State<AiCoachingScreen> {
   final _scrollCtrl = ScrollController();
   final List<_ChatMessage> _messages = [
     _ChatMessage(
-        text:
-            "Hi! I'm Alex, your AI focus coach. I've analyzed your recent data — let me know how I can help you stay on track today! 🎯",
-        isUser: false),
+      text:
+          "Hi! I'm Alex, your AI focus coach. I've analyzed your recent data — let me know how I can help you stay on track today! 🎯",
+      isUser: false,
+    ),
   ];
   bool _isTyping = false;
 
@@ -45,10 +46,12 @@ class _AiCoachingScreenState extends State<AiCoachingScreen> {
       if (mounted) {
         setState(() {
           _isTyping = false;
-          _messages.add(_ChatMessage(
-            text: _getAIResponse(text),
-            isUser: false,
-          ));
+          _messages.add(
+            _ChatMessage(
+              text: _getAIResponse(text),
+              isUser: false,
+            ),
+          );
         });
         _scrollToBottom();
       }
@@ -80,223 +83,305 @@ class _AiCoachingScreenState extends State<AiCoachingScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-              child: Row(
-                children: [
-                  AppIconButton(
-                      icon: Icons.arrow_back_rounded,
-                      onPressed: () => Navigator.maybePop(context)),
-                  const SizedBox(width: 12),
-                  // AI Avatar
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: AppGradients.mint,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                            color: AppColors.success.withValues(alpha: 0.3),
-                            blurRadius: 12)
-                      ],
-                    ),
-                    child: const Center(
-                        child: Text('🤖', style: TextStyle(fontSize: 20))),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Alex',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 16)),
-                      Text('AI Focus Coach',
-                          style: TextStyle(
-                              color: AppColors.textTertiary, fontSize: 12)),
-                    ],
-                  ),
-                ],
-              ),
-            ).animate().fadeIn(duration: 300.ms),
-
-            // Daily insight card
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-              child: ShimmerBorderCard(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: Row(
                   children: [
-                    Row(
-                      children: [
-                        const Text('💡', style: TextStyle(fontSize: 16)),
-                        const SizedBox(width: 8),
-                        const Text("Today's Insight",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14)),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(6),
+                    AppIconButton(
+                      icon: Icons.arrow_back_rounded,
+                      onPressed: () => Navigator.maybePop(context),
+                    ),
+                    const SizedBox(width: 12),
+                    // AI Avatar
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: AppGradients.mint,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.success.withValues(alpha: 0.3),
+                            blurRadius: 12,
                           ),
-                          child: const Text('Based on 7 days',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text('🤖', style: TextStyle(fontSize: 20)),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Alex',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'AI Focus Coach',
+                          style: TextStyle(
+                            color: AppColors.textTertiary,
+                            fontSize: 12,
+                          ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                        "Your focus sessions are 40% more effective in the morning. Consider blocking Instagram during 9-11 AM to maximize productivity.",
+                  ],
+                ),
+              ).animate().fadeIn(duration: 300.ms),
+
+              // Daily insight card
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                child: ShimmerBorderCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Text('💡', style: TextStyle(fontSize: 16)),
+                          const SizedBox(width: 8),
+                          const Text(
+                            "Today's Insight",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Text(
+                              'Based on 7 days',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Your focus sessions are 40% more effective in the morning. Consider blocking Instagram during 9-11 AM to maximize productivity.',
                         style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 13,
-                            fontStyle: FontStyle.italic,
-                            height: 1.5)),
+                          color: AppColors.textSecondary,
+                          fontSize: 13,
+                          fontStyle: FontStyle.italic,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ).animate(delay: 100.ms).fadeIn(duration: 400.ms),
+
+              // Quick prompts
+              SizedBox(
+                height: 36,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  children: [
+                    _QuickPrompt(
+                      label: '📊 Analyze my week',
+                      onTap: () => _sendMessage('Analyze my week'),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPrompt(
+                      label: '🎯 What to focus on?',
+                      onTap: () => _sendMessage('What should I focus on?'),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickPrompt(
+                      label: '📱 Instagram habits',
+                      onTap: () =>
+                          _sendMessage('Why do I keep checking Instagram?'),
+                    ),
+                  ],
+                ),
+              ).animate(delay: 200.ms).fadeIn(duration: 300.ms),
+
+              const SizedBox(height: 8),
+
+              // Chat messages
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollCtrl,
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                  itemCount: _messages.length + (_isTyping ? 1 : 0),
+                  itemBuilder: (context, i) {
+                    if (i == _messages.length && _isTyping) {
+                      return _TypingIndicator();
+                    }
+                    return _MessageBubble(
+                      message: _messages[i],
+                      index: i,
+                    );
+                  },
+                ),
+              ),
+
+              // Input bar
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _inputCtrl,
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 14,
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: 'Ask Alex anything...',
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12,),
+                        ),
+                        onSubmitted: _sendMessage,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () => _sendMessage(_inputCtrl.text),
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          gradient: AppGradients.hero,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.send_rounded,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ).animate(delay: 100.ms).fadeIn(duration: 400.ms),
+            ],
+          ),
+        ),
+      );
+}
 
-            // Quick prompts
-            SizedBox(
-              height: 36,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                children: [
-                  _QuickPrompt(
-                      label: '📊 Analyze my week',
-                      onTap: () => _sendMessage('Analyze my week')),
-                  const SizedBox(width: 8),
-                  _QuickPrompt(
-                      label: '🎯 What to focus on?',
-                      onTap: () => _sendMessage('What should I focus on?')),
-                  const SizedBox(width: 8),
-                  _QuickPrompt(
-                      label: '📱 Instagram habits',
-                      onTap: () =>
-                          _sendMessage('Why do I keep checking Instagram?')),
-                ],
-              ),
-            ).animate(delay: 200.ms).fadeIn(duration: 300.ms),
+class _QuickPrompt extends StatelessWidget {
+  const _QuickPrompt({required this.label, required this.onTap});
+  final String label;
+  final VoidCallback onTap;
 
-            const SizedBox(height: 8),
-
-            // Chat messages
-            Expanded(
-              child: ListView.builder(
-                controller: _scrollCtrl,
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                itemCount: _messages.length + (_isTyping ? 1 : 0),
-                itemBuilder: (context, i) {
-                  if (i == _messages.length && _isTyping) {
-                    return _TypingIndicator();
-                  }
-                  return _MessageBubble(
-                    message: _messages[i],
-                    index: i,
-                  );
-                },
-              ),
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceLight,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
             ),
+          ),
+        ),
+      );
+}
 
-            // Input bar
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _inputCtrl,
-                      style: const TextStyle(
-                          color: AppColors.textPrimary, fontSize: 14),
-                      decoration: const InputDecoration(
-                        hintText: 'Ask Alex anything...',
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      ),
-                      onSubmitted: _sendMessage,
-                    ),
+class _MessageBubble extends StatelessWidget {
+  const _MessageBubble({required this.message, required this.index});
+  final _ChatMessage message;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          mainAxisAlignment:
+              message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!message.isUser) ...[
+              Container(
+                width: 28,
+                height: 28,
+                decoration: const BoxDecoration(
+                  gradient: AppGradients.mint,
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: Text('🤖', style: TextStyle(fontSize: 14)),
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
+            Flexible(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  gradient: message.isUser ? AppGradients.hero : null,
+                  color: message.isUser ? null : AppColors.surfaceLight,
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(16),
+                    topRight: const Radius.circular(16),
+                    bottomLeft: Radius.circular(message.isUser ? 16 : 4),
+                    bottomRight: Radius.circular(message.isUser ? 4 : 16),
                   ),
-                  const SizedBox(width: 8),
-                  GestureDetector(
-                    onTap: () => _sendMessage(_inputCtrl.text),
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        gradient: AppGradients.hero,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(Icons.send_rounded,
-                          color: Colors.white, size: 20),
-                    ),
+                  border: message.isUser
+                      ? null
+                      : Border.all(color: AppColors.cardBorder),
+                ),
+                child: Text(
+                  message.text,
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.5,
+                    color:
+                        message.isUser ? Colors.white : AppColors.textSecondary,
                   ),
-                ],
+                ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
+      ).animate().fadeIn(duration: 200.ms).scale(
+            begin: const Offset(0.95, 0.95),
+            end: const Offset(1, 1),
+            duration: 200.ms,
+          );
 }
 
-class _QuickPrompt extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-  const _QuickPrompt({required this.label, required this.onTap});
-
+class _TypingIndicator extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          color: AppColors.surfaceLight,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.cardBorder),
-        ),
-        child: Center(
-          child: Text(label,
-              style:
-                  const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-        ),
-      ),
-    );
-  }
-}
-
-class _MessageBubble extends StatelessWidget {
-  final _ChatMessage message;
-  final int index;
-  const _MessageBubble({required this.message, required this.index});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        mainAxisAlignment:
-            message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!message.isUser) ...[
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          children: [
             Container(
               width: 28,
               height: 28,
@@ -305,110 +390,60 @@ class _MessageBubble extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: const Center(
-                  child: Text('🤖', style: TextStyle(fontSize: 14))),
+                  child: Text('🤖', style: TextStyle(fontSize: 14)),),
             ),
             const SizedBox(width: 8),
-          ],
-          Flexible(
-            child: Container(
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                gradient: message.isUser ? AppGradients.hero : null,
-                color: message.isUser ? null : AppColors.surfaceLight,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(16),
-                  topRight: const Radius.circular(16),
-                  bottomLeft: Radius.circular(message.isUser ? 16 : 4),
-                  bottomRight: Radius.circular(message.isUser ? 4 : 16),
+                color: AppColors.surfaceLight,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                  bottomLeft: Radius.circular(4),
+                  bottomRight: Radius.circular(16),
                 ),
-                border: message.isUser
-                    ? null
-                    : Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: AppColors.cardBorder),
               ),
-              child: Text(message.text,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.5,
-                    color:
-                        message.isUser ? Colors.white : AppColors.textSecondary,
-                  )),
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 200.ms).scale(
-        begin: const Offset(0.95, 0.95),
-        end: const Offset(1, 1),
-        duration: 200.ms);
-  }
-}
-
-class _TypingIndicator extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: const BoxDecoration(
-                gradient: AppGradients.mint, shape: BoxShape.circle),
-            child:
-                const Center(child: Text('🤖', style: TextStyle(fontSize: 14))),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceLight,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-                bottomLeft: Radius.circular(4),
-                bottomRight: Radius.circular(16),
-              ),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                3,
-                (i) => Padding(
-                  padding: EdgeInsets.only(right: i < 2 ? 4 : 0),
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: AppColors.textTertiary,
-                      shape: BoxShape.circle,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                  3,
+                  (i) => Padding(
+                    padding: EdgeInsets.only(right: i < 2 ? 4 : 0),
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: AppColors.textTertiary,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                )
-                    .animate(onPlay: (c) => c.repeat())
-                    .scale(
+                  )
+                      .animate(onPlay: (c) => c.repeat())
+                      .scale(
                         begin: const Offset(0.5, 0.5),
                         end: const Offset(1, 1),
                         duration: 600.ms,
                         delay: (i * 200).ms,
-                        curve: Curves.easeInOut)
-                    .then()
-                    .scale(
+                        curve: Curves.easeInOut,
+                      )
+                      .then()
+                      .scale(
                         begin: const Offset(1, 1),
                         end: const Offset(0.5, 0.5),
-                        duration: 600.ms),
+                        duration: 600.ms,
+                      ),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 class _ChatMessage {
+  _ChatMessage({required this.text, required this.isUser});
   final String text;
   final bool isUser;
-  _ChatMessage({required this.text, required this.isUser});
 }

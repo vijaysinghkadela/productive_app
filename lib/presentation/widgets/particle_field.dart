@@ -1,20 +1,19 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../../core/constants.dart';
+import 'package:focusguard_pro/core/constants.dart';
 
 /// Ambient floating particle system — used as background layer on key screens.
 /// Uses CustomPainter with RepaintBoundary for performance.
 class ParticleField extends StatefulWidget {
-  final int particleCount;
-  final Color? tintColor;
-  final double maxOpacity;
-
   const ParticleField({
     super.key,
     this.particleCount = 28,
     this.tintColor,
     this.maxOpacity = 0.08,
   });
+  final int particleCount;
+  final Color? tintColor;
+  final double maxOpacity;
 
   @override
   State<ParticleField> createState() => _ParticleFieldState();
@@ -62,28 +61,21 @@ class _ParticleFieldState extends State<ParticleField>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: AnimatedBuilder(
-        animation: _ctrl,
-        builder: (context, _) {
-          return CustomPaint(
+  Widget build(BuildContext context) => RepaintBoundary(
+        child: AnimatedBuilder(
+          animation: _ctrl,
+          builder: (context, _) => CustomPaint(
             painter: _ParticlePainter(
               particles: _particles,
               progress: _ctrl.value,
             ),
             size: Size.infinite,
-          );
-        },
-      ),
-    );
-  }
+          ),
+        ),
+      );
 }
 
 class _Particle {
-  double x, y, size, opacity, speed, angle, driftPhase;
-  Color color;
-
   _Particle({
     required this.x,
     required this.y,
@@ -94,13 +86,20 @@ class _Particle {
     required this.color,
     required this.driftPhase,
   });
+  double x;
+  double y;
+  double size;
+  double opacity;
+  double speed;
+  double angle;
+  double driftPhase;
+  Color color;
 }
 
 class _ParticlePainter extends CustomPainter {
+  _ParticlePainter({required this.particles, required this.progress});
   final List<_Particle> particles;
   final double progress;
-
-  _ParticlePainter({required this.particles, required this.progress});
 
   @override
   void paint(Canvas canvas, Size size) {

@@ -102,7 +102,6 @@ export const rebuildLeaderboard = functions
   .onRun(async () => {
     const db = getFirestore();
     const today = new Date().toISOString().split('T')[0];
-    const now = new Date();
 
     // Get all active users with stats
     const usersSnap = await db
@@ -154,10 +153,9 @@ export const rebuildLeaderboard = functions
     entries.sort((a, b) => b.score - a.score);
 
     // Determine period keys
-    const weekNum = getWeekNumber(now);
+
     const dailyKey = `daily_${today}`;
-    const _weeklyKey = `weekly_${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
-    const _monthlyKey = `monthly_${now.toISOString().slice(0, 7)}`;
+
 
     // Batch write (split into chunks of 500)
     for (let i = 0; i < entries.length; i += 400) {

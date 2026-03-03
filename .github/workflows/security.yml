@@ -1,0 +1,75 @@
+name: Enterprise Security Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly scan
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+          # 1. Dependency Vulnerability Scanning
+      - name: Run npm audit (Backend)
+        working-directory: ./functions
+        run: npm audit --audit-level=high
+
+          # 2. Static Application Security Testing (SAST)
+      - name: Semgrep Security Scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/security-audit p/nodejsscan p/typescript"
+          generateSarif: "1"
+
+          # 3. Secret Scanning (TruffleHog)
+      - name: TruffleHog Secret Scanner
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+
+          # 4. Infrastructure as Code (IaC) Scanning
+      - name: Checkov Scan (Firebase Configs & Rules)
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: all
+          soft_fail: false
+
+          # Upload SARIF file (Optional, requires GitHub Advanced Security)
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep.sarif
+
+  test-security-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        working-directory: ./functions
+        run: npm ci
+
+      - name: Run Security Tests (Jest)
+        working-directory: ./functions
+        run: npm run test:security

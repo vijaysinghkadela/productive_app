@@ -1,15 +1,16 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/core/utils.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart';
+import 'package:focusguard_pro/presentation/widgets/animated_score_ring.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/constants.dart';
-import '../../core/utils.dart';
-import '../providers/app_providers.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/animated_score_ring.dart';
-import '../widgets/app_buttons.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -46,7 +47,9 @@ class HomeScreen extends ConsumerWidget {
                               shape: BoxShape.circle,
                               gradient: AppGradients.hero,
                               border: Border.all(
-                                  color: AppColors.cardBorderLight, width: 1.5),
+                                color: AppColors.cardBorderLight,
+                                width: 1.5,
+                              ),
                             ),
                             child: Center(
                               child: Text(
@@ -83,7 +86,9 @@ class HomeScreen extends ConsumerWidget {
                       onTap: () => context.push('/achievements'),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
@@ -93,7 +98,8 @@ class HomeScreen extends ConsumerWidget {
                           ),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                              color: AppColors.streak.withValues(alpha: 0.3)),
+                            color: AppColors.streak.withValues(alpha: 0.3),
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -153,13 +159,14 @@ class HomeScreen extends ConsumerWidget {
                     _StatMiniCard(
                       emoji: '🎯',
                       label: 'Focus Time',
-                      value: formatDuration(Duration(
-                        minutes: timer.todaySessions
-                            .where((s) => s.completed)
-                            .fold(0, (sum, s) => sum + s.workMinutes),
-                      )),
+                      value: formatDuration(
+                        Duration(
+                          minutes: timer.todaySessions
+                              .where((s) => s.completed)
+                              .fold(0, (sum, s) => sum + s.workMinutes),
+                        ),
+                      ),
                       color: AppColors.secondary,
-                      delay: 0,
                       onTap: () => context.go('/focus'),
                     ),
                     const SizedBox(width: 10),
@@ -202,24 +209,34 @@ class HomeScreen extends ConsumerWidget {
                           gradient: AppGradients.hero,
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: const Icon(Icons.play_arrow_rounded,
-                            size: 28, color: Colors.white),
+                        child: const Icon(
+                          Icons.play_arrow_rounded,
+                          size: 28,
+                          color: Colors.white,
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Start Focus Session',
-                                style: Theme.of(context).textTheme.titleLarge),
+                            Text(
+                              'Start Focus Session',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                             const SizedBox(height: 2),
-                            Text('25 min · Deep Work',
-                                style: Theme.of(context).textTheme.bodySmall),
+                            Text(
+                              '25 min · Deep Work',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
                           ],
                         ),
                       ),
-                      Icon(Icons.arrow_forward_rounded,
-                          color: AppColors.textTertiary, size: 20),
+                      const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: AppColors.textTertiary,
+                        size: 20,
+                      ),
                     ],
                   ),
                 ),
@@ -238,44 +255,50 @@ class HomeScreen extends ConsumerWidget {
                     Row(
                       children: [
                         _QuickActionCard(
-                            icon: Icons.shield_rounded,
-                            label: 'Block Apps',
-                            color: AppColors.secondary,
-                            onTap: () => context.go('/blocker')),
+                          icon: Icons.shield_rounded,
+                          label: 'Block Apps',
+                          color: AppColors.secondary,
+                          onTap: () => context.go('/blocker'),
+                        ),
                         const SizedBox(width: 10),
                         _QuickActionCard(
-                            icon: Icons.flag_rounded,
-                            label: 'Set Goal',
-                            color: AppColors.tertiary,
-                            onTap: () => context.push('/goals')),
+                          icon: Icons.flag_rounded,
+                          label: 'Set Goal',
+                          color: AppColors.tertiary,
+                          onTap: () => context.push('/goals'),
+                        ),
                         const SizedBox(width: 10),
                         _QuickActionCard(
-                            icon: Icons.insights_rounded,
-                            label: 'Stats',
-                            color: AppColors.warning,
-                            onTap: () => context.go('/analytics')),
+                          icon: Icons.insights_rounded,
+                          label: 'Stats',
+                          color: AppColors.warning,
+                          onTap: () => context.go('/analytics'),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
                         _QuickActionCard(
-                            icon: Icons.psychology_rounded,
-                            label: 'AI Coach',
-                            color: AppColors.success,
-                            onTap: () => context.push('/ai-coaching')),
+                          icon: Icons.psychology_rounded,
+                          label: 'AI Coach',
+                          color: AppColors.success,
+                          onTap: () => context.push('/ai-coaching'),
+                        ),
                         const SizedBox(width: 10),
                         _QuickActionCard(
-                            icon: Icons.emoji_events_rounded,
-                            label: 'Challenge',
-                            color: AppColors.streak,
-                            onTap: () => context.push('/challenges')),
+                          icon: Icons.emoji_events_rounded,
+                          label: 'Challenge',
+                          color: AppColors.streak,
+                          onTap: () => context.push('/challenges'),
+                        ),
                         const SizedBox(width: 10),
                         _QuickActionCard(
-                            icon: Icons.spa_rounded,
-                            label: 'Wellbeing',
-                            color: AppColors.primary,
-                            onTap: () => context.push('/digital-wellbeing')),
+                          icon: Icons.spa_rounded,
+                          label: 'Wellbeing',
+                          color: AppColors.primary,
+                          onTap: () => context.push('/digital-wellbeing'),
+                        ),
                       ],
                     ),
                   ],
@@ -290,15 +313,20 @@ class HomeScreen extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Social Media Today',
-                        style: Theme.of(context).textTheme.headlineSmall),
+                    Text(
+                      'Social Media Today',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                     GestureDetector(
                       onTap: () => context.go('/analytics'),
-                      child: Text('See All →',
-                          style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13)),
+                      child: const Text(
+                        'See All →',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -314,13 +342,14 @@ class HomeScreen extends ConsumerWidget {
                   separatorBuilder: (_, __) => const SizedBox(width: 10),
                   itemBuilder: (context, i) {
                     final mins = [45, 30, 60, 20, 15, 10][i % 6];
-                    final limit = 30;
+                    const limit = 30;
                     final isOver = mins > limit;
                     return _SocialAppCard(
-                        name: socialMediaApps[i],
-                        minutes: mins,
-                        limit: limit,
-                        isOver: isOver);
+                      name: socialMediaApps[i],
+                      minutes: mins,
+                      limit: limit,
+                      isOver: isOver,
+                    );
                   },
                 ),
               )
@@ -334,12 +363,13 @@ class HomeScreen extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
                 child: GlassCard(
-                  padding: const EdgeInsets.all(20),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GradientText('❝',
-                          style: const TextStyle(fontSize: 32, height: 1)),
+                      const GradientText(
+                        '❝',
+                        style: TextStyle(fontSize: 32, height: 1),
+                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -370,11 +400,6 @@ class HomeScreen extends ConsumerWidget {
 // ──── COMPONENTS ────
 
 class _StatMiniCard extends StatelessWidget {
-  final String emoji, label, value;
-  final Color color;
-  final int delay;
-  final VoidCallback? onTap;
-
   const _StatMiniCard({
     required this.emoji,
     required this.label,
@@ -383,157 +408,176 @@ class _StatMiniCard extends StatelessWidget {
     this.delay = 0,
     this.onTap,
   });
+  final String emoji;
+  final String label;
+  final String value;
+  final Color color;
+  final int delay;
+  final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: PressableCard(
-        padding: const EdgeInsets.all(14),
-        borderRadius: 16,
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(emoji, style: const TextStyle(fontSize: 20)),
-            const SizedBox(height: 10),
-            Text(value,
+  Widget build(BuildContext context) => Expanded(
+        child: PressableCard(
+          padding: const EdgeInsets.all(14),
+          borderRadius: 16,
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(emoji, style: const TextStyle(fontSize: 20)),
+              const SizedBox(height: 10),
+              Text(
+                value,
                 style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.w700, color: color)),
-            const SizedBox(height: 2),
-            Text(label, style: Theme.of(context).textTheme.bodySmall),
-          ],
-        ),
-      )
-          .animate(delay: (300 + delay).ms)
-          .fadeIn(duration: 400.ms)
-          .slideY(begin: 0.1, end: 0),
-    );
-  }
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(label, style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
+        )
+            .animate(delay: (300 + delay).ms)
+            .fadeIn(duration: 400.ms)
+            .slideY(begin: 0.1, end: 0),
+      );
 }
 
 class _QuickActionCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-
   const _QuickActionCard({
     required this.icon,
     required this.label,
     required this.color,
     required this.onTap,
   });
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: PressableCard(
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        borderRadius: 16,
-        onTap: onTap,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
+  Widget build(BuildContext context) => Expanded(
+        child: PressableCard(
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          borderRadius: 16,
+          onTap: onTap,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: color, size: 22),
               ),
-              child: Icon(icon, color: color, size: 22),
-            ),
-            const SizedBox(height: 8),
-            Text(label,
-                style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600)),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _SocialAppCard extends StatelessWidget {
-  final String name;
-  final int minutes, limit;
-  final bool isOver;
-
   const _SocialAppCard({
     required this.name,
     required this.minutes,
     required this.limit,
     required this.isOver,
   });
+  final String name;
+  final int minutes;
+  final int limit;
+  final bool isOver;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 130,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            (isOver ? AppColors.alert : AppColors.surfaceLight)
-                .withValues(alpha: isOver ? 0.15 : 0.5),
-            (isOver ? AppColors.alert : AppColors.surfaceLight)
-                .withValues(alpha: isOver ? 0.05 : 0.2),
+  Widget build(BuildContext context) => Container(
+        width: 130,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              (isOver ? AppColors.alert : AppColors.surfaceLight)
+                  .withValues(alpha: isOver ? 0.15 : 0.5),
+              (isOver ? AppColors.alert : AppColors.surfaceLight)
+                  .withValues(alpha: isOver ? 0.05 : 0.2),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: (isOver ? AppColors.alert : AppColors.cardBorder)
+                .withValues(alpha: isOver ? 0.3 : 1),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Center(
+                    child: Text(
+                      name[0],
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                if (isOver)
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    color: AppColors.alert,
+                    size: 16,
+                  ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                Text(
+                  '${minutes}m / ${limit}m',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: isOver ? AppColors.alert : AppColors.textTertiary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: (isOver ? AppColors.alert : AppColors.cardBorder)
-              .withValues(alpha: isOver ? 0.3 : 1),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: Center(
-                  child: Text(name[0],
-                      style: TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13)),
-                ),
-              ),
-              const Spacer(),
-              if (isOver)
-                Icon(Icons.warning_amber_rounded,
-                    color: AppColors.alert, size: 16),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(name,
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary)),
-              Text('${minutes}m / ${limit}m',
-                  style: TextStyle(
-                      fontSize: 11,
-                      color: isOver ? AppColors.alert : AppColors.textTertiary,
-                      fontWeight: FontWeight.w500)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+      );
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/constants.dart';
-import '../providers/app_providers.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/app_buttons.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -40,11 +40,13 @@ class ProfileScreen extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           AppIconButton(
-                              icon: Icons.arrow_back_rounded,
-                              onPressed: () => Navigator.maybePop(context)),
+                            icon: Icons.arrow_back_rounded,
+                            onPressed: () => Navigator.maybePop(context),
+                          ),
                           AppIconButton(
-                              icon: Icons.settings_rounded,
-                              onPressed: () => context.push('/settings')),
+                            icon: Icons.settings_rounded,
+                            onPressed: () => context.push('/settings'),
+                          ),
                         ],
                       ),
                     ),
@@ -57,16 +59,19 @@ class ProfileScreen extends ConsumerWidget {
                         shape: BoxShape.circle,
                         gradient: AppGradients.hero,
                         border: Border.all(
-                            color: AppColors.cardBorderLight, width: 3),
+                          color: AppColors.cardBorderLight,
+                          width: 3,
+                        ),
                         boxShadow: AppShadows.elevatedGlow(AppColors.primary),
                       ),
                       child: Center(
                         child: Text(
                           (user?.displayName ?? 'U')[0].toUpperCase(),
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 38),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 38,
+                          ),
                         ),
                       ),
                     )
@@ -78,22 +83,29 @@ class ProfileScreen extends ConsumerWidget {
                         )
                         .fadeIn(duration: 400.ms),
                     const SizedBox(height: 12),
-                    Text(user?.displayName ?? 'User',
-                        style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      user?.displayName ?? 'User',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                     const SizedBox(height: 4),
                     // Level badge
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 6),
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         gradient: AppGradients.hero,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text('⚡ Level 12 · Focus Warrior',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600)),
+                      child: const Text(
+                        '⚡ Level 12 · Focus Warrior',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -103,24 +115,27 @@ class ProfileScreen extends ConsumerWidget {
 
           // Stats row
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: const Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Row(
                 children: [
                   _StatCell(
-                      value: '142h',
-                      label: 'Focus Hours',
-                      color: AppColors.primary),
-                  const SizedBox(width: 10),
+                    value: '142h',
+                    label: 'Focus Hours',
+                    color: AppColors.primary,
+                  ),
+                  SizedBox(width: 10),
                   _StatCell(
-                      value: '28',
-                      label: 'Day Streak',
-                      color: AppColors.streak),
-                  const SizedBox(width: 10),
+                    value: '28',
+                    label: 'Day Streak',
+                    color: AppColors.streak,
+                  ),
+                  SizedBox(width: 10),
                   _StatCell(
-                      value: '23',
-                      label: 'Achievements',
-                      color: AppColors.warning),
+                    value: '23',
+                    label: 'Achievements',
+                    color: AppColors.warning,
+                  ),
                 ],
               ),
             ).animate(delay: 200.ms).fadeIn(duration: 400.ms),
@@ -133,37 +148,47 @@ class ProfileScreen extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Badges',
-                      style: Theme.of(context).textTheme.headlineSmall),
+                  Text(
+                    'Badges',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                   GestureDetector(
                     onTap: () => context.push('/achievements'),
-                    child: Text('View All →',
-                        style: TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600)),
+                    child: const Text(
+                      'View All →',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
                   _BadgeItem(
-                      emoji: '🎯',
-                      label: 'Sharp Focus',
-                      color: AppColors.primary),
-                  const SizedBox(width: 10),
+                    emoji: '🎯',
+                    label: 'Sharp Focus',
+                    color: AppColors.primary,
+                  ),
+                  SizedBox(width: 10),
                   _BadgeItem(
-                      emoji: '🔥',
-                      label: 'Streak Master',
-                      color: AppColors.streak),
-                  const SizedBox(width: 10),
+                    emoji: '🔥',
+                    label: 'Streak Master',
+                    color: AppColors.streak,
+                  ),
+                  SizedBox(width: 10),
                   _BadgeItem(
-                      emoji: '🏆', label: 'Champion', color: AppColors.warning),
+                    emoji: '🏆',
+                    label: 'Champion',
+                    color: AppColors.warning,
+                  ),
                 ],
               ),
             ).animate(delay: 300.ms).fadeIn(duration: 400.ms),
@@ -173,8 +198,10 @@ class ProfileScreen extends ConsumerWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-              child: Text('Recent Activity',
-                  style: Theme.of(context).textTheme.headlineSmall),
+              child: Text(
+                'Recent Activity',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
             ),
           ),
           SliverList.builder(
@@ -183,7 +210,11 @@ class ProfileScreen extends ConsumerWidget {
               final activity = _recentActivity[i];
               return Padding(
                 padding: EdgeInsets.fromLTRB(
-                    20, 0, 20, i < _recentActivity.length - 1 ? 8 : 0),
+                  20,
+                  0,
+                  20,
+                  i < _recentActivity.length - 1 ? 8 : 0,
+                ),
                 child: GlassCard(
                   padding: const EdgeInsets.all(14),
                   borderRadius: 14,
@@ -196,25 +227,38 @@ class ProfileScreen extends ConsumerWidget {
                           color: activity.color.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Icon(activity.icon,
-                            color: activity.color, size: 18),
+                        child: Icon(
+                          activity.icon,
+                          color: activity.color,
+                          size: 18,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(activity.title,
-                                style: const TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w600)),
-                            Text(activity.subtitle,
-                                style: Theme.of(context).textTheme.bodySmall),
+                            Text(
+                              activity.title,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              activity.subtitle,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
                           ],
                         ),
                       ),
-                      Text(activity.time,
-                          style: TextStyle(
-                              fontSize: 11, color: AppColors.textTertiary)),
+                      Text(
+                        activity.time,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textTertiary,
+                        ),
+                      ),
                     ],
                   ),
                 ).animate(delay: (400 + i * 60).ms).fadeIn(duration: 300.ms),
@@ -229,22 +273,25 @@ class ProfileScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   _ActionRow(
-                      icon: Icons.share_rounded,
-                      label: 'Share Profile',
-                      color: AppColors.secondary,
-                      onTap: () {}),
+                    icon: Icons.share_rounded,
+                    label: 'Share Profile',
+                    color: AppColors.secondary,
+                    onTap: () {},
+                  ),
                   const SizedBox(height: 8),
                   _ActionRow(
-                      icon: Icons.download_rounded,
-                      label: 'Export Data',
-                      color: AppColors.primary,
-                      onTap: () {}),
+                    icon: Icons.download_rounded,
+                    label: 'Export Data',
+                    color: AppColors.primary,
+                    onTap: () {},
+                  ),
                   const SizedBox(height: 8),
                   _ActionRow(
-                      icon: Icons.logout_rounded,
-                      label: 'Sign Out',
-                      color: AppColors.alert,
-                      onTap: () {}),
+                    icon: Icons.logout_rounded,
+                    label: 'Sign Out',
+                    color: AppColors.alert,
+                    onTap: () {},
+                  ),
                 ],
               ),
             ).animate(delay: 600.ms).fadeIn(duration: 400.ms),
@@ -258,144 +305,172 @@ class ProfileScreen extends ConsumerWidget {
 }
 
 class _StatCell extends StatelessWidget {
-  final String value, label;
+  const _StatCell({
+    required this.value,
+    required this.label,
+    required this.color,
+  });
+  final String value;
+  final String label;
   final Color color;
-  const _StatCell(
-      {required this.value, required this.label, required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GlassCard(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          children: [
-            Text(value,
+  Widget build(BuildContext context) => Expanded(
+        child: GlassCard(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            children: [
+              Text(
+                value,
                 style: TextStyle(
-                    fontSize: 22, fontWeight: FontWeight.w700, color: color)),
-            const SizedBox(height: 4),
-            Text(label, style: Theme.of(context).textTheme.bodySmall),
-          ],
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(label, style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _BadgeItem extends StatelessWidget {
-  final String emoji, label;
+  const _BadgeItem({
+    required this.emoji,
+    required this.label,
+    required this.color,
+  });
+  final String emoji;
+  final String label;
   final Color color;
-  const _BadgeItem(
-      {required this.emoji, required this.label, required this.color});
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GlassCard(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        child: Column(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  color.withValues(alpha: 0.2),
-                  color.withValues(alpha: 0.05)
-                ]),
-                shape: BoxShape.circle,
+  Widget build(BuildContext context) => Expanded(
+        child: GlassCard(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Column(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      color.withValues(alpha: 0.2),
+                      color.withValues(alpha: 0.05),
+                    ],
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                ),
               ),
-              child: Center(
-                  child: Text(emoji, style: const TextStyle(fontSize: 24))),
-            ),
-            const SizedBox(height: 8),
-            Text(label,
+              const SizedBox(height: 8),
+              Text(
+                label,
                 style:
                     const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center),
-          ],
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _ActionRow extends StatelessWidget {
+  const _ActionRow({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
   final IconData icon;
   final String label;
   final Color color;
   final VoidCallback onTap;
-  const _ActionRow(
-      {required this.icon,
-      required this.label,
-      required this.color,
-      required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
-    return PressableCard(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      borderRadius: 14,
-      onTap: onTap,
-      child: Row(
-        children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 12),
-          Expanded(
-              child: Text(label,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: color))),
-          Icon(Icons.chevron_right_rounded,
-              color: color.withValues(alpha: 0.5), size: 20),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => PressableCard(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        borderRadius: 14,
+        onTap: onTap,
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 20),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: color,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: color.withValues(alpha: 0.5),
+              size: 20,
+            ),
+          ],
+        ),
+      );
 }
 
 class _ActivityData {
+  const _ActivityData({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.time,
+    required this.color,
+  });
   final IconData icon;
-  final String title, subtitle, time;
+  final String title;
+  final String subtitle;
+  final String time;
   final Color color;
-  const _ActivityData(
-      {required this.icon,
-      required this.title,
-      required this.subtitle,
-      required this.time,
-      required this.color});
 }
 
 const _recentActivity = [
   _ActivityData(
-      icon: Icons.timer_rounded,
-      title: 'Focus Session Complete',
-      subtitle: '45 min · Deep Work',
-      time: '2h ago',
-      color: AppColors.primary),
+    icon: Icons.timer_rounded,
+    title: 'Focus Session Complete',
+    subtitle: '45 min · Deep Work',
+    time: '2h ago',
+    color: AppColors.primary,
+  ),
   _ActivityData(
-      icon: Icons.emoji_events_rounded,
-      title: 'Achievement Unlocked',
-      subtitle: 'Marathon Focus — Rare',
-      time: '4h ago',
-      color: AppColors.warning),
+    icon: Icons.emoji_events_rounded,
+    title: 'Achievement Unlocked',
+    subtitle: 'Marathon Focus — Rare',
+    time: '4h ago',
+    color: AppColors.warning,
+  ),
   _ActivityData(
-      icon: Icons.flag_rounded,
-      title: 'Goal Met',
-      subtitle: 'Instagram < 30 min',
-      time: '6h ago',
-      color: AppColors.success),
+    icon: Icons.flag_rounded,
+    title: 'Goal Met',
+    subtitle: 'Instagram < 30 min',
+    time: '6h ago',
+    color: AppColors.success,
+  ),
   _ActivityData(
-      icon: Icons.local_fire_department_rounded,
-      title: 'Streak Extended',
-      subtitle: '28 days and counting!',
-      time: 'Yesterday',
-      color: AppColors.streak),
+    icon: Icons.local_fire_department_rounded,
+    title: 'Streak Extended',
+    subtitle: '28 days and counting!',
+    time: 'Yesterday',
+    color: AppColors.streak,
+  ),
   _ActivityData(
-      icon: Icons.shield_rounded,
-      title: 'Blocked 12 Apps',
-      subtitle: 'Social media + games',
-      time: 'Yesterday',
-      color: AppColors.secondary),
+    icon: Icons.shield_rounded,
+    title: 'Blocked 12 Apps',
+    subtitle: 'Social media + games',
+    time: 'Yesterday',
+    color: AppColors.secondary,
+  ),
 ];

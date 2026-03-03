@@ -1,9 +1,5 @@
 class AppGoal {
-  final String appName;
-  final String packageName;
-  final int dailyLimitMinutes;
-  final int currentUsageMinutes;
-  final List<String> completedDates; // dates when goal was met
+  // dates when goal was met
 
   const AppGoal({
     required this.appName,
@@ -12,6 +8,19 @@ class AppGoal {
     this.currentUsageMinutes = 0,
     this.completedDates = const [],
   });
+
+  factory AppGoal.fromMap(Map<String, dynamic> map) => AppGoal(
+        appName: map['appName'] as String,
+        packageName: map['packageName'] as String,
+        dailyLimitMinutes: map['dailyLimitMinutes'] as int,
+        currentUsageMinutes: map['currentUsageMinutes'] as int? ?? 0,
+        completedDates: List<String>.from(map['completedDates'] as List? ?? []),
+      );
+  final String appName;
+  final String packageName;
+  final int dailyLimitMinutes;
+  final int currentUsageMinutes;
+  final List<String> completedDates;
 
   bool get isGoalMet => currentUsageMinutes <= dailyLimitMinutes;
   double get progress => dailyLimitMinutes > 0
@@ -27,15 +36,14 @@ class AppGoal {
     int? dailyLimitMinutes,
     int? currentUsageMinutes,
     List<String>? completedDates,
-  }) {
-    return AppGoal(
-      appName: appName,
-      packageName: packageName,
-      dailyLimitMinutes: dailyLimitMinutes ?? this.dailyLimitMinutes,
-      currentUsageMinutes: currentUsageMinutes ?? this.currentUsageMinutes,
-      completedDates: completedDates ?? this.completedDates,
-    );
-  }
+  }) =>
+      AppGoal(
+        appName: appName,
+        packageName: packageName,
+        dailyLimitMinutes: dailyLimitMinutes ?? this.dailyLimitMinutes,
+        currentUsageMinutes: currentUsageMinutes ?? this.currentUsageMinutes,
+        completedDates: completedDates ?? this.completedDates,
+      );
 
   Map<String, dynamic> toMap() => {
         'appName': appName,
@@ -44,12 +52,4 @@ class AppGoal {
         'currentUsageMinutes': currentUsageMinutes,
         'completedDates': completedDates,
       };
-
-  factory AppGoal.fromMap(Map<String, dynamic> map) => AppGoal(
-        appName: map['appName'] as String,
-        packageName: map['packageName'] as String,
-        dailyLimitMinutes: map['dailyLimitMinutes'] as int,
-        currentUsageMinutes: map['currentUsageMinutes'] as int? ?? 0,
-        completedDates: List<String>.from(map['completedDates'] as List? ?? []),
-      );
 }

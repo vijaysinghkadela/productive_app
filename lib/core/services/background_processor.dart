@@ -8,33 +8,30 @@ class BackgroundProcessor {
 
   /// Run a computation in a background isolate.
   /// [function] must be a top-level or static function.
-  static Future<R> run<T, R>(R Function(T) function, T input) {
-    return compute(function, input);
-  }
+  static Future<R> run<T, R>(R Function(T) function, T input) =>
+      compute(function, input);
 
   /// Parse a large JSON string in a background isolate.
-  static Future<Map<String, dynamic>> parseJson(String jsonString) {
-    return compute(_parseJsonIsolate, jsonString);
-  }
+  static Future<Map<String, dynamic>> parseJson(String jsonString) =>
+      compute(_parseJsonIsolate, jsonString);
 
   /// Aggregate daily stats in background.
   static Future<Map<String, num>> aggregateStats(
-      List<Map<String, dynamic>> rawStats) {
-    return compute(_aggregateStatsIsolate, rawStats);
-  }
+    List<Map<String, dynamic>> rawStats,
+  ) =>
+      compute(_aggregateStatsIsolate, rawStats);
 
   /// Batch-process score calculations in background.
   static Future<List<int>> batchCalculateScores(
-      List<Map<String, dynamic>> inputs) {
-    return compute(_batchScoresIsolate, inputs);
-  }
+    List<Map<String, dynamic>> inputs,
+  ) =>
+      compute(_batchScoresIsolate, inputs);
 }
 
 // ─── Top-level isolate functions (must be top-level for compute()) ───
 
-Map<String, dynamic> _parseJsonIsolate(String json) {
-  return Map<String, dynamic>.from(jsonDecode(json) as Map);
-}
+Map<String, dynamic> _parseJsonIsolate(String json) =>
+    Map<String, dynamic>.from(jsonDecode(json) as Map);
 
 Map<String, num> _aggregateStatsIsolate(List<Map<String, dynamic>> stats) {
   num totalScreenTime = 0;
@@ -61,20 +58,19 @@ Map<String, num> _aggregateStatsIsolate(List<Map<String, dynamic>> stats) {
   };
 }
 
-List<int> _batchScoresIsolate(List<Map<String, dynamic>> inputs) {
-  return inputs.map((input) {
-    const baseScore = 100;
-    final socialDeduction = ((input['socialMinutes'] as num?) ?? 0) * 0.3;
-    final screenDeduction = ((input['screenMinutes'] as num?) ?? 0) * 0.1;
-    final focusBonus = ((input['focusSessions'] as num?) ?? 0) * 5;
-    final goalBonus = ((input['goalsMet'] as num?) ?? 0) * 3;
+List<int> _batchScoresIsolate(List<Map<String, dynamic>> inputs) =>
+    inputs.map((input) {
+      const baseScore = 100;
+      final socialDeduction = ((input['socialMinutes'] as num?) ?? 0) * 0.3;
+      final screenDeduction = ((input['screenMinutes'] as num?) ?? 0) * 0.1;
+      final focusBonus = ((input['focusSessions'] as num?) ?? 0) * 5;
+      final goalBonus = ((input['goalsMet'] as num?) ?? 0) * 3;
 
-    return (baseScore -
-            socialDeduction -
-            screenDeduction +
-            focusBonus +
-            goalBonus)
-        .round()
-        .clamp(0, 100);
-  }).toList();
-}
+      return (baseScore -
+              socialDeduction -
+              screenDeduction +
+              focusBonus +
+              goalBonus)
+          .round()
+          .clamp(0, 100);
+    }).toList();

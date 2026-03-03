@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:focus_guard/services/purchase_service.dart';
 import 'package:focus_guard/domain/entities/user.dart';
+import 'package:focus_guard/services/purchase_service.dart';
 
 void main() {
   late PurchaseService service;

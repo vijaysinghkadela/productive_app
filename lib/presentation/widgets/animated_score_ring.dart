@@ -1,23 +1,22 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../../core/constants.dart';
-import '../../core/theme.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/core/theme.dart';
 
 /// Animated productivity score ring — the hero widget of the dashboard.
 /// CustomPainter: 18px gradient stroke, animated draw, count-up number, pulsing glow.
 class AnimatedScoreRing extends StatefulWidget {
-  final int score;
-  final double size;
-  final double strokeWidth;
-  final Duration duration;
-
   const AnimatedScoreRing({
-    super.key,
     required this.score,
+    super.key,
     this.size = 220,
     this.strokeWidth = 18,
     this.duration = const Duration(milliseconds: 1200),
   });
+  final int score;
+  final double size;
+  final double strokeWidth;
+  final Duration duration;
 
   @override
   State<AnimatedScoreRing> createState() => _AnimatedScoreRingState();
@@ -68,86 +67,83 @@ class _AnimatedScoreRingState extends State<AnimatedScoreRing>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: Listenable.merge([_drawCtrl, _glowCtrl]),
-      builder: (context, _) {
-        final score = _countAnim.value.round();
-        final color = AppColors.scoreColor(score);
-        final glowIntensity =
-            0.2 + (_glowCtrl.value * 0.15) * (widget.score / 100);
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: Listenable.merge([_drawCtrl, _glowCtrl]),
+        builder: (context, _) {
+          final score = _countAnim.value.round();
+          final color = AppColors.scoreColor(score);
+          final glowIntensity =
+              0.2 + (_glowCtrl.value * 0.15) * (widget.score / 100);
 
-        return SizedBox(
-          width: widget.size,
-          height: widget.size,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // Outer glow
-              Container(
-                width: widget.size * 0.85,
-                height: widget.size * 0.85,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(alpha: glowIntensity),
-                      blurRadius: 40,
-                      spreadRadius: 5,
+          return SizedBox(
+            width: widget.size,
+            height: widget.size,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Outer glow
+                Container(
+                  width: widget.size * 0.85,
+                  height: widget.size * 0.85,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withValues(alpha: glowIntensity),
+                        blurRadius: 40,
+                        spreadRadius: 5,
+                      ),
+                    ],
+                  ),
+                ),
+                // Ring painter
+                CustomPaint(
+                  size: Size(widget.size, widget.size),
+                  painter: _ScoreRingPainter(
+                    progress: _drawAnim.value * (widget.score / 100),
+                    strokeWidth: widget.strokeWidth,
+                    score: widget.score,
+                  ),
+                ),
+                // Center content
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '$score',
+                      style: AppTheme.mono(64, FontWeight.w700).copyWith(
+                        color: color,
+                        height: 1.0,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "TODAY'S SCORE",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textTertiary,
+                        letterSpacing: 2,
+                      ),
                     ),
                   ],
                 ),
-              ),
-              // Ring painter
-              CustomPaint(
-                size: Size(widget.size, widget.size),
-                painter: _ScoreRingPainter(
-                  progress: _drawAnim.value * (widget.score / 100),
-                  strokeWidth: widget.strokeWidth,
-                  score: widget.score,
-                ),
-              ),
-              // Center content
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '$score',
-                    style: AppTheme.mono(64, FontWeight.w700).copyWith(
-                      color: color,
-                      height: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "TODAY'S SCORE",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textTertiary,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+              ],
+            ),
+          );
+        },
+      );
 }
 
 class _ScoreRingPainter extends CustomPainter {
-  final double progress;
-  final double strokeWidth;
-  final int score;
-
   _ScoreRingPainter({
     required this.progress,
     required this.strokeWidth,
     required this.score,
   });
+  final double progress;
+  final double strokeWidth;
+  final int score;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -166,7 +162,7 @@ class _ScoreRingPainter extends CustomPainter {
     if (progress <= 0) return;
 
     // Gradient stroke
-    final List<Color> colors;
+    List<Color> colors;
     if (score >= 71) {
       colors = [const Color(0xFF6C63FF), const Color(0xFF00D4FF)];
     } else if (score >= 41) {

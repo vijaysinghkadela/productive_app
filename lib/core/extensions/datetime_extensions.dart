@@ -55,7 +55,7 @@ extension DateTimeExtension on DateTime {
   DateTime get startOfWeek => subtract(Duration(days: weekday - 1)).startOfDay;
 
   /// Start of month
-  DateTime get startOfMonth => DateTime(year, month, 1);
+  DateTime get startOfMonth => DateTime(year, month);
 
   /// Relative time: "2 hours ago", "Just now", "Yesterday"
   String get relativeTime {

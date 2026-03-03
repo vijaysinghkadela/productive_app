@@ -20,7 +20,8 @@ class UsageTrackerService {
       });
       if (result == null) return {};
       return result.map(
-          (key, value) => MapEntry(key.toString(), (value as num).toInt()));
+        (key, value) => MapEntry(key.toString(), (value as num).toInt()),
+      );
     } on PlatformException {
       // Return demo data when platform API is unavailable
       return _getDemoUsageStats();
@@ -103,18 +104,16 @@ class UsageTrackerService {
   }
 
   /// Fallback demo data when platform API is not available.
-  Map<String, int> _getDemoUsageStats() {
-    return {
-      'com.instagram.android': 45,
-      'com.zhiliaoapp.musically': 30,
-      'com.google.android.youtube': 60,
-      'com.twitter.android': 20,
-      'com.facebook.katana': 15,
-      'com.whatsapp': 40,
-      'com.android.chrome': 35,
-      'com.google.android.gm': 10,
-      'com.spotify.music': 30,
-      'com.netflix.mediaclient': 50,
-    };
-  }
+  Map<String, int> _getDemoUsageStats() => {
+        'com.instagram.android': 45,
+        'com.zhiliaoapp.musically': 30,
+        'com.google.android.youtube': 60,
+        'com.twitter.android': 20,
+        'com.facebook.katana': 15,
+        'com.whatsapp': 40,
+        'com.android.chrome': 35,
+        'com.google.android.gm': 10,
+        'com.spotify.music': 30,
+        'com.netflix.mediaclient': 50,
+      };
 }

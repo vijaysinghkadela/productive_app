@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
+import 'package:focusguard_pro/presentation/widgets/particle_field.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants.dart';
-import '../../widgets/glass_card.dart';
-import '../../widgets/app_buttons.dart';
-import '../../widgets/particle_field.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -33,10 +33,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   void _updateStrength(String pw) {
-    int strength = 0;
+    var strength = 0;
     if (pw.length >= 6) strength++;
     if (pw.length >= 10) strength++;
-    if (RegExp(r'[A-Z]').hasMatch(pw) && RegExp(r'[0-9]').hasMatch(pw)) {
+    if (RegExp('[A-Z]').hasMatch(pw) && RegExp('[0-9]').hasMatch(pw)) {
       strength++;
     }
     if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(pw)) strength++;
@@ -64,7 +64,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       AppColors.alert,
       AppColors.warning,
       AppColors.secondary,
-      AppColors.success
+      AppColors.success,
     ];
 
     return Scaffold(
@@ -72,7 +72,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       body: Stack(
         children: [
           const Positioned.fill(
-              child: ParticleField(particleCount: 18, maxOpacity: 0.04)),
+            child: ParticleField(particleCount: 18, maxOpacity: 0.04),
+          ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -84,8 +85,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     children: [
                       if (_step > 0)
                         AppIconButton(
-                            icon: Icons.arrow_back_rounded,
-                            onPressed: () => setState(() => _step--)),
+                          icon: Icons.arrow_back_rounded,
+                          onPressed: () => setState(() => _step--),
+                        ),
                       const Spacer(),
                       // Step indicator
                       Row(
@@ -124,8 +126,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       switchOutCurve: Curves.easeIn,
                       transitionBuilder: (child, anim) => SlideTransition(
                         position: Tween(
-                                begin: const Offset(0.05, 0), end: Offset.zero)
-                            .animate(anim),
+                          begin: const Offset(0.05, 0),
+                          end: Offset.zero,
+                        ).animate(anim),
                         child: FadeTransition(opacity: anim, child: child),
                       ),
                       child: _step == 0
@@ -143,8 +146,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             )
                           : _step == 1
                               ? _Step2(
-                                  key: const ValueKey(1), nameCtrl: _nameCtrl)
-                              : _Step3(key: const ValueKey(2)),
+                                  key: const ValueKey(1),
+                                  nameCtrl: _nameCtrl,
+                                )
+                              : const _Step3(key: ValueKey(2)),
                     ),
                   ),
 
@@ -163,16 +168,23 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Already have an account? ',
-                            style: TextStyle(
-                                color: AppColors.textTertiary, fontSize: 14)),
+                        const Text(
+                          'Already have an account? ',
+                          style: TextStyle(
+                            color: AppColors.textTertiary,
+                            fontSize: 14,
+                          ),
+                        ),
                         GestureDetector(
                           onTap: () => context.go('/login'),
-                          child: Text('Sign In',
-                              style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14)),
+                          child: const Text(
+                            'Sign In',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -188,7 +200,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 }
 
 class _Step1 extends StatelessWidget {
-  final TextEditingController emailCtrl, passCtrl;
+  const _Step1({
+    required this.emailCtrl,
+    required this.passCtrl,
+    required this.obscure,
+    required this.strengthLevel,
+    required this.strengthLabel,
+    required this.strengthColor,
+    required this.onToggleObscure,
+    required this.onPasswordChanged,
+    super.key,
+  });
+  final TextEditingController emailCtrl;
+  final TextEditingController passCtrl;
   final bool obscure;
   final int strengthLevel;
   final String strengthLabel;
@@ -196,241 +220,276 @@ class _Step1 extends StatelessWidget {
   final VoidCallback onToggleObscure;
   final ValueChanged<String> onPasswordChanged;
 
-  const _Step1(
-      {super.key,
-      required this.emailCtrl,
-      required this.passCtrl,
-      required this.obscure,
-      required this.strengthLevel,
-      required this.strengthLabel,
-      required this.strengthColor,
-      required this.onToggleObscure,
-      required this.onPasswordChanged});
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Create Account', style: Theme.of(context).textTheme.displaySmall),
-        const SizedBox(height: 8),
-        Text('Set up your email and password',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 15)),
-        const SizedBox(height: 32),
-        TextField(
-          controller: emailCtrl,
-          keyboardType: TextInputType.emailAddress,
-          style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
-          decoration: const InputDecoration(
-            labelText: 'Email',
-            prefixIcon: Icon(Icons.email_outlined,
-                color: AppColors.textTertiary, size: 20),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Create Account',
+              style: Theme.of(context).textTheme.displaySmall,),
+          const SizedBox(height: 8),
+          const Text(
+            'Set up your email and password',
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 15),
           ),
-        ),
-        const SizedBox(height: 16),
-        TextField(
-          controller: passCtrl,
-          obscureText: obscure,
-          style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
-          decoration: InputDecoration(
-            labelText: 'Password',
-            prefixIcon: const Icon(Icons.lock_outline_rounded,
-                color: AppColors.textTertiary, size: 20),
-            suffixIcon: GestureDetector(
-              onTap: onToggleObscure,
-              child: Icon(
+          const SizedBox(height: 32),
+          TextField(
+            controller: emailCtrl,
+            keyboardType: TextInputType.emailAddress,
+            style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              prefixIcon: Icon(
+                Icons.email_outlined,
+                color: AppColors.textTertiary,
+                size: 20,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: passCtrl,
+            obscureText: obscure,
+            style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
+            decoration: InputDecoration(
+              labelText: 'Password',
+              prefixIcon: const Icon(
+                Icons.lock_outline_rounded,
+                color: AppColors.textTertiary,
+                size: 20,
+              ),
+              suffixIcon: GestureDetector(
+                onTap: onToggleObscure,
+                child: Icon(
                   obscure
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
                   color: AppColors.textTertiary,
-                  size: 20),
+                  size: 20,
+                ),
+              ),
             ),
+            onChanged: onPasswordChanged,
           ),
-          onChanged: onPasswordChanged,
-        ),
-        const SizedBox(height: 12),
-        // Password strength meter
-        if (passCtrl.text.isNotEmpty) ...[
-          Row(
-            children: List.generate(
+          const SizedBox(height: 12),
+          // Password strength meter
+          if (passCtrl.text.isNotEmpty) ...[
+            Row(
+              children: List.generate(
                 4,
                 (i) => Expanded(
-                      child: AnimatedContainer(
-                        duration: Anim.normal,
-                        height: 4,
-                        margin: EdgeInsets.only(right: i < 3 ? 4 : 0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          color: i < strengthLevel
-                              ? strengthColor
-                              : AppColors.surfaceLight,
-                        ),
-                      ),
-                    )),
-          ),
-          const SizedBox(height: 6),
-          Text(strengthLabel,
+                  child: AnimatedContainer(
+                    duration: Anim.normal,
+                    height: 4,
+                    margin: EdgeInsets.only(right: i < 3 ? 4 : 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: i < strengthLevel
+                          ? strengthColor
+                          : AppColors.surfaceLight,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              strengthLabel,
               style: TextStyle(
-                  color: strengthColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600)),
+                color: strengthColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ],
-      ],
-    );
-  }
+      );
 }
 
 class _Step2 extends StatelessWidget {
+  const _Step2({required this.nameCtrl, super.key});
   final TextEditingController nameCtrl;
-  const _Step2({super.key, required this.nameCtrl});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Your Profile', style: Theme.of(context).textTheme.displaySmall),
-        const SizedBox(height: 8),
-        Text('Choose a display name and avatar',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 15)),
-        const SizedBox(height: 32),
-        TextField(
-          controller: nameCtrl,
-          style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
-          decoration: const InputDecoration(
-            labelText: 'Display Name',
-            prefixIcon: Icon(Icons.person_outline_rounded,
-                color: AppColors.textTertiary, size: 20),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Your Profile', style: Theme.of(context).textTheme.displaySmall),
+          const SizedBox(height: 8),
+          const Text(
+            'Choose a display name and avatar',
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 15),
           ),
-        ),
-        const SizedBox(height: 24),
-        Text('Choose Avatar',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 72,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            itemBuilder: (context, i) {
-              final colors = [
-                AppColors.primary,
-                AppColors.secondary,
-                AppColors.tertiary,
-                AppColors.success,
-                AppColors.warning,
-                AppColors.streak,
-                AppColors.primary,
-                AppColors.secondary,
-                AppColors.tertiary,
-                AppColors.success
-              ];
-              final emojis = [
-                '🦊',
-                '🐼',
-                '🦁',
-                '🐸',
-                '🦉',
-                '🐙',
-                '🦄',
-                '🐺',
-                '🦅',
-                '🐯'
-              ];
-              return Padding(
-                padding: EdgeInsets.only(right: i < 9 ? 10 : 0),
-                child: Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      colors[i].withValues(alpha: 0.2),
-                      colors[i].withValues(alpha: 0.05)
-                    ]),
-                    shape: BoxShape.circle,
-                    border: Border.all(
+          const SizedBox(height: 32),
+          TextField(
+            controller: nameCtrl,
+            style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
+            decoration: const InputDecoration(
+              labelText: 'Display Name',
+              prefixIcon: Icon(
+                Icons.person_outline_rounded,
+                color: AppColors.textTertiary,
+                size: 20,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Text(
+            'Choose Avatar',
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 72,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 10,
+              itemBuilder: (context, i) {
+                final colors = [
+                  AppColors.primary,
+                  AppColors.secondary,
+                  AppColors.tertiary,
+                  AppColors.success,
+                  AppColors.warning,
+                  AppColors.streak,
+                  AppColors.primary,
+                  AppColors.secondary,
+                  AppColors.tertiary,
+                  AppColors.success,
+                ];
+                final emojis = [
+                  '🦊',
+                  '🐼',
+                  '🦁',
+                  '🐸',
+                  '🦉',
+                  '🐙',
+                  '🦄',
+                  '🐺',
+                  '🦅',
+                  '🐯',
+                ];
+                return Padding(
+                  padding: EdgeInsets.only(right: i < 9 ? 10 : 0),
+                  child: Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          colors[i].withValues(alpha: 0.2),
+                          colors[i].withValues(alpha: 0.05),
+                        ],
+                      ),
+                      shape: BoxShape.circle,
+                      border: Border.all(
                         color: i == 0 ? colors[i] : AppColors.cardBorder,
-                        width: i == 0 ? 2 : 1),
+                        width: i == 0 ? 2 : 1,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        emojis[i],
+                        style: const TextStyle(fontSize: 28),
+                      ),
+                    ),
                   ),
-                  child: Center(
-                      child: Text(emojis[i],
-                          style: const TextStyle(fontSize: 28))),
-                ),
-              ).animate(delay: (i * 50).ms).scale(
-                  begin: const Offset(0.7, 0.7),
-                  duration: 300.ms,
-                  curve: Curves.elasticOut);
-            },
+                ).animate(delay: (i * 50).ms).scale(
+                      begin: const Offset(0.7, 0.7),
+                      duration: 300.ms,
+                      curve: Curves.elasticOut,
+                    );
+              },
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }
 
 class _Step3 extends StatelessWidget {
   const _Step3({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Almost Done!', style: Theme.of(context).textTheme.displaySmall),
-        const SizedBox(height: 8),
-        Text('Just a few more things',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 15)),
-        const SizedBox(height: 32),
-        GlassCard(
-          padding: const EdgeInsets.all(18),
-          child: Row(
-            children: [
-              const Icon(Icons.notifications_active_rounded,
-                  color: AppColors.primary, size: 24),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Smart Notifications',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15)),
-                    Text('Get reminded to stay focused',
-                        style: TextStyle(
-                            color: AppColors.textTertiary, fontSize: 13)),
-                  ],
-                ),
-              ),
-              CustomToggle(value: true, onChanged: (_) {}),
-            ],
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Almost Done!', style: Theme.of(context).textTheme.displaySmall),
+          const SizedBox(height: 8),
+          const Text(
+            'Just a few more things',
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 15),
           ),
-        ),
-        const SizedBox(height: 12),
-        GlassCard(
-          padding: const EdgeInsets.all(18),
-          child: Row(
-            children: [
-              const Icon(Icons.analytics_rounded,
-                  color: AppColors.secondary, size: 24),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Weekly Reports',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15)),
-                    Text('Receive productivity insights',
-                        style: TextStyle(
-                            color: AppColors.textTertiary, fontSize: 13)),
-                  ],
+          const SizedBox(height: 32),
+          GlassCard(
+            padding: const EdgeInsets.all(18),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.notifications_active_rounded,
+                  color: AppColors.primary,
+                  size: 24,
                 ),
-              ),
-              CustomToggle(value: true, onChanged: (_) {}),
-            ],
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Smart Notifications',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        'Get reminded to stay focused',
+                        style: TextStyle(
+                          color: AppColors.textTertiary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                CustomToggle(value: true, onChanged: (_) {}),
+              ],
+            ),
           ),
-        ),
-      ],
-    );
-  }
+          const SizedBox(height: 12),
+          GlassCard(
+            padding: const EdgeInsets.all(18),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.analytics_rounded,
+                  color: AppColors.secondary,
+                  size: 24,
+                ),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Weekly Reports',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        'Receive productivity insights',
+                        style: TextStyle(
+                          color: AppColors.textTertiary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                CustomToggle(value: true, onChanged: (_) {}),
+              ],
+            ),
+          ),
+        ],
+      );
 }

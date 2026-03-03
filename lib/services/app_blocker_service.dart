@@ -30,7 +30,8 @@ class AppBlockerService {
       // Service not available on this platform or permission denied
       _isServiceRunning = false;
       throw AppBlockerException(
-          'Failed to start blocking service: ${e.message}');
+        'Failed to start blocking service: ${e.message}',
+      );
     }
   }
 
@@ -42,7 +43,8 @@ class AppBlockerService {
       _blockedPackages.clear();
     } on PlatformException catch (e) {
       throw AppBlockerException(
-          'Failed to stop blocking service: ${e.message}');
+        'Failed to stop blocking service: ${e.message}',
+      );
     }
   }
 
@@ -112,8 +114,8 @@ class AppBlockerService {
 }
 
 class AppBlockerException implements Exception {
-  final String message;
   const AppBlockerException(this.message);
+  final String message;
 
   @override
   String toString() => 'AppBlockerException: $message';

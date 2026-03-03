@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Manages AES-256 encryption keys via platform secure enclaves
@@ -9,8 +10,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 class SecureStorageService {
   static const _encryptionKeyName = 'focusguard_hive_encryption_key';
 
-  static final _secureStorage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  static const _secureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(),
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
     ),
@@ -48,9 +49,8 @@ class SecureStorageService {
   }
 
   /// Opens an encrypted Hive box.
-  static Future<Box<T>> openEncryptedBox<T>(String name) async {
-    return Hive.openBox<T>(name, encryptionCipher: cipher);
-  }
+  static Future<Box<T>> openEncryptedBox<T>(String name) async =>
+      Hive.openBox<T>(name, encryptionCipher: cipher);
 
   /// Store a sensitive value directly in secure enclave (for tokens, PINs).
   static Future<void> writeSecure(String key, String value) async {
@@ -58,9 +58,8 @@ class SecureStorageService {
   }
 
   /// Read a sensitive value from secure enclave.
-  static Future<String?> readSecure(String key) async {
-    return _secureStorage.read(key: key);
-  }
+  static Future<String?> readSecure(String key) async =>
+      _secureStorage.read(key: key);
 
   /// Delete a sensitive value from secure enclave.
   static Future<void> deleteSecure(String key) async {

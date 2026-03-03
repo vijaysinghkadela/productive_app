@@ -1,30 +1,14 @@
 /// User data model with JSON serialization
 class UserModel {
-  final String uid;
-  final String email;
-  final String? displayName;
-  final String? photoUrl;
-  final String? username;
-  final String? bio;
-  final DateTime createdAt;
-  final DateTime lastLoginAt;
-  final int streakDays;
-  final int totalFocusMinutes;
-  final int level;
-  final int totalXp;
-  final String subscriptionTier; // free, basic, pro, elite
-  final List<String> accountabilityPartnerIds;
-  final Map<String, dynamic> settings;
-
   const UserModel({
     required this.uid,
     required this.email,
+    required this.createdAt,
+    required this.lastLoginAt,
     this.displayName,
     this.photoUrl,
     this.username,
     this.bio,
-    required this.createdAt,
-    required this.lastLoginAt,
     this.streakDays = 0,
     this.totalFocusMinutes = 0,
     this.level = 1,
@@ -48,10 +32,25 @@ class UserModel {
         level: json['level'] as int? ?? 1,
         totalXp: json['totalXp'] as int? ?? 0,
         subscriptionTier: json['subscriptionTier'] as String? ?? 'free',
-        accountabilityPartnerIds:
-            List<String>.from(json['accountabilityPartnerIds'] ?? []),
-        settings: Map<String, dynamic>.from(json['settings'] ?? {}),
+        accountabilityPartnerIds: List<String>.from(
+            json['accountabilityPartnerIds'] as Iterable<dynamic>? ?? [],),
+        settings: Map<String, dynamic>.from(json['settings'] as Map? ?? {}),
       );
+  final String uid;
+  final String email;
+  final String? displayName;
+  final String? photoUrl;
+  final String? username;
+  final String? bio;
+  final DateTime createdAt;
+  final DateTime lastLoginAt;
+  final int streakDays;
+  final int totalFocusMinutes;
+  final int level;
+  final int totalXp;
+  final String subscriptionTier; // free, basic, pro, elite
+  final List<String> accountabilityPartnerIds;
+  final Map<String, dynamic> settings;
 
   Map<String, dynamic> toJson() => {
         'uid': uid,

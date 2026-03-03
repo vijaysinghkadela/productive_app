@@ -112,13 +112,13 @@ export const onUserDocumentUpdate = functions
         }
 
         // Update accountability pairs
-        const pairsSnap = await db
-          .collection(Collections.ACCOUNTABILITY_PAIRS)
-          .where('userIds', 'array-contains', uid)
-          .get();
-        for (const _pairDoc of pairsSnap.docs) {
-          // Username stored in messages, not top-level — no batch needed
-        }
+        // const pairsSnap = await db
+        //   .collection(Collections.ACCOUNTABILITY_PAIRS)
+        //   .where('userIds', 'array-contains', uid)
+        //   .get();
+        // for (const _pairDoc of pairsSnap.docs) {
+        //   // Username stored in messages, not top-level — no batch needed
+        // }
 
         try {
           await batch.commit();

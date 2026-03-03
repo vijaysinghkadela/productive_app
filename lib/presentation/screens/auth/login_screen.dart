@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/particle_field.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants.dart';
-import '../../widgets/app_buttons.dart';
-import '../../widgets/particle_field.dart';
-import '../../providers/app_providers.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -62,7 +62,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         children: [
           // Background particles + top gradient
           const Positioned.fill(
-              child: ParticleField(particleCount: 20, maxOpacity: 0.04)),
+            child: ParticleField(particleCount: 20, maxOpacity: 0.04),
+          ),
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -96,8 +97,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       borderRadius: BorderRadius.circular(28),
                       boxShadow: AppShadows.elevatedGlow(AppColors.primary),
                     ),
-                    child: const Icon(Icons.shield_rounded,
-                        size: 52, color: Colors.white),
+                    child: const Icon(
+                      Icons.shield_rounded,
+                      size: 52,
+                      color: Colors.white,
+                    ),
                   )
                       .animate()
                       .scale(
@@ -107,8 +111,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       )
                       .fadeIn(duration: 400.ms),
                   const SizedBox(height: 16),
-                  Text('Welcome Back',
-                          style: Theme.of(context).textTheme.displaySmall)
+                  Text(
+                    'Welcome Back',
+                    style: Theme.of(context).textTheme.displaySmall,
+                  )
                       .animate(delay: 200.ms)
                       .fadeIn(duration: 400.ms)
                       .slideY(begin: 0.1, end: 0),
@@ -125,7 +131,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             right: 0,
             bottom: bottom > 0 ? bottom - 20 : 0,
             top: MediaQuery.of(context).size.height * 0.35,
-            child: Container(
+            child: DecoratedBox(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -172,18 +178,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Row(
                         children: [
                           Expanded(
-                              child: Container(
-                                  height: 1, color: AppColors.cardBorder)),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text('or continue with email',
-                                style: TextStyle(
-                                    color: AppColors.textTertiary,
-                                    fontSize: 12)),
+                            child: Container(
+                              height: 1,
+                              color: AppColors.cardBorder,
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              'or continue with email',
+                              style: TextStyle(
+                                color: AppColors.textTertiary,
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
                           Expanded(
-                              child: Container(
-                                  height: 1, color: AppColors.cardBorder)),
+                            child: Container(
+                              height: 1,
+                              color: AppColors.cardBorder,
+                            ),
+                          ),
                         ],
                       ),
                     ).animate(delay: 400.ms).fadeIn(),
@@ -226,11 +241,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     if (_error != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
-                        child: Text(_error!,
-                                style: const TextStyle(
-                                    color: AppColors.alert, fontSize: 13))
-                            .animate()
-                            .shake(hz: 4, duration: 400.ms),
+                        child: Text(
+                          _error!,
+                          style: const TextStyle(
+                            color: AppColors.alert,
+                            fontSize: 13,
+                          ),
+                        ).animate().shake(hz: 4, duration: 400.ms),
                       ),
 
                     // Forgot password
@@ -238,9 +255,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () => context.push('/forgot-password'),
-                        child: Text('Forgot Password?',
-                            style: TextStyle(
-                                color: AppColors.textTertiary, fontSize: 13)),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: AppColors.textTertiary,
+                            fontSize: 13,
+                          ),
+                        ),
                       ),
                     ),
 
@@ -259,16 +280,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Don't have an account? ",
-                            style: TextStyle(
-                                color: AppColors.textTertiary, fontSize: 14)),
+                        const Text(
+                          "Don't have an account? ",
+                          style: TextStyle(
+                            color: AppColors.textTertiary,
+                            fontSize: 14,
+                          ),
+                        ),
                         GestureDetector(
                           onTap: () => context.push('/signup'),
-                          child: Text('Sign Up',
-                              style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14)),
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -284,11 +312,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 }
 
 class _SocialButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color color, bgColor;
-  final VoidCallback onTap;
-
   const _SocialButton({
     required this.label,
     required this.icon,
@@ -296,44 +319,45 @@ class _SocialButton extends StatelessWidget {
     required this.bgColor,
     required this.onTap,
   });
+  final String label;
+  final IconData icon;
+  final Color color;
+  final Color bgColor;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        onTap();
-      },
-      child: Container(
-        height: 52,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.cardBorderLight),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(width: 8),
-            Text(label,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onTap();
+        },
+        child: Container(
+          height: 52,
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.cardBorderLight),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: color, size: 24),
+              const SizedBox(width: 8),
+              Text(
+                label,
                 style: TextStyle(
-                    color: color, fontWeight: FontWeight.w600, fontSize: 15)),
-          ],
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _GlassTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  final IconData icon;
-  final bool obscureText;
-  final Widget? suffixIcon;
-  final TextInputType? keyboardType;
-
   const _GlassTextField({
     required this.controller,
     required this.label,
@@ -342,19 +366,23 @@ class _GlassTextField extends StatelessWidget {
     this.suffixIcon,
     this.keyboardType,
   });
+  final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final bool obscureText;
+  final Widget? suffixIcon;
+  final TextInputType? keyboardType;
 
   @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: AppColors.textTertiary, size: 20),
-        suffixIcon: suffixIcon,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => TextField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        style: const TextStyle(color: AppColors.textPrimary, fontSize: 15),
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: AppColors.textTertiary, size: 20),
+          suffixIcon: suffixIcon,
+        ),
+      );
 }

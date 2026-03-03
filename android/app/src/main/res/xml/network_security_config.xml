@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+  <base-config cleartextTrafficPermitted="false">
+    <trust-anchors>
+      <!-- Trust only system-installed CAs (ignores user-installed certs like Charles Proxy/Burp) -->
+      <certificates src="system"/>
+    </trust-anchors>
+  </base-config>
+  <domain-config cleartextTrafficPermitted="false">
+    <domain includeSubdomains="true">firebaseapp.com</domain>
+    <domain includeSubdomains="true">googleapis.com</domain>
+    <domain includeSubdomains="true">focusguardpro.app</domain>
+    <domain includeSubdomains="true">api.openai.com</domain>
+    <pin-set expiration="2025-12-01">
+      <!-- Firebase primary & backup -->
+      <pin digest="SHA-256">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</pin>
+      <pin digest="SHA-256">BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=</pin>
+      <!-- Google APIs -->
+      <pin digest="SHA-256">CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=</pin>
+      <!-- Production App -->
+      <pin digest="SHA-256">primary_pin_base64==</pin>
+    </pin-set>
+  </domain-config>
+  <debug-overrides>
+    <trust-anchors>
+      <!-- Allow user-added CAs for proxying in debug builds only -->
+      <certificates src="user"/>
+    </trust-anchors>
+  </debug-overrides>
+</network-security-config>

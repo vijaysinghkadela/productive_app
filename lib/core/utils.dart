@@ -75,6 +75,15 @@ void hapticSelection() => HapticFeedback.selectionClick();
 
 // Glassmorphism helper widget
 class GlassContainer extends StatelessWidget {
+  const GlassContainer({
+    required this.child,
+    super.key,
+    this.padding,
+    this.margin,
+    this.borderRadius = 20,
+    this.blur = 10,
+    this.color,
+  });
   final Widget child;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
@@ -82,40 +91,27 @@ class GlassContainer extends StatelessWidget {
   final double blur;
   final Color? color;
 
-  const GlassContainer({
-    super.key,
-    required this.child,
-    this.padding,
-    this.margin,
-    this.borderRadius = 20,
-    this.blur = 10,
-    this.color,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: margin,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-          child: Container(
-            padding: padding ?? const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: color ?? Colors.white.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(borderRadius),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.15),
-                width: 1,
+  Widget build(BuildContext context) => Container(
+        margin: margin,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+            child: Container(
+              padding: padding ?? const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: color ?? Colors.white.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(borderRadius),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.15),
+                ),
               ),
+              child: child,
             ),
-            child: child,
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 // Score color helper — delegates to AppColors

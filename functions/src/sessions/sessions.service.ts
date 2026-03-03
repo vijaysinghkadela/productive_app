@@ -208,7 +208,7 @@ export const getSessionAnalytics = functions.region(REGION).https.onCall(async (
   const uid = context.auth.uid;
   const db = getFirestore();
 
-  const { startDate, endDate, groupBy: _groupBy = 'day' } = data;
+  const { startDate, endDate } = data;
   if (!startDate || !endDate) {
     throw new functions.https.HttpsError('invalid-argument', 'startDate and endDate required');
   }

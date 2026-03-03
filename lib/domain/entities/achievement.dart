@@ -1,13 +1,4 @@
 class Achievement {
-  final String id;
-  final String title;
-  final String description;
-  final String icon;
-  final int targetValue;
-  final int currentValue;
-  final bool unlocked;
-  final DateTime? unlockedDate;
-
   const Achievement({
     required this.id,
     required this.title,
@@ -18,6 +9,14 @@ class Achievement {
     this.unlocked = false,
     this.unlockedDate,
   });
+  final String id;
+  final String title;
+  final String description;
+  final String icon;
+  final int targetValue;
+  final int currentValue;
+  final bool unlocked;
+  final DateTime? unlockedDate;
 
   double get progress =>
       targetValue > 0 ? (currentValue / targetValue).clamp(0.0, 1.0) : 0.0;
@@ -26,18 +25,17 @@ class Achievement {
     int? currentValue,
     bool? unlocked,
     DateTime? unlockedDate,
-  }) {
-    return Achievement(
-      id: id,
-      title: title,
-      description: description,
-      icon: icon,
-      targetValue: targetValue,
-      currentValue: currentValue ?? this.currentValue,
-      unlocked: unlocked ?? this.unlocked,
-      unlockedDate: unlockedDate ?? this.unlockedDate,
-    );
-  }
+  }) =>
+      Achievement(
+        id: id,
+        title: title,
+        description: description,
+        icon: icon,
+        targetValue: targetValue,
+        currentValue: currentValue ?? this.currentValue,
+        unlocked: unlocked ?? this.unlocked,
+        unlockedDate: unlockedDate ?? this.unlockedDate,
+      );
 }
 
 // Predefined achievements

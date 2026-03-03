@@ -13,10 +13,10 @@ class InputSanitizer {
   /// Strips HTML tags, script injection patterns, and control characters.
   static String sanitize(String input) {
     // Remove HTML tags
-    var cleaned = input.replaceAll(RegExp(r'<[^>]*>'), '');
+    var cleaned = input.replaceAll(RegExp('<[^>]*>'), '');
     // Remove script-like patterns
     cleaned = cleaned.replaceAll(
-      RegExp(r'javascript:', caseSensitive: false),
+      RegExp('javascript:', caseSensitive: false),
       '',
     );
     cleaned = cleaned.replaceAll(
@@ -40,9 +40,8 @@ class InputSanitizer {
   }
 
   /// Validate and sanitize a display name.
-  static String sanitizeName(String input) {
-    return sanitizeWithLimit(input, maxNameLength);
-  }
+  static String sanitizeName(String input) =>
+      sanitizeWithLimit(input, maxNameLength);
 
   /// Validate and sanitize email address.
   static String? sanitizeEmail(String input) {
@@ -55,18 +54,16 @@ class InputSanitizer {
   }
 
   /// Sanitize a text field (goals, habit names, etc.).
-  static String sanitizeTextField(String input) {
-    return sanitizeWithLimit(input, maxTextFieldLength);
-  }
+  static String sanitizeTextField(String input) =>
+      sanitizeWithLimit(input, maxTextFieldLength);
 
   /// Sanitize journal/long-form content.
-  static String sanitizeJournal(String input) {
-    return sanitizeWithLimit(input, maxJournalLength);
-  }
+  static String sanitizeJournal(String input) =>
+      sanitizeWithLimit(input, maxJournalLength);
 
   /// Validate a numeric PIN (digits only).
   static String? sanitizePin(String input) {
-    final digitsOnly = input.replaceAll(RegExp(r'[^0-9]'), '');
+    final digitsOnly = input.replaceAll(RegExp('[^0-9]'), '');
     if (digitsOnly.isEmpty || digitsOnly.length > maxPinLength) return null;
     return digitsOnly;
   }

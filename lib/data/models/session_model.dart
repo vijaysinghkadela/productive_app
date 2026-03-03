@@ -1,30 +1,15 @@
 /// Focus session data model
 class SessionModel {
-  final String id;
-  final String userId;
-  final String type; // Deep Work, Study, Creative, etc.
-  final String? label; // Custom note
-  final DateTime startTime;
-  final DateTime? endTime;
-  final int plannedDurationMinutes;
-  final int actualDurationMinutes;
-  final int workMinutes;
-  final int breakMinutes;
-  final int completedPhases;
-  final int totalPhases;
-  final int distractionCount;
-  final bool completed;
-  final String? ambientSound;
-  final double? productivityImpact; // Score impact (+/-)
+  // Score impact (+/-)
 
   const SessionModel({
     required this.id,
     required this.userId,
     required this.type,
-    this.label,
     required this.startTime,
-    this.endTime,
     required this.plannedDurationMinutes,
+    this.label,
+    this.endTime,
     this.actualDurationMinutes = 0,
     this.workMinutes = 25,
     this.breakMinutes = 5,
@@ -56,6 +41,22 @@ class SessionModel {
         ambientSound: json['ambientSound'] as String?,
         productivityImpact: (json['productivityImpact'] as num?)?.toDouble(),
       );
+  final String id;
+  final String userId;
+  final String type; // Deep Work, Study, Creative, etc.
+  final String? label; // Custom note
+  final DateTime startTime;
+  final DateTime? endTime;
+  final int plannedDurationMinutes;
+  final int actualDurationMinutes;
+  final int workMinutes;
+  final int breakMinutes;
+  final int completedPhases;
+  final int totalPhases;
+  final int distractionCount;
+  final bool completed;
+  final String? ambientSound;
+  final double? productivityImpact;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -79,18 +80,6 @@ class SessionModel {
 
 /// Usage stat data model for per-app tracking
 class UsageStatModel {
-  final String date; // yyyy-MM-dd
-  final String userId;
-  final Map<String, int> appUsageMinutes; // packageName → minutes
-  final int totalScreenTimeMinutes;
-  final int socialMediaMinutes;
-  final int pickupCount;
-  final int focusSessionsCompleted;
-  final int goalsCompleted;
-  final int productivityScore;
-  final String? firstUseTime; // HH:mm
-  final String? lastUseTime;
-
   const UsageStatModel({
     required this.date,
     required this.userId,
@@ -108,7 +97,8 @@ class UsageStatModel {
   factory UsageStatModel.fromJson(Map<String, dynamic> json) => UsageStatModel(
         date: json['date'] as String,
         userId: json['userId'] as String,
-        appUsageMinutes: Map<String, int>.from(json['appUsageMinutes'] ?? {}),
+        appUsageMinutes:
+            Map<String, int>.from(json['appUsageMinutes'] as Map? ?? {}),
         totalScreenTimeMinutes: json['totalScreenTimeMinutes'] as int? ?? 0,
         socialMediaMinutes: json['socialMediaMinutes'] as int? ?? 0,
         pickupCount: json['pickupCount'] as int? ?? 0,
@@ -118,6 +108,17 @@ class UsageStatModel {
         firstUseTime: json['firstUseTime'] as String?,
         lastUseTime: json['lastUseTime'] as String?,
       );
+  final String date; // yyyy-MM-dd
+  final String userId;
+  final Map<String, int> appUsageMinutes; // packageName → minutes
+  final int totalScreenTimeMinutes;
+  final int socialMediaMinutes;
+  final int pickupCount;
+  final int focusSessionsCompleted;
+  final int goalsCompleted;
+  final int productivityScore;
+  final String? firstUseTime; // HH:mm
+  final String? lastUseTime;
 
   Map<String, dynamic> toJson() => {
         'date': date,
@@ -136,36 +137,19 @@ class UsageStatModel {
 
 /// Goal data model
 class GoalModel {
-  final String id;
-  final String userId;
-  final String name;
-  final String type; // screen_time, focus_time, social_media_free, etc.
-  final String category;
-  final int targetValue; // minutes or count
-  final int currentProgress;
-  final String period; // daily, weekly, monthly
-  final DateTime createdAt;
-  final int streakDays;
-  final bool isActive;
-
   const GoalModel({
     required this.id,
     required this.userId,
     required this.name,
     required this.type,
-    this.category = 'General',
     required this.targetValue,
+    required this.createdAt,
+    this.category = 'General',
     this.currentProgress = 0,
     this.period = 'daily',
-    required this.createdAt,
     this.streakDays = 0,
     this.isActive = true,
   });
-
-  double get completionRate =>
-      targetValue == 0 ? 0 : (currentProgress / targetValue).clamp(0.0, 1.0);
-
-  bool get isCompleted => currentProgress >= targetValue;
 
   factory GoalModel.fromJson(Map<String, dynamic> json) => GoalModel(
         id: json['id'] as String,
@@ -180,6 +164,22 @@ class GoalModel {
         streakDays: json['streakDays'] as int? ?? 0,
         isActive: json['isActive'] as bool? ?? true,
       );
+  final String id;
+  final String userId;
+  final String name;
+  final String type; // screen_time, focus_time, social_media_free, etc.
+  final String category;
+  final int targetValue; // minutes or count
+  final int currentProgress;
+  final String period; // daily, weekly, monthly
+  final DateTime createdAt;
+  final int streakDays;
+  final bool isActive;
+
+  double get completionRate =>
+      targetValue == 0 ? 0 : (currentProgress / targetValue).clamp(0.0, 1.0);
+
+  bool get isCompleted => currentProgress >= targetValue;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -198,19 +198,6 @@ class GoalModel {
 
 /// Achievement data model
 class AchievementModel {
-  final String id;
-  final String name;
-  final String description;
-  final String icon;
-  final String category; // focus_master, social_warrior, streak_champion, etc.
-  final String rarity; // common, rare, epic, legendary
-  final int xpReward;
-  final bool unlocked;
-  final DateTime? unlockedAt;
-  final double progress; // 0.0-1.0
-  final int targetValue;
-  final int currentValue;
-
   const AchievementModel({
     required this.id,
     required this.name,
@@ -243,6 +230,18 @@ class AchievementModel {
         targetValue: json['targetValue'] as int? ?? 1,
         currentValue: json['currentValue'] as int? ?? 0,
       );
+  final String id;
+  final String name;
+  final String description;
+  final String icon;
+  final String category; // focus_master, social_warrior, streak_champion, etc.
+  final String rarity; // common, rare, epic, legendary
+  final int xpReward;
+  final bool unlocked;
+  final DateTime? unlockedAt;
+  final double progress; // 0.0-1.0
+  final int targetValue;
+  final int currentValue;
 
   Map<String, dynamic> toJson() => {
         'id': id,

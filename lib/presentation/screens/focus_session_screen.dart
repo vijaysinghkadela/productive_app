@@ -1,16 +1,17 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/core/theme.dart';
+import 'package:focusguard_pro/core/utils.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
+import 'package:focusguard_pro/presentation/widgets/particle_field.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/constants.dart';
-import '../../core/theme.dart';
-import '../../core/utils.dart';
-import '../providers/app_providers.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/particle_field.dart';
-import '../widgets/app_buttons.dart';
 
 class FocusSessionScreen extends ConsumerStatefulWidget {
   const FocusSessionScreen({super.key});
@@ -109,8 +110,10 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                         onPressed: () =>
                             context.canPop() ? context.pop() : null,
                       ),
-                      Text('Focus Session',
-                          style: Theme.of(context).textTheme.headlineMedium),
+                      Text(
+                        'Focus Session',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
                       const SizedBox(width: 44),
                     ],
                   ).animate().fadeIn(duration: 300.ms),
@@ -185,7 +188,7 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                               _isRunning
                                   ? '${_isBreakPhase ? 'BREAK' : 'DEEP WORK'} · PHASE $_currentPhase OF $_totalPhases'
                                   : 'READY',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textTertiary,
@@ -256,11 +259,13 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
 
                   // ──── SESSION TYPE SELECTOR (when not running) ────
                   if (!_isRunning) ...[
-                    Text('Session Type',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall
-                            ?.copyWith(letterSpacing: 2)),
+                    Text(
+                      'Session Type',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(letterSpacing: 2),
+                    ),
                     const SizedBox(height: 12),
                     SizedBox(
                       height: 80,
@@ -296,31 +301,39 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                                       : AppColors.cardBorder,
                                 ),
                                 boxShadow: isSelected
-                                    ? AppShadows.glow(AppColors.primary,
-                                        blur: 12)
+                                    ? AppShadows.glow(
+                                        AppColors.primary,
+                                        blur: 12,
+                                      )
                                     : null,
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(p.emoji,
-                                      style: const TextStyle(fontSize: 20)),
+                                  Text(
+                                    p.emoji,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
                                   const SizedBox(height: 4),
-                                  Text(p.label,
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600,
-                                        color: isSelected
-                                            ? Colors.white
-                                            : AppColors.textSecondary,
-                                      )),
-                                  Text('${p.workMinutes}m',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: isSelected
-                                            ? Colors.white70
-                                            : AppColors.textTertiary,
-                                      )),
+                                  Text(
+                                    p.label,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${p.workMinutes}m',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: isSelected
+                                          ? Colors.white70
+                                          : AppColors.textTertiary,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -344,19 +357,25 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                             color: AppColors.secondary.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.music_note_rounded,
-                              color: AppColors.secondary, size: 22),
+                          child: const Icon(
+                            Icons.music_note_rounded,
+                            color: AppColors.secondary,
+                            size: 22,
+                          ),
                         ),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Ambient Sound',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium),
-                              Text(_selectedSound,
-                                  style: Theme.of(context).textTheme.bodySmall),
+                              Text(
+                                'Ambient Sound',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              Text(
+                                _selectedSound,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
                             ],
                           ),
                         ),
@@ -396,15 +415,19 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
           children: [
             Center(
               child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                      color: AppColors.textTertiary,
-                      borderRadius: BorderRadius.circular(2))),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.textTertiary,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
-            Text('Ambient Sounds',
-                style: Theme.of(context).textTheme.headlineMedium),
+            Text(
+              'Ambient Sounds',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
             const SizedBox(height: 16),
             Expanded(
               child: GridView.builder(
@@ -424,7 +447,7 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                       setState(() => _selectedSound = sound['name']!);
                       Navigator.pop(context);
                     },
-                    child: Container(
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: isSelected ? AppGradients.hero : null,
                         color: isSelected ? null : AppColors.surfaceLight,
@@ -438,23 +461,30 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(sound['icon']!,
-                              style: const TextStyle(fontSize: 24)),
+                          Text(
+                            sound['icon']!,
+                            style: const TextStyle(fontSize: 24),
+                          ),
                           const SizedBox(height: 6),
-                          Text(sound['name']!,
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: isSelected
-                                    ? Colors.white
-                                    : AppColors.textSecondary,
-                              ),
-                              textAlign: TextAlign.center),
+                          Text(
+                            sound['name']!,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected
+                                  ? Colors.white
+                                  : AppColors.textSecondary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                           if (isSelected)
                             const Padding(
                               padding: EdgeInsets.only(top: 2),
-                              child: Icon(Icons.check_circle,
-                                  color: Colors.white, size: 14),
+                              child: Icon(
+                                Icons.check_circle,
+                                color: Colors.white,
+                                size: 14,
+                              ),
                             ),
                         ],
                       ),
@@ -473,9 +503,9 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
 // ──── PAINTERS ────
 
 class _TimerRingPainter extends CustomPainter {
+  _TimerRingPainter({required this.progress, this.isBreak = false});
   final double progress;
   final bool isBreak;
-  _TimerRingPainter({required this.progress, this.isBreak = false});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -485,13 +515,14 @@ class _TimerRingPainter extends CustomPainter {
 
     // Track
     canvas.drawCircle(
-        center,
-        radius,
-        Paint()
-          ..color = const Color(0x0FFFFFFF)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 14
-          ..strokeCap = StrokeCap.round);
+      center,
+      radius,
+      Paint()
+        ..color = const Color(0x0FFFFFFF)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 14
+        ..strokeCap = StrokeCap.round,
+    );
 
     if (progress <= 0) return;
 
@@ -501,17 +532,20 @@ class _TimerRingPainter extends CustomPainter {
         : [const Color(0xFF6C63FF), const Color(0xFF00D4FF)];
 
     canvas.drawArc(
-        rect,
-        -pi / 2,
-        2 * pi * progress,
-        false,
-        Paint()
-          ..shader = SweepGradient(
-                  startAngle: -pi / 2, endAngle: 3 * pi / 2, colors: colors)
-              .createShader(rect)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 14
-          ..strokeCap = StrokeCap.round);
+      rect,
+      -pi / 2,
+      2 * pi * progress,
+      false,
+      Paint()
+        ..shader = SweepGradient(
+          startAngle: -pi / 2,
+          endAngle: 3 * pi / 2,
+          colors: colors,
+        ).createShader(rect)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 14
+        ..strokeCap = StrokeCap.round,
+    );
   }
 
   @override
@@ -527,15 +561,15 @@ class _DecoRingPainter extends CustomPainter {
 
     // Dashed decorative ring
     const dashCount = 60;
-    for (int i = 0; i < dashCount; i++) {
+    for (var i = 0; i < dashCount; i++) {
       final angle = (i / dashCount) * 2 * pi;
       final x = center.dx + radius * cos(angle);
       final y = center.dy + radius * sin(angle);
       canvas.drawCircle(
-          Offset(x, y),
-          0.8,
-          Paint()
-            ..color = Colors.white.withValues(alpha: i.isEven ? 0.06 : 0.02));
+        Offset(x, y),
+        0.8,
+        Paint()..color = Colors.white.withValues(alpha: i.isEven ? 0.06 : 0.02),
+      );
     }
   }
 

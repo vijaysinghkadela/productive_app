@@ -188,8 +188,7 @@ export const aggregateWeeklyAnalytics = functions
       tierBreakdown: { free: 0, basic: 0, pro: 0, elite: 0, lifetime: 0 },
     };
 
-    const _scoreSum = 0;
-    const _scoreCount = 0;
+
 
     for (const userDoc of usersSnap.docs) {
       const user = userDoc.data() as UserDocument;

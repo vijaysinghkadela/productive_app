@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:focusguard_pro/core/constants.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../core/constants.dart';
 
 /// Reusable paginated list view with lazy-loading, skeleton placeholders,
 /// and scroll-based pagination for memory-efficient list rendering.
 class PaginatedListView<T> extends StatefulWidget {
+  const PaginatedListView({
+    required this.items,
+    required this.itemBuilder,
+    super.key,
+    this.onLoadMore,
+    this.pageSize = 20,
+    this.emptyWidget,
+    this.header,
+    this.padding = const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+    this.hasReachedEnd = false,
+  });
   final List<T> items;
   final Widget Function(BuildContext, T, int) itemBuilder;
   final Future<List<T>> Function(int page)? onLoadMore;
@@ -13,18 +24,6 @@ class PaginatedListView<T> extends StatefulWidget {
   final Widget? header;
   final EdgeInsets padding;
   final bool hasReachedEnd;
-
-  const PaginatedListView({
-    super.key,
-    required this.items,
-    required this.itemBuilder,
-    this.onLoadMore,
-    this.pageSize = 20,
-    this.emptyWidget,
-    this.header,
-    this.padding = const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-    this.hasReachedEnd = false,
-  });
 
   @override
   State<PaginatedListView<T>> createState() => _PaginatedListViewState<T>();
@@ -94,7 +93,10 @@ class _PaginatedListViewState<T> extends State<PaginatedListView<T>> {
         final adjustedIndex = widget.header != null ? index - 1 : index;
         if (adjustedIndex < widget.items.length) {
           return widget.itemBuilder(
-              context, widget.items[adjustedIndex], adjustedIndex);
+            context,
+            widget.items[adjustedIndex],
+            adjustedIndex,
+          );
         }
         // Skeleton loading placeholder
         return const _SkeletonItem();

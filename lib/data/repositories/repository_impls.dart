@@ -1,19 +1,18 @@
 import 'package:flutter/foundation.dart';
-import '../../core/errors/failure.dart';
-import '../../core/errors/app_exceptions.dart';
-import '../models/user_model.dart';
-import '../models/session_model.dart';
-import '../models/feature_models.dart';
-import '../datasources/local_datasources.dart';
-import '../../domain/repositories/repositories.dart';
+import 'package:focusguard_pro/core/errors/app_exceptions.dart';
+import 'package:focusguard_pro/core/errors/failure.dart';
+import 'package:focusguard_pro/data/datasources/local_datasources.dart';
+import 'package:focusguard_pro/data/models/feature_models.dart';
+import 'package:focusguard_pro/data/models/session_model.dart';
+import 'package:focusguard_pro/data/models/user_model.dart';
+import 'package:focusguard_pro/domain/repositories/repositories.dart';
 
 /// User repository implementation using local datasources (demo mode).
 /// In production: add Firebase remote datasource for sync.
 class UserRepositoryImpl implements UserRepository {
+  UserRepositoryImpl(this._hive, this._secure);
   final HiveDatasource _hive;
   final SecureStorageDatasource _secure;
-
-  UserRepositoryImpl(this._hive, this._secure);
 
   @override
   Future<Result<UserModel>> getCurrentUser() async {
@@ -74,7 +73,10 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Result<UserModel>> signUp(
-      String email, String password, String displayName) async {
+    String email,
+    String password,
+    String displayName,
+  ) async {
     try {
       await Future.delayed(const Duration(milliseconds: 800));
       final user = UserModel(
@@ -118,8 +120,8 @@ class UserRepositoryImpl implements UserRepository {
 
 /// Session repository implementation
 class SessionRepositoryImpl implements SessionRepository {
-  final HiveDatasource _hive;
   SessionRepositoryImpl(this._hive);
+  final HiveDatasource _hive;
 
   @override
   Future<Result<SessionModel>> startSession(SessionModel session) async {
@@ -134,8 +136,10 @@ class SessionRepositoryImpl implements SessionRepository {
   }
 
   @override
-  Future<Result<SessionModel>> endSession(String id,
-      {required bool completed}) async {
+  Future<Result<SessionModel>> endSession(
+    String id, {
+    required bool completed,
+  }) async {
     try {
       final sessions = _hive.getSessions();
       final idx = sessions.indexWhere((s) => s['id'] == id);
@@ -153,7 +157,7 @@ class SessionRepositoryImpl implements SessionRepository {
   Future<Result<List<SessionModel>>> getSessionHistory({int limit = 30}) async {
     try {
       final sessions = _hive.getSessions().take(limit).toList();
-      return Success(sessions.map((s) => SessionModel.fromJson(s)).toList());
+      return Success(sessions.map(SessionModel.fromJson).toList());
     } catch (e) {
       return Failure('Failed to get sessions: $e');
     }
@@ -166,7 +170,9 @@ class SessionRepositoryImpl implements SessionRepository {
       final total = sessions.length;
       final completed = sessions.where((s) => s['completed'] == true).length;
       final totalMinutes = sessions.fold<int>(
-          0, (sum, s) => sum + (s['actualDurationMinutes'] as int? ?? 0));
+        0,
+        (sum, s) => sum + (s['actualDurationMinutes'] as int? ?? 0),
+      );
       return Success({
         'total': total,
         'completed': completed,
@@ -182,8 +188,8 @@ class SessionRepositoryImpl implements SessionRepository {
 
 /// Goal repository implementation
 class GoalRepositoryImpl implements GoalRepository {
-  final HiveDatasource _hive;
   GoalRepositoryImpl(this._hive);
+  final HiveDatasource _hive;
 
   static const _key = 'goals';
 
@@ -201,7 +207,7 @@ class GoalRepositoryImpl implements GoalRepository {
   @override
   Future<Result<List<GoalModel>>> getGoals({bool activeOnly = true}) async {
     try {
-      final goals = _getAll().map((g) => GoalModel.fromJson(g)).toList();
+      final goals = _getAll().map(GoalModel.fromJson).toList();
       if (activeOnly) return Success(goals.where((g) => g.isActive).toList());
       return Success(goals);
     } catch (e) {
@@ -248,8 +254,8 @@ class GoalRepositoryImpl implements GoalRepository {
 
 /// Habit repository implementation
 class HabitRepositoryImpl implements HabitRepository {
-  final HiveDatasource _hive;
   HabitRepositoryImpl(this._hive);
+  final HiveDatasource _hive;
 
   static const _key = 'habits';
 
@@ -267,7 +273,7 @@ class HabitRepositoryImpl implements HabitRepository {
   @override
   Future<Result<List<HabitModel>>> getHabits({bool activeOnly = true}) async {
     try {
-      final habits = _getAll().map((h) => HabitModel.fromJson(h)).toList();
+      final habits = _getAll().map(HabitModel.fromJson).toList();
       if (activeOnly) return Success(habits.where((h) => h.isActive).toList());
       return Success(habits);
     } catch (e) {
@@ -292,7 +298,8 @@ class HabitRepositoryImpl implements HabitRepository {
       final habits = _getAll();
       final idx = habits.indexWhere((h) => h['id'] == id);
       if (idx == -1) return const Failure('Habit not found');
-      final dates = List<String>.from(habits[idx]['completedDates'] ?? []);
+      final dates = List<String>.from(
+          habits[idx]['completedDates'] as Iterable<dynamic>? ?? [],);
       if (dates.contains(date)) {
         dates.remove(date);
       } else {
@@ -337,8 +344,8 @@ class HabitRepositoryImpl implements HabitRepository {
 
 /// Journal repository implementation
 class JournalRepositoryImpl implements JournalRepository {
-  final HiveDatasource _hive;
   JournalRepositoryImpl(this._hive);
+  final HiveDatasource _hive;
 
   static const _key = 'journal_entries';
 
@@ -356,8 +363,7 @@ class JournalRepositoryImpl implements JournalRepository {
   @override
   Future<Result<List<JournalModel>>> getEntries({int limit = 30}) async {
     try {
-      final entries =
-          _getAll().take(limit).map((e) => JournalModel.fromJson(e)).toList();
+      final entries = _getAll().take(limit).map(JournalModel.fromJson).toList();
       return Success(entries);
     } catch (e) {
       return Failure('Failed to get journal entries: $e');
@@ -404,7 +410,7 @@ class JournalRepositoryImpl implements JournalRepository {
   Future<Result<List<JournalModel>>> searchEntries(String query) async {
     try {
       final entries = _getAll()
-          .map((e) => JournalModel.fromJson(e))
+          .map(JournalModel.fromJson)
           .where((e) => e.content.toLowerCase().contains(query.toLowerCase()))
           .toList();
       return Success(entries);

@@ -1,16 +1,17 @@
 // ignore_for_file: unused_element
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/datasources/local_data_source.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/entities/focus_session.dart';
-import '../../domain/entities/daily_stat.dart';
-import '../../domain/entities/goal.dart';
-import '../../domain/entities/app_info.dart';
-import '../../domain/entities/achievement.dart';
-import '../../core/productivity_score.dart';
-import '../../core/utils.dart';
+import 'package:focusguard_pro/core/productivity_score.dart';
+import 'package:focusguard_pro/core/utils.dart';
+import 'package:focusguard_pro/data/datasources/local_data_source.dart';
+import 'package:focusguard_pro/domain/entities/achievement.dart';
+import 'package:focusguard_pro/domain/entities/app_info.dart';
+import 'package:focusguard_pro/domain/entities/daily_stat.dart';
+import 'package:focusguard_pro/domain/entities/focus_session.dart';
+import 'package:focusguard_pro/domain/entities/goal.dart';
+import 'package:focusguard_pro/domain/entities/user.dart';
 
 // --- LocalDataSource Provider ---
 final localDataSourceProvider =
@@ -20,10 +21,10 @@ final localDataSourceProvider =
 enum AuthStatus { initial, authenticated, unauthenticated }
 
 class AuthState {
+  const AuthState({this.status = AuthStatus.initial, this.user, this.error});
   final AuthStatus status;
   final UserEntity? user;
   final String? error;
-  const AuthState({this.status = AuthStatus.initial, this.user, this.error});
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -73,15 +74,6 @@ final authProvider =
 enum TimerPhase { idle, work, breakTime, completed }
 
 class FocusTimerState {
-  final TimerPhase phase;
-  final int remainingSeconds;
-  final int totalWorkSeconds;
-  final int totalBreakSeconds;
-  final String sessionType;
-  final String? ambientSound;
-  final FocusSession? currentSession;
-  final List<FocusSession> todaySessions;
-
   const FocusTimerState({
     this.phase = TimerPhase.idle,
     this.remainingSeconds = 0,
@@ -92,6 +84,14 @@ class FocusTimerState {
     this.currentSession,
     this.todaySessions = const [],
   });
+  final TimerPhase phase;
+  final int remainingSeconds;
+  final int totalWorkSeconds;
+  final int totalBreakSeconds;
+  final String sessionType;
+  final String? ambientSound;
+  final FocusSession? currentSession;
+  final List<FocusSession> todaySessions;
 
   FocusTimerState copyWith({
     TimerPhase? phase,
@@ -102,27 +102,25 @@ class FocusTimerState {
     String? ambientSound,
     FocusSession? currentSession,
     List<FocusSession>? todaySessions,
-  }) {
-    return FocusTimerState(
-      phase: phase ?? this.phase,
-      remainingSeconds: remainingSeconds ?? this.remainingSeconds,
-      totalWorkSeconds: totalWorkSeconds ?? this.totalWorkSeconds,
-      totalBreakSeconds: totalBreakSeconds ?? this.totalBreakSeconds,
-      sessionType: sessionType ?? this.sessionType,
-      ambientSound: ambientSound ?? this.ambientSound,
-      currentSession: currentSession ?? this.currentSession,
-      todaySessions: todaySessions ?? this.todaySessions,
-    );
-  }
+  }) =>
+      FocusTimerState(
+        phase: phase ?? this.phase,
+        remainingSeconds: remainingSeconds ?? this.remainingSeconds,
+        totalWorkSeconds: totalWorkSeconds ?? this.totalWorkSeconds,
+        totalBreakSeconds: totalBreakSeconds ?? this.totalBreakSeconds,
+        sessionType: sessionType ?? this.sessionType,
+        ambientSound: ambientSound ?? this.ambientSound,
+        currentSession: currentSession ?? this.currentSession,
+        todaySessions: todaySessions ?? this.todaySessions,
+      );
 }
 
 class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
-  final LocalDataSource _dataSource;
-  Timer? _timer;
-
   FocusTimerNotifier(this._dataSource) : super(const FocusTimerState()) {
     _loadTodaySessions();
   }
+  final LocalDataSource _dataSource;
+  Timer? _timer;
 
   void _loadTodaySessions() {
     final sessions = _dataSource.getSessionsForDate(dayKey(DateTime.now()));
@@ -191,7 +189,9 @@ class FocusTimerNotifier extends StateNotifier<FocusTimerState> {
 
   void _completeWorkPhase() {
     state = state.copyWith(
-        phase: TimerPhase.breakTime, remainingSeconds: state.totalBreakSeconds);
+      phase: TimerPhase.breakTime,
+      remainingSeconds: state.totalBreakSeconds,
+    );
     _startCountdown();
   }
 
@@ -243,11 +243,10 @@ final focusTimerProvider =
 
 // --- Goals Provider ---
 class GoalsNotifier extends StateNotifier<List<AppGoal>> {
-  final LocalDataSource _dataSource;
-
   GoalsNotifier(this._dataSource) : super([]) {
     _load();
   }
+  final LocalDataSource _dataSource;
 
   void _load() {
     state = _dataSource.getGoals();
@@ -275,11 +274,10 @@ final goalsProvider = StateNotifierProvider<GoalsNotifier, List<AppGoal>>(
 
 // --- Blocker Provider ---
 class BlockerNotifier extends StateNotifier<List<AppInfo>> {
-  final LocalDataSource _dataSource;
-
   BlockerNotifier(this._dataSource) : super([]) {
     _load();
   }
+  final LocalDataSource _dataSource;
 
   void _load() {
     state = _dataSource.getBlockedApps();
@@ -307,11 +305,10 @@ final blockerProvider = StateNotifierProvider<BlockerNotifier, List<AppInfo>>(
 
 // --- Daily Stats Provider ---
 class DailyStatsNotifier extends StateNotifier<DailyStat?> {
-  final LocalDataSource _dataSource;
-
   DailyStatsNotifier(this._dataSource) : super(null) {
     _loadToday();
   }
+  final LocalDataSource _dataSource;
 
   void _loadToday() {
     state = _dataSource.getDailyStat(dayKey(DateTime.now()));
@@ -353,11 +350,10 @@ final productivityScoreProvider = Provider<int>((ref) {
 
 // --- Achievements Provider ---
 class AchievementsNotifier extends StateNotifier<List<Achievement>> {
-  final LocalDataSource _dataSource;
-
   AchievementsNotifier(this._dataSource) : super(defaultAchievements) {
     _load();
   }
+  final LocalDataSource _dataSource;
 
   void _load() {
     state = defaultAchievements.map((a) {
@@ -397,15 +393,6 @@ final achievementsProvider =
 
 // --- Settings Provider ---
 class SettingsState {
-  final bool notificationsEnabled;
-  final bool strictModeEnabled;
-  final String? strictModePin;
-  final bool bedtimeModeEnabled;
-  final TimeOfDay bedtimeStart;
-  final TimeOfDay bedtimeEnd;
-  final bool hasCompletedOnboarding;
-  final bool hasAcceptedTerms;
-
   const SettingsState({
     this.notificationsEnabled = true,
     this.strictModeEnabled = false,
@@ -416,6 +403,14 @@ class SettingsState {
     this.hasCompletedOnboarding = false,
     this.hasAcceptedTerms = false,
   });
+  final bool notificationsEnabled;
+  final bool strictModeEnabled;
+  final String? strictModePin;
+  final bool bedtimeModeEnabled;
+  final TimeOfDay bedtimeStart;
+  final TimeOfDay bedtimeEnd;
+  final bool hasCompletedOnboarding;
+  final bool hasAcceptedTerms;
 
   SettingsState copyWith({
     bool? notificationsEnabled,
@@ -426,27 +421,25 @@ class SettingsState {
     TimeOfDay? bedtimeEnd,
     bool? hasCompletedOnboarding,
     bool? hasAcceptedTerms,
-  }) {
-    return SettingsState(
-      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
-      strictModeEnabled: strictModeEnabled ?? this.strictModeEnabled,
-      strictModePin: strictModePin ?? this.strictModePin,
-      bedtimeModeEnabled: bedtimeModeEnabled ?? this.bedtimeModeEnabled,
-      bedtimeStart: bedtimeStart ?? this.bedtimeStart,
-      bedtimeEnd: bedtimeEnd ?? this.bedtimeEnd,
-      hasCompletedOnboarding:
-          hasCompletedOnboarding ?? this.hasCompletedOnboarding,
-      hasAcceptedTerms: hasAcceptedTerms ?? this.hasAcceptedTerms,
-    );
-  }
+  }) =>
+      SettingsState(
+        notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+        strictModeEnabled: strictModeEnabled ?? this.strictModeEnabled,
+        strictModePin: strictModePin ?? this.strictModePin,
+        bedtimeModeEnabled: bedtimeModeEnabled ?? this.bedtimeModeEnabled,
+        bedtimeStart: bedtimeStart ?? this.bedtimeStart,
+        bedtimeEnd: bedtimeEnd ?? this.bedtimeEnd,
+        hasCompletedOnboarding:
+            hasCompletedOnboarding ?? this.hasCompletedOnboarding,
+        hasAcceptedTerms: hasAcceptedTerms ?? this.hasAcceptedTerms,
+      );
 }
 
 class SettingsNotifier extends StateNotifier<SettingsState> {
-  final LocalDataSource _dataSource;
-
   SettingsNotifier(this._dataSource) : super(const SettingsState()) {
     _load();
   }
+  final LocalDataSource _dataSource;
 
   void _load() {
     state = state.copyWith(
@@ -523,85 +516,94 @@ final settingsProvider = StateNotifierProvider<SettingsNotifier, SettingsState>(
 );
 
 // --- Installed Apps Provider (demo data) ---
-final installedAppsProvider = Provider<List<AppInfo>>((ref) {
-  return [
+final installedAppsProvider = Provider<List<AppInfo>>(
+  (ref) => [
     const AppInfo(
-        appName: 'Instagram',
-        packageName: 'com.instagram.android',
-        isSocialMedia: true,
-        usageTodayMinutes: 45),
+      appName: 'Instagram',
+      packageName: 'com.instagram.android',
+      isSocialMedia: true,
+      usageTodayMinutes: 45,
+    ),
     const AppInfo(
-        appName: 'TikTok',
-        packageName: 'com.zhiliaoapp.musically',
-        isSocialMedia: true,
-        usageTodayMinutes: 30),
+      appName: 'TikTok',
+      packageName: 'com.zhiliaoapp.musically',
+      isSocialMedia: true,
+      usageTodayMinutes: 30,
+    ),
     const AppInfo(
-        appName: 'YouTube',
-        packageName: 'com.google.android.youtube',
-        isSocialMedia: true,
-        usageTodayMinutes: 60),
+      appName: 'YouTube',
+      packageName: 'com.google.android.youtube',
+      isSocialMedia: true,
+      usageTodayMinutes: 60,
+    ),
     const AppInfo(
-        appName: 'Twitter / X',
-        packageName: 'com.twitter.android',
-        isSocialMedia: true,
-        usageTodayMinutes: 20),
+      appName: 'Twitter / X',
+      packageName: 'com.twitter.android',
+      isSocialMedia: true,
+      usageTodayMinutes: 20,
+    ),
     const AppInfo(
-        appName: 'Facebook',
-        packageName: 'com.facebook.katana',
-        isSocialMedia: true,
-        usageTodayMinutes: 15),
+      appName: 'Facebook',
+      packageName: 'com.facebook.katana',
+      isSocialMedia: true,
+      usageTodayMinutes: 15,
+    ),
     const AppInfo(
-        appName: 'Snapchat',
-        packageName: 'com.snapchat.android',
-        isSocialMedia: true,
-        usageTodayMinutes: 10),
+      appName: 'Snapchat',
+      packageName: 'com.snapchat.android',
+      isSocialMedia: true,
+      usageTodayMinutes: 10,
+    ),
     const AppInfo(
-        appName: 'Reddit',
-        packageName: 'com.reddit.frontpage',
-        isSocialMedia: true,
-        usageTodayMinutes: 25),
+      appName: 'Reddit',
+      packageName: 'com.reddit.frontpage',
+      isSocialMedia: true,
+      usageTodayMinutes: 25,
+    ),
     const AppInfo(
-        appName: 'Pinterest',
-        packageName: 'com.pinterest',
-        isSocialMedia: true,
-        usageTodayMinutes: 5),
+      appName: 'Pinterest',
+      packageName: 'com.pinterest',
+      isSocialMedia: true,
+      usageTodayMinutes: 5,
+    ),
     const AppInfo(
-        appName: 'WhatsApp',
-        packageName: 'com.whatsapp',
-        isSocialMedia: false,
-        usageTodayMinutes: 40),
+      appName: 'WhatsApp',
+      packageName: 'com.whatsapp',
+      usageTodayMinutes: 40,
+    ),
     const AppInfo(
-        appName: 'Telegram',
-        packageName: 'org.telegram.messenger',
-        isSocialMedia: false,
-        usageTodayMinutes: 15),
+      appName: 'Telegram',
+      packageName: 'org.telegram.messenger',
+      usageTodayMinutes: 15,
+    ),
     const AppInfo(
-        appName: 'Chrome',
-        packageName: 'com.android.chrome',
-        isSocialMedia: false,
-        usageTodayMinutes: 35),
+      appName: 'Chrome',
+      packageName: 'com.android.chrome',
+      usageTodayMinutes: 35,
+    ),
     const AppInfo(
-        appName: 'Gmail',
-        packageName: 'com.google.android.gm',
-        isSocialMedia: false,
-        usageTodayMinutes: 10),
+      appName: 'Gmail',
+      packageName: 'com.google.android.gm',
+      usageTodayMinutes: 10,
+    ),
     const AppInfo(
-        appName: 'Netflix',
-        packageName: 'com.netflix.mediaclient',
-        isSocialMedia: false,
-        usageTodayMinutes: 50),
+      appName: 'Netflix',
+      packageName: 'com.netflix.mediaclient',
+      usageTodayMinutes: 50,
+    ),
     const AppInfo(
-        appName: 'Spotify',
-        packageName: 'com.spotify.music',
-        isSocialMedia: false,
-        usageTodayMinutes: 30),
+      appName: 'Spotify',
+      packageName: 'com.spotify.music',
+      usageTodayMinutes: 30,
+    ),
     const AppInfo(
-        appName: 'LinkedIn',
-        packageName: 'com.linkedin.android',
-        isSocialMedia: true,
-        usageTodayMinutes: 8),
-  ];
-});
+      appName: 'LinkedIn',
+      packageName: 'com.linkedin.android',
+      isSocialMedia: true,
+      usageTodayMinutes: 8,
+    ),
+  ],
+);
 
 // --- Demo Weekly Stats ---
 final weeklyStatsProvider = Provider<List<DailyStat>>((ref) {
@@ -631,7 +633,7 @@ final weeklyStatsProvider = Provider<List<DailyStat>>((ref) {
 // ====== NEW PROVIDERS FOR FOCUSGUARD PRO ======
 
 // --- Habits Provider ---
-class HabitsNotifier extends StateNotifier<List<dynamic>> {
+class HabitsNotifier extends StateNotifier<List<Map<String,dynamic>>> {
   HabitsNotifier() : super([]);
 
   void addHabit(String name, String icon) {
@@ -641,9 +643,6 @@ class HabitsNotifier extends StateNotifier<List<dynamic>> {
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: name,
         icon: icon,
-        currentStreak: 0,
-        completionRate: 0.0,
-        category: 'General',
         completedDates: [],
         createdAt: DateTime.now(),
       ),
@@ -682,6 +681,16 @@ class HabitsNotifier extends StateNotifier<List<dynamic>> {
 }
 
 class _SimpleHabit {
+  _SimpleHabit({
+    required this.id,
+    required this.name,
+    required this.createdAt,
+    this.icon = '🎯',
+    this.currentStreak = 0,
+    this.completionRate = 0.0,
+    this.category = 'General',
+    this.completedDates = const [],
+  });
   final String id;
   final String name;
   final String icon;
@@ -691,16 +700,6 @@ class _SimpleHabit {
   final List<String> completedDates;
   final DateTime createdAt;
 
-  _SimpleHabit(
-      {required this.id,
-      required this.name,
-      this.icon = '🎯',
-      this.currentStreak = 0,
-      this.completionRate = 0.0,
-      this.category = 'General',
-      this.completedDates = const [],
-      required this.createdAt});
-
   bool get isCompletedToday {
     final today = DateTime.now();
     final todayStr =
@@ -709,27 +708,30 @@ class _SimpleHabit {
   }
 }
 
-final habitsProvider = StateNotifierProvider<HabitsNotifier, List<dynamic>>(
-    (ref) => HabitsNotifier());
+final habitsProvider = StateNotifierProvider<HabitsNotifier, List<Map<String,dynamic>>>(
+  (ref) => HabitsNotifier(),
+);
 
 // --- Challenges Provider ---
-class ChallengesNotifier extends StateNotifier<List<dynamic>> {
+class ChallengesNotifier extends StateNotifier<List<Map<String,dynamic>>> {
   ChallengesNotifier() : super([]);
 }
 
 final challengesProvider =
-    StateNotifierProvider<ChallengesNotifier, List<dynamic>>(
-        (ref) => ChallengesNotifier());
+    StateNotifierProvider<ChallengesNotifier, List<Map<String,dynamic>>>(
+  (ref) => ChallengesNotifier(),
+);
 
 // --- Journal Provider ---
-class JournalNotifier extends StateNotifier<List<dynamic>> {
+class JournalNotifier extends StateNotifier<List<Map<String,dynamic>>> {
   JournalNotifier() : super([]);
 
-  void addEntry(
-      {String content = '',
-      int mood = 3,
-      int focusRating = 5,
-      List<String> gratitude = const []}) {
+  void addEntry({
+    String content = '',
+    int mood = 3,
+    int focusRating = 5,
+    List<String> gratitude = const [],
+  }) {
     state = [
       _SimpleJournalEntry(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -738,7 +740,6 @@ class JournalNotifier extends StateNotifier<List<dynamic>> {
         mood: mood,
         focusRating: focusRating,
         gratitude: gratitude,
-        isPinned: false,
       ),
       ...state,
     ];
@@ -746,6 +747,15 @@ class JournalNotifier extends StateNotifier<List<dynamic>> {
 }
 
 class _SimpleJournalEntry {
+  _SimpleJournalEntry({
+    required this.id,
+    required this.date,
+    this.content = '',
+    this.mood = 3,
+    this.focusRating = 5,
+    this.gratitude = const [],
+    this.isPinned = false,
+  });
   final String id;
   final DateTime date;
   final String content;
@@ -753,15 +763,6 @@ class _SimpleJournalEntry {
   final int focusRating;
   final List<String> gratitude;
   final bool isPinned;
-
-  _SimpleJournalEntry(
-      {required this.id,
-      required this.date,
-      this.content = '',
-      this.mood = 3,
-      this.focusRating = 5,
-      this.gratitude = const [],
-      this.isPinned = false});
 
   String get moodEmoji {
     switch (mood) {
@@ -781,21 +782,12 @@ class _SimpleJournalEntry {
   }
 }
 
-final journalProvider = StateNotifierProvider<JournalNotifier, List<dynamic>>(
-    (ref) => JournalNotifier());
+final journalProvider = StateNotifierProvider<JournalNotifier, List<Map<String,dynamic>>>(
+  (ref) => JournalNotifier(),
+);
 
 // --- Rewards Provider ---
 class _RewardState {
-  final int totalXp;
-  final int level;
-  final List<String> unlockedBadges;
-  final List<String> unlockedThemes;
-  final int focusSessionsCompleted;
-  final int habitsCompleted;
-  final int challengesCompleted;
-  final int goalsAchieved;
-  final int loginStreak;
-
   const _RewardState({
     this.totalXp = 1250,
     this.level = 4,
@@ -807,11 +799,20 @@ class _RewardState {
     this.goalsAchieved = 8,
     this.loginStreak = 5,
   });
+  final int totalXp;
+  final int level;
+  final List<String> unlockedBadges;
+  final List<String> unlockedThemes;
+  final int focusSessionsCompleted;
+  final int habitsCompleted;
+  final int challengesCompleted;
+  final int goalsAchieved;
+  final int loginStreak;
   int get xpForNextLevel => (100 * level * 1.3).toInt();
 
   double get levelProgress {
-    int total = 0;
-    for (int i = 1; i < level; i++) {
+    var total = 0;
+    for (var i = 1; i < level; i++) {
       total += (100 * i * 1.3).toInt();
     }
     final xpInLevel = totalXp - total;

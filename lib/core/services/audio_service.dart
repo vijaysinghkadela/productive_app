@@ -11,8 +11,12 @@ class AudioService {
   static const int maxConcurrent = 3;
 
   /// Play an ambient sound with optional looping
-  Future<void> play(String soundId,
-      {String? assetPath, bool loop = true, double volume = 0.7}) async {
+  Future<void> play(
+    String soundId, {
+    String? assetPath,
+    bool loop = true,
+    double volume = 0.7,
+  }) async {
     if (_players.length >= maxConcurrent && !_players.containsKey(soundId)) {
       debugPrint('🎵 Max concurrent sounds reached ($maxConcurrent)');
       return;

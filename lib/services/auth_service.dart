@@ -1,4 +1,4 @@
-import '../domain/entities/user.dart';
+import 'package:focusguard_pro/domain/entities/user.dart';
 
 /// Handles Firebase Authentication.
 ///
@@ -41,7 +41,10 @@ class AuthService {
 
   /// Sign up with email and password.
   Future<AuthResult> signUpWithEmail(
-      String email, String password, String displayName) async {
+    String email,
+    String password,
+    String displayName,
+  ) async {
     if (!_configured) {
       return _mockSignIn(email, name: displayName);
     }
@@ -144,9 +147,8 @@ class AuthService {
 
 /// Result of an authentication operation.
 class AuthResult {
+  const AuthResult({required this.success, this.user, this.error});
   final bool success;
   final UserEntity? user;
   final String? error;
-
-  const AuthResult({required this.success, this.user, this.error});
 }

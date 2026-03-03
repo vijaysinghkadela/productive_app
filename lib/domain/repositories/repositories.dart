@@ -1,7 +1,7 @@
-import '../../core/errors/failure.dart';
-import '../../data/models/user_model.dart';
-import '../../data/models/session_model.dart';
-import '../../data/models/feature_models.dart';
+import 'package:focusguard_pro/core/errors/failure.dart';
+import 'package:focusguard_pro/data/models/feature_models.dart';
+import 'package:focusguard_pro/data/models/session_model.dart';
+import 'package:focusguard_pro/data/models/user_model.dart';
 
 /// Abstract repository interfaces for Clean Architecture.
 /// Implementations in data/repositories/ depend on datasources.
@@ -14,7 +14,10 @@ abstract class UserRepository {
   Future<Result<void>> deleteUser(String uid);
   Future<Result<UserModel>> signIn(String email, String password);
   Future<Result<UserModel>> signUp(
-      String email, String password, String displayName);
+    String email,
+    String password,
+    String displayName,
+  );
   Future<Result<void>> signOut();
   Future<Result<void>> resetPassword(String email);
   Future<Result<UserModel>> signInWithGoogle();
@@ -35,7 +38,9 @@ abstract class UsageRepository {
   Future<Result<List<UsageStatModel>>> getWeeklyUsage();
   Future<Result<List<UsageStatModel>>> getMonthlyUsage();
   Future<Result<Map<String, int>>> getAppUsage(
-      String packageName, String period);
+    String packageName,
+    String period,
+  );
 }
 
 /// Goal repository
@@ -82,9 +87,12 @@ abstract class JournalRepository {
 /// AI Coaching repository
 abstract class AiCoachingRepository {
   Future<Result<String>> getAiResponse(
-      String message, Map<String, dynamic> context);
-  Future<Result<List<AiCoachingModel>>> getConversationHistory(
-      {int limit = 30});
+    String message,
+    Map<String, dynamic> context,
+  );
+  Future<Result<List<AiCoachingModel>>> getConversationHistory({
+    int limit = 30,
+  });
   Future<Result<String>> getDailyInsight(Map<String, dynamic> stats);
 }
 

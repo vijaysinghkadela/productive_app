@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/kanban_provider.dart';
-import '../../core/constants.dart';
-import '../../core/theme.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/core/theme.dart';
+import 'package:focusguard_pro/presentation/providers/kanban_provider.dart';
 
 /// Kanban-style task board with three columns: To Do, In Progress, Done.
 /// Supports drag-and-drop reordering, swipe actions, and task creation.
@@ -42,12 +42,30 @@ class _KanbanScreenState extends ConsumerState<KanbanScreen> {
       ),
       body: PageView(
         children: [
-          _buildColumn(context, kanban, 'To Do', TaskStatus.todo,
-              AppColors.secondary, Icons.radio_button_unchecked_rounded),
-          _buildColumn(context, kanban, 'In Progress', TaskStatus.inProgress,
-              AppColors.warning, Icons.timelapse_rounded),
-          _buildColumn(context, kanban, 'Done', TaskStatus.done,
-              AppColors.success, Icons.check_circle_rounded),
+          _buildColumn(
+            context,
+            kanban,
+            'To Do',
+            TaskStatus.todo,
+            AppColors.secondary,
+            Icons.radio_button_unchecked_rounded,
+          ),
+          _buildColumn(
+            context,
+            kanban,
+            'In Progress',
+            TaskStatus.inProgress,
+            AppColors.warning,
+            Icons.timelapse_rounded,
+          ),
+          _buildColumn(
+            context,
+            kanban,
+            'Done',
+            TaskStatus.done,
+            AppColors.success,
+            Icons.check_circle_rounded,
+          ),
         ],
       ),
       bottomNavigationBar: Container(
@@ -55,45 +73,58 @@ class _KanbanScreenState extends ConsumerState<KanbanScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildStatusChip('To Do', kanban.countByStatus(TaskStatus.todo),
-                AppColors.secondary),
-            _buildStatusChip('In Progress',
-                kanban.countByStatus(TaskStatus.inProgress), AppColors.warning),
-            _buildStatusChip('Done', kanban.countByStatus(TaskStatus.done),
-                AppColors.success),
+            _buildStatusChip(
+              'To Do',
+              kanban.countByStatus(TaskStatus.todo),
+              AppColors.secondary,
+            ),
+            _buildStatusChip(
+              'In Progress',
+              kanban.countByStatus(TaskStatus.inProgress),
+              AppColors.warning,
+            ),
+            _buildStatusChip(
+              'Done',
+              kanban.countByStatus(TaskStatus.done),
+              AppColors.success,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatusChip(String label, int count, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: GlassDecoration.pill(color),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Text(
-            '$label ($count)',
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _buildStatusChip(String label, int count, Color color) => Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: GlassDecoration.pill(color),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Text(
+              '$label ($count)',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+          ],
+        ),
+      );
 
-  Widget _buildColumn(BuildContext context, KanbanState kanban, String title,
-      TaskStatus status, Color color, IconData icon) {
+  Widget _buildColumn(
+    BuildContext context,
+    KanbanState kanban,
+    String title,
+    TaskStatus status,
+    Color color,
+    IconData icon,
+  ) {
     final tasks = kanban.byStatus(status);
     final theme = Theme.of(context);
 
@@ -110,7 +141,9 @@ class _KanbanScreenState extends ConsumerState<KanbanScreen> {
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.md, vertical: AppSpacing.xs),
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.xs,
+                ),
                 decoration: GlassDecoration.pill(color),
                 child: Text(
                   '${tasks.length}',
@@ -129,8 +162,11 @@ class _KanbanScreenState extends ConsumerState<KanbanScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(icon,
-                            size: 48, color: color.withValues(alpha: 0.3)),
+                        Icon(
+                          icon,
+                          size: 48,
+                          color: color.withValues(alpha: 0.3),
+                        ),
                         const SizedBox(height: AppSpacing.lg),
                         Text(
                           'No tasks here',
@@ -192,8 +228,10 @@ class _KanbanScreenState extends ConsumerState<KanbanScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('New Task',
-                  style: Theme.of(context).textTheme.headlineMedium),
+              Text(
+                'New Task',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
               const SizedBox(height: AppSpacing.lg),
               TextField(
                 controller: _titleController,
@@ -266,18 +304,17 @@ class _KanbanScreenState extends ConsumerState<KanbanScreen> {
 }
 
 class _KanbanTaskCard extends StatelessWidget {
-  final KanbanTask task;
-  final Color color;
-  final void Function(TaskStatus) onMove;
-  final VoidCallback onDelete;
-
   const _KanbanTaskCard({
-    super.key,
     required this.task,
     required this.color,
     required this.onMove,
     required this.onDelete,
+    super.key,
   });
+  final KanbanTask task;
+  final Color color;
+  final void Function(TaskStatus) onMove;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -306,8 +343,10 @@ class _KanbanTaskCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(task.priorityEmoji,
-                      style: const TextStyle(fontSize: 16)),
+                  Text(
+                    task.priorityEmoji,
+                    style: const TextStyle(fontSize: 16),
+                  ),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
@@ -319,16 +358,19 @@ class _KanbanTaskCard extends StatelessWidget {
                   ),
                   // Move menu
                   PopupMenuButton<TaskStatus>(
-                    icon: Icon(Icons.more_vert,
-                        size: AppSizes.iconMd,
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+                    icon: Icon(
+                      Icons.more_vert,
+                      size: AppSizes.iconMd,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    ),
                     itemBuilder: (context) => TaskStatus.values
                         .where((s) => s != task.status)
-                        .map((s) => PopupMenuItem(
-                              value: s,
-                              child: Text(_statusLabel(s)),
-                            ))
+                        .map(
+                          (s) => PopupMenuItem(
+                            value: s,
+                            child: Text(_statusLabel(s)),
+                          ),
+                        )
                         .toList(),
                     onSelected: onMove,
                   ),
@@ -347,8 +389,11 @@ class _KanbanTaskCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.sm),
                 Row(
                   children: [
-                    Icon(Icons.calendar_today_rounded,
-                        size: AppSizes.iconSm, color: color),
+                    Icon(
+                      Icons.calendar_today_rounded,
+                      size: AppSizes.iconSm,
+                      color: color,
+                    ),
                     const SizedBox(width: AppSpacing.xs),
                     Text(
                       '${task.dueDate!.day}/${task.dueDate!.month}/${task.dueDate!.year}',
@@ -362,12 +407,14 @@ class _KanbanTaskCard extends StatelessWidget {
                 Wrap(
                   spacing: AppSpacing.xs,
                   children: task.labels
-                      .map((l) => Chip(
-                            label: Text(l),
-                            visualDensity: VisualDensity.compact,
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                          ))
+                      .map(
+                        (l) => Chip(
+                          label: Text(l),
+                          visualDensity: VisualDensity.compact,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      )
                       .toList(),
                 ),
               ],

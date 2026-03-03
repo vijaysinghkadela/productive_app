@@ -1,4 +1,4 @@
-import '../domain/entities/user.dart';
+import 'package:focusguard_pro/domain/entities/user.dart';
 
 /// Handles RevenueCat subscription management.
 ///
@@ -75,7 +75,7 @@ class PurchaseService {
   /// Restore previous purchases.
   Future<PurchaseResult> restorePurchases() async {
     if (!_configured) {
-      return PurchaseResult(
+      return const PurchaseResult(
         success: true,
         tier: SubscriptionTier.free,
         message: 'No purchases to restore (development mode)',
@@ -141,69 +141,58 @@ class PurchaseService {
     return SubscriptionTier.free;
   }
 
-  List<SubscriptionPackage> _getMockOfferings() {
-    return const [
-      SubscriptionPackage(
-        productId: 'focusguard_basic_monthly',
-        title: 'Basic',
-        description: 'Usage tracking, 3 blocked apps, basic reports',
-        price: '\$5.99',
-        period: 'month',
-        tier: SubscriptionTier.basic,
-      ),
-      SubscriptionPackage(
-        productId: 'focusguard_pro_monthly',
-        title: 'Pro',
-        description:
-            'Unlimited blocking, full analytics, focus sessions, bedtime mode',
-        price: '\$9.99',
-        period: 'month',
-        tier: SubscriptionTier.pro,
-        hasFreeTrial: true,
-        freeTrialDays: 7,
-      ),
-      SubscriptionPackage(
-        productId: 'focusguard_elite_monthly',
-        title: 'Elite',
-        description:
-            'Everything + accountability partner, AI coach, priority support',
-        price: '\$12.99',
-        period: 'month',
-        tier: SubscriptionTier.elite,
-      ),
-      SubscriptionPackage(
-        productId: 'focusguard_pro_annual',
-        title: 'Pro (Annual)',
-        description: 'Save 40% with annual billing',
-        price: '\$71.88',
-        period: 'year',
-        tier: SubscriptionTier.pro,
-        hasFreeTrial: true,
-        freeTrialDays: 7,
-      ),
-      SubscriptionPackage(
-        productId: 'focusguard_elite_annual',
-        title: 'Elite (Annual)',
-        description: 'Save 40% with annual billing',
-        price: '\$93.48',
-        period: 'year',
-        tier: SubscriptionTier.elite,
-      ),
-    ];
-  }
+  List<SubscriptionPackage> _getMockOfferings() => const [
+        SubscriptionPackage(
+          productId: 'focusguard_basic_monthly',
+          title: 'Basic',
+          description: 'Usage tracking, 3 blocked apps, basic reports',
+          price: r'$5.99',
+          period: 'month',
+          tier: SubscriptionTier.basic,
+        ),
+        SubscriptionPackage(
+          productId: 'focusguard_pro_monthly',
+          title: 'Pro',
+          description:
+              'Unlimited blocking, full analytics, focus sessions, bedtime mode',
+          price: r'$9.99',
+          period: 'month',
+          tier: SubscriptionTier.pro,
+          hasFreeTrial: true,
+          freeTrialDays: 7,
+        ),
+        SubscriptionPackage(
+          productId: 'focusguard_elite_monthly',
+          title: 'Elite',
+          description:
+              'Everything + accountability partner, AI coach, priority support',
+          price: r'$12.99',
+          period: 'month',
+          tier: SubscriptionTier.elite,
+        ),
+        SubscriptionPackage(
+          productId: 'focusguard_pro_annual',
+          title: 'Pro (Annual)',
+          description: 'Save 40% with annual billing',
+          price: r'$71.88',
+          period: 'year',
+          tier: SubscriptionTier.pro,
+          hasFreeTrial: true,
+          freeTrialDays: 7,
+        ),
+        SubscriptionPackage(
+          productId: 'focusguard_elite_annual',
+          title: 'Elite (Annual)',
+          description: 'Save 40% with annual billing',
+          price: r'$93.48',
+          period: 'year',
+          tier: SubscriptionTier.elite,
+        ),
+      ];
 }
 
 /// Represents a subscription package from RevenueCat.
 class SubscriptionPackage {
-  final String productId;
-  final String title;
-  final String description;
-  final String price;
-  final String period;
-  final SubscriptionTier tier;
-  final bool hasFreeTrial;
-  final int freeTrialDays;
-
   const SubscriptionPackage({
     required this.productId,
     required this.title,
@@ -214,17 +203,24 @@ class SubscriptionPackage {
     this.hasFreeTrial = false,
     this.freeTrialDays = 0,
   });
+  final String productId;
+  final String title;
+  final String description;
+  final String price;
+  final String period;
+  final SubscriptionTier tier;
+  final bool hasFreeTrial;
+  final int freeTrialDays;
 }
 
 /// Result of a purchase operation.
 class PurchaseResult {
-  final bool success;
-  final SubscriptionTier tier;
-  final String message;
-
   const PurchaseResult({
     required this.success,
     required this.tier,
     required this.message,
   });
+  final bool success;
+  final SubscriptionTier tier;
+  final String message;
 }

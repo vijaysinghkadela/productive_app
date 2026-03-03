@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../core/constants.dart';
+import 'package:focusguard_pro/core/constants.dart';
 
 /// Primary gradient button with glow shadow, scale animation, and loading state.
 class PrimaryButton extends StatefulWidget {
-  final String label;
-  final VoidCallback? onPressed;
-  final bool isLoading;
-  final IconData? icon;
-  final Gradient? gradient;
-  final double height;
-
   const PrimaryButton({
-    super.key,
     required this.label,
+    super.key,
     this.onPressed,
     this.isLoading = false,
     this.icon,
     this.gradient,
     this.height = 56,
   });
+  final String label;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final IconData? icon;
+  final Gradient? gradient;
+  final double height;
 
   @override
   State<PrimaryButton> createState() => _PrimaryButtonState();
@@ -116,18 +115,17 @@ class _PrimaryButtonState extends State<PrimaryButton>
 
 /// Secondary glass button with gradient border.
 class SecondaryButton extends StatefulWidget {
-  final String label;
-  final VoidCallback? onPressed;
-  final IconData? icon;
-  final Color? color;
-
   const SecondaryButton({
-    super.key,
     required this.label,
+    super.key,
     this.onPressed,
     this.icon,
     this.color,
   });
+  final String label;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final Color? color;
 
   @override
   State<SecondaryButton> createState() => _SecondaryButtonState();
@@ -205,18 +203,17 @@ class _SecondaryButtonState extends State<SecondaryButton>
 
 /// 44×44 glass icon button with glow on press.
 class AppIconButton extends StatefulWidget {
-  final IconData icon;
-  final VoidCallback? onPressed;
-  final Color? color;
-  final double size;
-
   const AppIconButton({
-    super.key,
     required this.icon,
+    super.key,
     this.onPressed,
     this.color,
     this.size = 44,
   });
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final Color? color;
+  final double size;
 
   @override
   State<AppIconButton> createState() => _AppIconButtonState();
@@ -262,7 +259,10 @@ class _AppIconButtonState extends State<AppIconButton>
               shape: BoxShape.circle,
               border: Border.all(
                 color: Color.lerp(
-                    AppColors.cardBorder, c.withValues(alpha: 0.3), t)!,
+                  AppColors.cardBorder,
+                  c.withValues(alpha: 0.3),
+                  t,
+                )!,
               ),
               boxShadow: t > 0.1 ? AppShadows.glow(c, blur: 12 * t) : null,
             ),
@@ -276,16 +276,15 @@ class _AppIconButtonState extends State<AppIconButton>
 
 /// Custom animated toggle switch with spring physics.
 class CustomToggle extends StatefulWidget {
-  final bool value;
-  final ValueChanged<bool>? onChanged;
-  final Color? activeColor;
-
   const CustomToggle({
-    super.key,
     required this.value,
+    super.key,
     this.onChanged,
     this.activeColor,
   });
+  final bool value;
+  final ValueChanged<bool>? onChanged;
+  final Color? activeColor;
 
   @override
   State<CustomToggle> createState() => _CustomToggleState();
@@ -353,8 +352,9 @@ class _CustomToggleState extends State<CustomToggle>
               boxShadow: t > 0.5
                   ? [
                       BoxShadow(
-                          color: activeColor.withValues(alpha: 0.3 * t),
-                          blurRadius: 8)
+                        color: activeColor.withValues(alpha: 0.3 * t),
+                        blurRadius: 8,
+                      ),
                     ]
                   : null,
             ),
@@ -390,11 +390,6 @@ class _CustomToggleState extends State<CustomToggle>
 
 /// Gradient text widget
 class GradientText extends StatelessWidget {
-  final String text;
-  final TextStyle? style;
-  final Gradient gradient;
-  final TextAlign? textAlign;
-
   const GradientText(
     this.text, {
     super.key,
@@ -402,15 +397,17 @@ class GradientText extends StatelessWidget {
     this.gradient = AppGradients.hero,
     this.textAlign,
   });
+  final String text;
+  final TextStyle? style;
+  final Gradient gradient;
+  final TextAlign? textAlign;
 
   @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (bounds) => gradient.createShader(
-        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-      ),
-      blendMode: BlendMode.srcIn,
-      child: Text(text, style: style, textAlign: textAlign),
-    );
-  }
+  Widget build(BuildContext context) => ShaderMask(
+        shaderCallback: (bounds) => gradient.createShader(
+          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+        ),
+        blendMode: BlendMode.srcIn,
+        child: Text(text, style: style, textAlign: textAlign),
+      );
 }

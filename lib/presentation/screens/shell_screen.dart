@@ -1,44 +1,50 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:focusguard_pro/core/constants.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/constants.dart';
 
 class ShellScreen extends StatelessWidget {
+  const ShellScreen({required this.child, super.key});
   final Widget child;
-  const ShellScreen({super.key, required this.child});
 
   static const _tabs = [
     _TabItem(
-        icon: Icons.home_rounded,
-        activeIcon: Icons.home_rounded,
-        label: 'Home',
-        path: '/home'),
+      icon: Icons.home_rounded,
+      activeIcon: Icons.home_rounded,
+      label: 'Home',
+      path: '/home',
+    ),
     _TabItem(
-        icon: Icons.timer_outlined,
-        activeIcon: Icons.timer_rounded,
-        label: 'Focus',
-        path: '/focus'),
+      icon: Icons.timer_outlined,
+      activeIcon: Icons.timer_rounded,
+      label: 'Focus',
+      path: '/focus',
+    ),
     _TabItem(
-        icon: Icons.insights_outlined,
-        activeIcon: Icons.insights_rounded,
-        label: 'Stats',
-        path: '/analytics'),
+      icon: Icons.insights_outlined,
+      activeIcon: Icons.insights_rounded,
+      label: 'Stats',
+      path: '/analytics',
+    ),
     _TabItem(
-        icon: Icons.shield_outlined,
-        activeIcon: Icons.shield_rounded,
-        label: 'Block',
-        path: '/blocker'),
+      icon: Icons.shield_outlined,
+      activeIcon: Icons.shield_rounded,
+      label: 'Block',
+      path: '/blocker',
+    ),
     _TabItem(
-        icon: Icons.grid_view_outlined,
-        activeIcon: Icons.grid_view_rounded,
-        label: 'More',
-        path: '/more'),
+      icon: Icons.grid_view_outlined,
+      activeIcon: Icons.grid_view_rounded,
+      label: 'More',
+      path: '/more',
+    ),
   ];
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
-    for (int i = 0; i < _tabs.length; i++) {
+    for (var i = 0; i < _tabs.length; i++) {
       if (location == _tabs[i].path) return i;
     }
     return 0;
@@ -70,9 +76,10 @@ class ShellScreen extends StatelessWidget {
                 border: Border.all(color: AppColors.cardBorderLight),
                 boxShadow: const [
                   BoxShadow(
-                      color: Color(0x40000000),
-                      blurRadius: 24,
-                      offset: Offset(0, 8)),
+                    color: Color(0x40000000),
+                    blurRadius: 24,
+                    offset: Offset(0, 8),
+                  ),
                 ],
               ),
               child: Row(
@@ -101,75 +108,77 @@ class ShellScreen extends StatelessWidget {
 }
 
 class _TabItem {
+  const _TabItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+    required this.path,
+  });
   final IconData icon;
   final IconData activeIcon;
   final String label;
   final String path;
-  const _TabItem(
-      {required this.icon,
-      required this.activeIcon,
-      required this.label,
-      required this.path});
 }
 
 class _NavBarItem extends StatelessWidget {
+  const _NavBarItem({
+    required this.tab,
+    required this.isActive,
+    required this.onTap,
+  });
   final _TabItem tab;
   final bool isActive;
   final VoidCallback onTap;
 
-  const _NavBarItem(
-      {required this.tab, required this.isActive, required this.onTap});
-
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: SizedBox(
-        width: 56,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: Anim.normal,
-              curve: Curves.easeInOut,
-              child: Icon(
-                isActive ? tab.activeIcon : tab.icon,
-                size: 24,
-                color: isActive ? AppColors.primary : AppColors.textTertiary,
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: SizedBox(
+          width: 56,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: Anim.normal,
+                curve: Curves.easeInOut,
+                child: Icon(
+                  isActive ? tab.activeIcon : tab.icon,
+                  size: 24,
+                  color: isActive ? AppColors.primary : AppColors.textTertiary,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            // Glowing dot indicator
-            AnimatedContainer(
-              duration: Anim.normal,
-              width: isActive ? 6 : 0,
-              height: isActive ? 6 : 0,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary,
-                boxShadow: isActive
-                    ? [
-                        BoxShadow(
+              const SizedBox(height: 4),
+              // Glowing dot indicator
+              AnimatedContainer(
+                duration: Anim.normal,
+                width: isActive ? 6 : 0,
+                height: isActive ? 6 : 0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary,
+                  boxShadow: isActive
+                      ? [
+                          BoxShadow(
                             color: AppColors.primary.withValues(alpha: 0.6),
-                            blurRadius: 8)
-                      ]
-                    : [],
+                            blurRadius: 8,
+                          ),
+                        ]
+                      : [],
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            AnimatedDefaultTextStyle(
-              duration: Anim.fast,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                color: isActive ? AppColors.primary : AppColors.textTertiary,
+              const SizedBox(height: 2),
+              AnimatedDefaultTextStyle(
+                duration: Anim.fast,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  color: isActive ? AppColors.primary : AppColors.textTertiary,
+                ),
+                child: Text(tab.label),
               ),
-              child: Text(tab.label),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

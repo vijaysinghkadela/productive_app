@@ -1,138 +1,212 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
+import 'package:focusguard_pro/data/database/app_database.dart';
 
-/// Offline-first sync service that queues local changes and pushes
-/// them to the remote backend when connectivity is restored.
+/// Production offline-first sync engine.
 ///
-/// Implements last-write-wins conflict resolution with timestamps.
+/// Pipeline:
+/// 1. Local write → drift DB with synced=false
+/// 2. On connectivity restored → push unsynced rows to Firestore
+/// 3. Pull remote changes with Last-Write-Wins conflict resolution
 class SyncService {
-  static final SyncService _instance = SyncService._();
   factory SyncService() => _instance;
   SyncService._();
+  static final SyncService _instance = SyncService._();
 
-  final _syncQueue = <SyncOperation>[];
+  final _db = AppDatabase.instance;
+  final _firestore = FirebaseFirestore.instance;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
+  Timer? _periodicSync;
   bool _isSyncing = false;
-  Timer? _retryTimer;
+  DateTime? _lastPullTimestamp;
 
-  /// Initialize connectivity listener.
   void init() {
-    _connectivitySub = Connectivity().onConnectivityChanged.listen((results) {
-      final hasConnection = results.any((r) => r != ConnectivityResult.none);
-      if (hasConnection && _syncQueue.isNotEmpty) {
-        _processSyncQueue();
-      }
-    });
+    _connectivitySub =
+        Connectivity().onConnectivityChanged.listen(_onConnectivityChange);
+    _periodicSync = Timer.periodic(const Duration(minutes: 5), (_) => sync());
   }
 
-  /// Enqueue a sync operation for later execution.
-  void enqueue(SyncOperation operation) {
-    _syncQueue.add(operation);
-    debugPrint('📤 Sync queue: ${_syncQueue.length} pending operations');
-    // Try to sync immediately
-    _processSyncQueue();
-  }
-
-  /// Process all pending sync operations.
-  Future<void> _processSyncQueue() async {
-    if (_isSyncing || _syncQueue.isEmpty) return;
-    _isSyncing = true;
-    _retryTimer?.cancel();
-
-    final connectivityResult = await Connectivity().checkConnectivity();
-    final isOnline =
-        connectivityResult.any((r) => r != ConnectivityResult.none);
-
-    if (!isOnline) {
-      _isSyncing = false;
-      _scheduleRetry();
-      return;
+  void _onConnectivityChange(List<ConnectivityResult> results) {
+    if (results.any((r) => r != ConnectivityResult.none)) {
+      sync();
     }
+  }
 
-    final failedOps = <SyncOperation>[];
+  /// Full bidirectional sync: push then pull.
+  Future<void> sync() async {
+    if (_isSyncing) return;
+    _isSyncing = true;
 
-    for (final op in List.of(_syncQueue)) {
+    try {
+      final connectivity = await Connectivity().checkConnectivity();
+      if (connectivity.every((r) => r == ConnectivityResult.none)) {
+        _isSyncing = false;
+        return;
+      }
+
+      await _pushSessions();
+      await _pushDailyStats();
+      await _pushKanbanTasks();
+      await _pullRemoteSessions();
+    } catch (e) {
+      debugPrint('❌ Sync error: $e');
+    } finally {
+      _isSyncing = false;
+    }
+  }
+
+  // ─── PUSH: Local → Firestore ───
+
+  Future<void> _pushSessions() async {
+    final unsynced = await (_db.select(_db.sessions)
+          ..where((t) => t.synced.equals(false)))
+        .get();
+
+    for (final session in unsynced) {
       try {
-        await op.execute();
-        _syncQueue.remove(op);
-        debugPrint('✅ Synced: ${op.description}');
+        await _firestore.collection('sessions').doc(session.id).set(
+          {
+            'sessionType': session.sessionType,
+            'workMinutes': session.workMinutes,
+            'breakMinutes': session.breakMinutes,
+            'startTime': Timestamp.fromDate(session.startTime),
+            'endTime': session.endTime != null
+                ? Timestamp.fromDate(session.endTime!)
+                : null,
+            'completed': session.completed,
+            'productivityScore': session.productivityScore,
+            'lastModified': FieldValue.serverTimestamp(),
+          },
+          SetOptions(merge: true),
+        );
+
+        await (_db.update(_db.sessions)..where((t) => t.id.equals(session.id)))
+            .write(const SessionsCompanion(synced: Value(true)));
+        debugPrint('✅ Pushed session ${session.id}');
       } catch (e) {
-        op.retryCount++;
-        if (op.retryCount < op.maxRetries) {
-          failedOps.add(op);
-        } else {
-          debugPrint('❌ Sync failed permanently: ${op.description}');
-          _syncQueue.remove(op);
+        debugPrint('⚠️ Failed session ${session.id}: $e');
+      }
+    }
+  }
+
+  Future<void> _pushDailyStats() async {
+    final unsynced = await (_db.select(_db.dailyStats)
+          ..where((t) => t.synced.equals(false)))
+        .get();
+
+    for (final stat in unsynced) {
+      try {
+        await _firestore.collection('dailyStats').doc(stat.dateKey).set(
+          {
+            'totalScreenTimeMinutes': stat.totalScreenTimeMinutes,
+            'socialMediaMinutes': stat.socialMediaMinutes,
+            'focusMinutes': stat.focusMinutes,
+            'focusSessionsCompleted': stat.focusSessionsCompleted,
+            'productivityScore': stat.productivityScore,
+            'appUnlocks': stat.appUnlocks,
+            'lastModified': FieldValue.serverTimestamp(),
+          },
+          SetOptions(merge: true),
+        );
+
+        await (_db.update(_db.dailyStats)
+              ..where((t) => t.dateKey.equals(stat.dateKey)))
+            .write(const DailyStatsCompanion(synced: Value(true)));
+        debugPrint('✅ Pushed stat ${stat.dateKey}');
+      } catch (e) {
+        debugPrint('⚠️ Failed stat ${stat.dateKey}: $e');
+      }
+    }
+  }
+
+  Future<void> _pushKanbanTasks() async {
+    final unsynced = await (_db.select(_db.kanbanTasks)
+          ..where((t) => t.synced.equals(false)))
+        .get();
+
+    for (final task in unsynced) {
+      try {
+        await _firestore.collection('kanbanTasks').doc(task.id).set(
+          {
+            'title': task.title,
+            'description': task.description,
+            'status': task.status,
+            'priority': task.priority,
+            'createdAt': Timestamp.fromDate(task.createdAt),
+            'dueDate':
+                task.dueDate != null ? Timestamp.fromDate(task.dueDate!) : null,
+            'labels': task.labels,
+            'sortOrder': task.sortOrder,
+            'lastModified': FieldValue.serverTimestamp(),
+          },
+          SetOptions(merge: true),
+        );
+
+        await (_db.update(_db.kanbanTasks)..where((t) => t.id.equals(task.id)))
+            .write(const KanbanTasksCompanion(synced: Value(true)));
+        debugPrint('✅ Pushed task ${task.id}');
+      } catch (e) {
+        debugPrint('⚠️ Failed task ${task.id}: $e');
+      }
+    }
+  }
+
+  // ─── PULL: Firestore → Local (Last-Write-Wins) ───
+
+  Future<void> _pullRemoteSessions() async {
+    final since = _lastPullTimestamp ?? DateTime(2020);
+    try {
+      final snap = await _firestore
+          .collection('sessions')
+          .where('lastModified', isGreaterThan: Timestamp.fromDate(since))
+          .get();
+
+      for (final doc in snap.docs) {
+        final data = doc.data();
+        final remoteModified = (data['lastModified'] as Timestamp).toDate();
+
+        // Check if local copy is newer
+        final localRows = await (_db.select(_db.sessions)
+              ..where((t) => t.id.equals(doc.id)))
+            .get();
+
+        if (localRows.isEmpty ||
+            remoteModified.isAfter(localRows.first.lastModified)) {
+          await _db.into(_db.sessions).insertOnConflictUpdate(
+                SessionsCompanion(
+                  id: Value(doc.id),
+                  sessionType:
+                      Value(data['sessionType'] as String? ?? 'Deep Work'),
+                  workMinutes: Value(data['workMinutes'] as int? ?? 25),
+                  breakMinutes: Value(data['breakMinutes'] as int? ?? 5),
+                  startTime: Value((data['startTime'] as Timestamp).toDate()),
+                  endTime: Value(
+                    data['endTime'] != null
+                        ? (data['endTime'] as Timestamp).toDate()
+                        : null,
+                  ),
+                  completed: Value(data['completed'] as bool? ?? false),
+                  synced: const Value(true),
+                  lastModified: Value(remoteModified),
+                ),
+              );
         }
       }
-    }
 
-    _isSyncing = false;
-
-    if (_syncQueue.isNotEmpty) {
-      _scheduleRetry();
+      _lastPullTimestamp = DateTime.now();
+      debugPrint('⬇️ Pulled ${snap.docs.length} remote sessions');
+    } catch (e) {
+      debugPrint('⚠️ Pull failed: $e');
     }
   }
 
-  /// Schedule a retry with exponential backoff.
-  void _scheduleRetry() {
-    _retryTimer?.cancel();
-    final delay = Duration(seconds: 5 * (_syncQueue.first.retryCount + 1));
-    _retryTimer = Timer(delay, _processSyncQueue);
-  }
-
-  /// Force sync now (e.g., on manual pull-to-refresh).
-  Future<void> syncNow() => _processSyncQueue();
-
-  /// Number of pending operations.
-  int get pendingCount => _syncQueue.length;
-
-  /// Whether a sync is currently in progress.
   bool get isSyncing => _isSyncing;
 
-  /// Dispose resources.
   void dispose() {
     _connectivitySub?.cancel();
-    _retryTimer?.cancel();
+    _periodicSync?.cancel();
   }
 }
-
-/// Represents a single sync operation in the queue.
-class SyncOperation {
-  final String id;
-  final String description;
-  final String collection;
-  final String documentId;
-  final Map<String, dynamic> data;
-  final SyncType type;
-  final DateTime timestamp;
-  int retryCount;
-  final int maxRetries;
-
-  SyncOperation({
-    required this.id,
-    required this.description,
-    required this.collection,
-    required this.documentId,
-    required this.data,
-    this.type = SyncType.upsert,
-    DateTime? timestamp,
-    this.retryCount = 0,
-    this.maxRetries = 5,
-  }) : timestamp = timestamp ?? DateTime.now();
-
-  /// Execute the sync operation against the remote backend.
-  /// In production, this would call Firestore/API directly.
-  Future<void> execute() async {
-    // Placeholder — replace with actual Firestore write
-    debugPrint(
-      '🔄 Syncing ${type.name} to $collection/$documentId '
-      '(attempt ${retryCount + 1}/$maxRetries)',
-    );
-    // Simulate network call
-    await Future.delayed(const Duration(milliseconds: 100));
-  }
-}
-
-enum SyncType { upsert, delete }

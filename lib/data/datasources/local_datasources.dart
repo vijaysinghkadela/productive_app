@@ -1,7 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Hive local datasource for persistent key-value and list storage
@@ -14,22 +15,24 @@ class HiveDatasource {
 
   Future<void> init() async {
     await Hive.initFlutter();
-    await Hive.openBox(_userBox);
-    await Hive.openBox(_sessionsBox);
-    await Hive.openBox(_statsBox);
-    await Hive.openBox(_settingsBox);
-    await Hive.openBox(_cacheBox);
+    await Hive.openBox<dynamic>(_userBox);
+    await Hive.openBox<dynamic>(_sessionsBox);
+    await Hive.openBox<dynamic>(_statsBox);
+    await Hive.openBox<dynamic>(_settingsBox);
+    await Hive.openBox<dynamic>(_cacheBox);
   }
 
   // Generic CRUD
-  Future<void> put(String boxName, String key, dynamic value) async {
-    final box = Hive.box(boxName);
+  Future<void> put(String boxName, String key, value) async {
+    final box = Hive.box<dynamic>(boxName);
     await box.put(
-        key, value is Map || value is List ? jsonEncode(value) : value);
+      key,
+      value is Map || value is List ? jsonEncode(value) : value,
+    );
   }
 
-  dynamic get(String boxName, String key, {dynamic defaultValue}) {
-    final box = Hive.box(boxName);
+  dynamic get(String boxName, String key, {defaultValue}) {
+    final box = Hive.box<dynamic>(boxName);
     final val = box.get(key, defaultValue: defaultValue);
     if (val is String) {
       try {
@@ -42,12 +45,12 @@ class HiveDatasource {
   }
 
   Future<void> delete(String boxName, String key) async {
-    final box = Hive.box(boxName);
+    final box = Hive.box<dynamic>(boxName);
     await box.delete(key);
   }
 
   List<dynamic> getAll(String boxName) {
-    final box = Hive.box(boxName);
+    final box = Hive.box<dynamic>(boxName);
     return box.values.map((v) {
       if (v is String) {
         try {
@@ -61,7 +64,7 @@ class HiveDatasource {
   }
 
   Future<void> clearBox(String boxName) async {
-    final box = Hive.box(boxName);
+    final box = Hive.box<dynamic>(boxName);
     await box.clear();
   }
 
@@ -94,14 +97,16 @@ class HiveDatasource {
   }
 
   // Settings
-  Future<void> saveSetting(String key, dynamic value) =>
-      put(_settingsBox, key, value);
-  dynamic getSetting(String key, {dynamic defaultValue}) =>
+  Future<void> saveSetting(String key, value) => put(_settingsBox, key, value);
+  dynamic getSetting(String key, {defaultValue}) =>
       get(_settingsBox, key, defaultValue: defaultValue);
 
   // Cache with TTL
-  Future<void> cacheData(String key, dynamic data,
-      {Duration ttl = const Duration(hours: 1)}) async {
+  Future<void> cacheData(
+    String key,
+    data, {
+    Duration ttl = const Duration(hours: 1),
+  }) async {
     final expiry = DateTime.now().add(ttl).toIso8601String();
     await put(_cacheBox, key, {'data': data, 'expiry': expiry});
   }
@@ -116,13 +121,13 @@ class HiveDatasource {
     return null;
   }
 
-  Future<void> dispose() async => await Hive.close();
+  Future<void> dispose() async => Hive.close();
 }
 
 /// Secure storage datasource for sensitive data (PIN, tokens)
 class SecureStorageDatasource {
   final FlutterSecureStorage _storage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    aOptions: AndroidOptions(),
     iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
   );
 

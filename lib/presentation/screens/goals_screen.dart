@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/constants.dart';
-import '../providers/app_providers.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/app_buttons.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 
 class GoalsScreen extends ConsumerWidget {
   const GoalsScreen({super.key});
@@ -46,21 +46,24 @@ class GoalsScreen extends ConsumerWidget {
                       child: Row(
                         children: [
                           _CompletionRing(
-                              completed: completedCount, total: goals.length),
+                            completed: completedCount,
+                            total: goals.length,
+                          ),
                           const SizedBox(width: 20),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Today's Goals",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall),
+                                Text(
+                                  "Today's Goals",
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 const SizedBox(height: 4),
                                 Text(
-                                    '$completedCount of ${goals.length} completed',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium),
+                                  '$completedCount of ${goals.length} completed',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ],
                             ),
                           ),
@@ -77,7 +80,11 @@ class GoalsScreen extends ConsumerWidget {
                     final goal = goals[i];
                     return Padding(
                       padding: EdgeInsets.fromLTRB(
-                          20, 0, 20, i < goals.length - 1 ? 10 : 0),
+                        20,
+                        0,
+                        20,
+                        i < goals.length - 1 ? 10 : 0,
+                      ),
                       child: _GoalCard(goal: goal, index: i),
                     );
                   },
@@ -106,11 +113,13 @@ class GoalsScreen extends ConsumerWidget {
           children: [
             Center(
               child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                      color: AppColors.textTertiary,
-                      borderRadius: BorderRadius.circular(2))),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.textTertiary,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
             ),
             const SizedBox(height: 24),
             Text('New Goal', style: Theme.of(context).textTheme.headlineMedium),
@@ -148,8 +157,9 @@ class GoalsScreen extends ConsumerWidget {
 }
 
 class _CompletionRing extends StatelessWidget {
-  final int completed, total;
   const _CompletionRing({required this.completed, required this.total});
+  final int completed;
+  final int total;
 
   @override
   Widget build(BuildContext context) {
@@ -184,9 +194,9 @@ class _CompletionRing extends StatelessWidget {
 }
 
 class _GoalCard extends StatelessWidget {
+  const _GoalCard({required this.goal, required this.index});
   final dynamic goal;
   final int index;
-  const _GoalCard({required this.goal, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -234,18 +244,27 @@ class _GoalCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(goal.appName ?? 'Goal',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600)),
-                    Text('$current / $target minutes',
-                        style: Theme.of(context).textTheme.bodySmall),
+                    Text(
+                      goal.appName ?? 'Goal',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '$current / $target minutes',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ],
                 ),
               ),
               Text(
                 '${(ratio * 100).clamp(0, 100).round()}%',
                 style: TextStyle(
-                    color: barColor, fontWeight: FontWeight.w700, fontSize: 15),
+                  color: barColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
               ),
             ],
           ),
@@ -267,10 +286,12 @@ class _GoalCard extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Container(
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            barColor,
-                            barColor.withValues(alpha: 0.6)
-                          ]),
+                          gradient: LinearGradient(
+                            colors: [
+                              barColor,
+                              barColor.withValues(alpha: 0.6),
+                            ],
+                          ),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -290,11 +311,14 @@ class _GoalCard extends StatelessWidget {
                   color: AppColors.streak.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text('🔥 $streakDays day streak',
-                    style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.streak)),
+                child: Text(
+                  '🔥 $streakDays day streak',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.streak,
+                  ),
+                ),
               ),
             ),
         ],
@@ -307,42 +331,48 @@ class _GoalCard extends StatelessWidget {
 }
 
 class _EmptyGoals extends StatelessWidget {
-  final VoidCallback onAdd;
   const _EmptyGoals({required this.onAdd});
+  final VoidCallback onAdd;
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(28),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceLight,
-                shape: BoxShape.circle,
+  Widget build(BuildContext context) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(28),
+                decoration: const BoxDecoration(
+                  color: AppColors.surfaceLight,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.flag_rounded,
+                  size: 48,
+                  color: AppColors.textTertiary,
+                ),
               ),
-              child: const Icon(Icons.flag_rounded,
-                  size: 48, color: AppColors.textTertiary),
-            ),
-            const SizedBox(height: 24),
-            Text('No Goals Yet',
+              const SizedBox(height: 24),
+              Text(
+                'No Goals Yet',
                 style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center),
-            const SizedBox(height: 8),
-            Text('Set daily limits for apps to stay on track.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Set daily limits for apps to stay on track.',
                 style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center),
-            const SizedBox(height: 24),
-            PrimaryButton(
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              PrimaryButton(
                 label: 'Add Your First Goal',
                 icon: Icons.add_rounded,
-                onPressed: onAdd),
-          ],
-        ).animate().fadeIn(delay: 200.ms),
-      ),
-    );
-  }
+                onPressed: onAdd,
+              ),
+            ],
+          ).animate().fadeIn(delay: 200.ms),
+        ),
+      );
 }

@@ -3,11 +3,10 @@
 library;
 
 class AppException implements Exception {
+  const AppException(this.message, {this.code, this.originalError});
   final String message;
   final String? code;
   final Object? originalError;
-
-  const AppException(this.message, {this.code, this.originalError});
 
   String get userMessage => message;
 
@@ -64,9 +63,10 @@ class StorageException extends AppException {
 }
 
 class PermissionException extends AppException {
-  const PermissionException(
-      [super.message = 'Permission required.', String? permission])
-      : super(code: permission);
+  const PermissionException([
+    super.message = 'Permission required.',
+    String? permission,
+  ]) : super(code: permission);
 
   @override
   String get userMessage {
@@ -90,11 +90,13 @@ class SubscriptionException extends AppException {
 }
 
 class AiCoachingException extends AppException {
-  const AiCoachingException(
-      [super.message = 'AI coaching is temporarily unavailable.']);
+  const AiCoachingException([
+    super.message = 'AI coaching is temporarily unavailable.',
+  ]);
 }
 
 class RateLimitException extends AppException {
-  const RateLimitException(
-      [super.message = 'You\'ve reached your limit. Upgrade for more.']);
+  const RateLimitException([
+    super.message = 'You\'ve reached your limit. Upgrade for more.',
+  ]);
 }

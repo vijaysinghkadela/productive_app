@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../core/constants.dart';
-import '../widgets/app_buttons.dart';
-import '../widgets/particle_field.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/particle_field.dart';
 
 class FocusSpacesScreen extends StatefulWidget {
   const FocusSpacesScreen({super.key});
@@ -16,45 +16,45 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
 
   static const _rooms = [
     _RoomData(
-        name: 'Silent Library',
-        emoji: '📚',
-        users: 234,
-        gradient:
-            LinearGradient(colors: [Color(0xFF3D2B1F), Color(0xFF0D1225)]),
-        sound: 'Quiet ambiance',
-        particleColor: AppColors.warning),
+      name: 'Silent Library',
+      emoji: '📚',
+      users: 234,
+      gradient: LinearGradient(colors: [Color(0xFF3D2B1F), Color(0xFF0D1225)]),
+      sound: 'Quiet ambiance',
+      particleColor: AppColors.warning,
+    ),
     _RoomData(
-        name: 'Coffee Shop',
-        emoji: '☕',
-        users: 567,
-        gradient:
-            LinearGradient(colors: [Color(0xFF4A3728), Color(0xFF0D1225)]),
-        sound: 'Chatter + coffee machine',
-        particleColor: Color(0xFFD4A373)),
+      name: 'Coffee Shop',
+      emoji: '☕',
+      users: 567,
+      gradient: LinearGradient(colors: [Color(0xFF4A3728), Color(0xFF0D1225)]),
+      sound: 'Chatter + coffee machine',
+      particleColor: Color(0xFFD4A373),
+    ),
     _RoomData(
-        name: 'Forest Retreat',
-        emoji: '🌲',
-        users: 189,
-        gradient:
-            LinearGradient(colors: [Color(0xFF1B4332), Color(0xFF0D1225)]),
-        sound: 'Birds + wind',
-        particleColor: AppColors.success),
+      name: 'Forest Retreat',
+      emoji: '🌲',
+      users: 189,
+      gradient: LinearGradient(colors: [Color(0xFF1B4332), Color(0xFF0D1225)]),
+      sound: 'Birds + wind',
+      particleColor: AppColors.success,
+    ),
     _RoomData(
-        name: 'Space Station',
-        emoji: '🚀',
-        users: 412,
-        gradient:
-            LinearGradient(colors: [Color(0xFF1A1040), Color(0xFF0D1225)]),
-        sound: 'White noise + hum',
-        particleColor: AppColors.primary),
+      name: 'Space Station',
+      emoji: '🚀',
+      users: 412,
+      gradient: LinearGradient(colors: [Color(0xFF1A1040), Color(0xFF0D1225)]),
+      sound: 'White noise + hum',
+      particleColor: AppColors.primary,
+    ),
     _RoomData(
-        name: 'Rain Café',
-        emoji: '🌧️',
-        users: 321,
-        gradient:
-            LinearGradient(colors: [Color(0xFF2D3748), Color(0xFF0D1225)]),
-        sound: 'Raindrops + thunder',
-        particleColor: AppColors.secondary),
+      name: 'Rain Café',
+      emoji: '🌧️',
+      users: 321,
+      gradient: LinearGradient(colors: [Color(0xFF2D3748), Color(0xFF0D1225)]),
+      sound: 'Raindrops + thunder',
+      particleColor: AppColors.secondary,
+    ),
   ];
 
   @override
@@ -71,11 +71,12 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
             decoration: BoxDecoration(gradient: room.gradient),
           ),
           Positioned.fill(
-              child: ParticleField(
-            particleCount: 15,
-            maxOpacity: 0.06,
-            tintColor: room.particleColor,
-          )),
+            child: ParticleField(
+              particleCount: 15,
+              maxOpacity: 0.06,
+              tintColor: room.particleColor,
+            ),
+          ),
 
           SafeArea(
             child: Column(
@@ -86,11 +87,14 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
                   child: Row(
                     children: [
                       AppIconButton(
-                          icon: Icons.arrow_back_rounded,
-                          onPressed: () => Navigator.maybePop(context)),
+                        icon: Icons.arrow_back_rounded,
+                        onPressed: () => Navigator.maybePop(context),
+                      ),
                       const SizedBox(width: 12),
-                      Text('Focus Spaces',
-                          style: Theme.of(context).textTheme.headlineMedium),
+                      Text(
+                        'Focus Spaces',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
                     ],
                   ),
                 ).animate().fadeIn(duration: 300.ms),
@@ -124,9 +128,10 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                      color: r.particleColor
-                                          .withValues(alpha: 0.2),
-                                      blurRadius: 24)
+                                    color:
+                                        r.particleColor.withValues(alpha: 0.2),
+                                    blurRadius: 24,
+                                  ),
                                 ]
                               : [],
                         ),
@@ -137,27 +142,43 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
                           children: [
                             Text(r.emoji, style: const TextStyle(fontSize: 36)),
                             const SizedBox(height: 8),
-                            Text(r.name,
-                                style: const TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.w700)),
+                            Text(
+                              r.name,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                Icon(Icons.people_outline_rounded,
-                                    size: 14, color: AppColors.textTertiary),
+                                const Icon(
+                                  Icons.people_outline_rounded,
+                                  size: 14,
+                                  color: AppColors.textTertiary,
+                                ),
                                 const SizedBox(width: 4),
-                                Text('${r.users} focusing now',
-                                    style: TextStyle(
-                                        color: AppColors.textTertiary,
-                                        fontSize: 12)),
+                                Text(
+                                  '${r.users} focusing now',
+                                  style: const TextStyle(
+                                    color: AppColors.textTertiary,
+                                    fontSize: 12,
+                                  ),
+                                ),
                                 const SizedBox(width: 12),
-                                Icon(Icons.volume_up_rounded,
-                                    size: 14, color: AppColors.textTertiary),
+                                const Icon(
+                                  Icons.volume_up_rounded,
+                                  size: 14,
+                                  color: AppColors.textTertiary,
+                                ),
                                 const SizedBox(width: 4),
-                                Text(r.sound,
-                                    style: TextStyle(
-                                        color: AppColors.textTertiary,
-                                        fontSize: 12)),
+                                Text(
+                                  r.sound,
+                                  style: const TextStyle(
+                                    color: AppColors.textTertiary,
+                                    fontSize: 12,
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -196,59 +217,67 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('People Focusing',
-                          style: Theme.of(context).textTheme.headlineSmall),
+                      Text(
+                        'People Focusing',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                       const SizedBox(height: 12),
                       // Avatar cluster
                       SizedBox(
                         height: 50,
                         child: Stack(
-                          children: List.generate(6, (i) {
-                            return Positioned(
+                          children: List.generate(
+                            6,
+                            (i) => Positioned(
                               left: i * 36.0,
                               child: Container(
                                 width: 44,
                                 height: 44,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  gradient: LinearGradient(colors: [
-                                    [
-                                      AppColors.primary,
-                                      AppColors.secondary,
-                                      AppColors.tertiary,
-                                      AppColors.success,
-                                      AppColors.warning,
-                                      AppColors.streak
-                                    ][i],
-                                    AppColors.surfaceLight,
-                                  ]),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      [
+                                        AppColors.primary,
+                                        AppColors.secondary,
+                                        AppColors.tertiary,
+                                        AppColors.success,
+                                        AppColors.warning,
+                                        AppColors.streak,
+                                      ][i],
+                                      AppColors.surfaceLight,
+                                    ],
+                                  ),
                                   border: Border.all(
-                                      color: AppColors.background, width: 2),
+                                    color: AppColors.background,
+                                    width: 2,
+                                  ),
                                 ),
                                 child: Center(
-                                    child: Text(
-                                  [
-                                    'A',
-                                    'S',
-                                    'J',
-                                    'M',
-                                    'K',
-                                    '+${room.users - 5}'
-                                  ][i],
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: i == 5 ? 10 : 16,
+                                  child: Text(
+                                    [
+                                      'A',
+                                      'S',
+                                      'J',
+                                      'M',
+                                      'K',
+                                      '+${room.users - 5}',
+                                    ][i],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: i == 5 ? 10 : 16,
+                                    ),
                                   ),
-                                )),
+                                ),
                               ),
                             ).animate(delay: (i * 80).ms).scale(
                                   begin: const Offset(0, 0),
                                   end: const Offset(1, 1),
                                   duration: 300.ms,
                                   curve: Curves.elasticOut,
-                                );
-                          }),
+                                ),
+                          ),
                         ),
                       ),
                     ],
@@ -263,10 +292,12 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
                   child: PrimaryButton(
                     label: 'Join ${room.name}',
                     icon: Icons.login_rounded,
-                    gradient: LinearGradient(colors: [
-                      room.particleColor,
-                      room.particleColor.withValues(alpha: 0.7)
-                    ]),
+                    gradient: LinearGradient(
+                      colors: [
+                        room.particleColor,
+                        room.particleColor.withValues(alpha: 0.7),
+                      ],
+                    ),
                     onPressed: () {},
                   ),
                 ).animate(delay: 400.ms).fadeIn(duration: 400.ms),
@@ -280,15 +311,18 @@ class _FocusSpacesScreenState extends State<FocusSpacesScreen> {
 }
 
 class _RoomData {
-  final String name, emoji, sound;
+  const _RoomData({
+    required this.name,
+    required this.emoji,
+    required this.users,
+    required this.gradient,
+    required this.sound,
+    required this.particleColor,
+  });
+  final String name;
+  final String emoji;
+  final String sound;
   final int users;
   final LinearGradient gradient;
   final Color particleColor;
-  const _RoomData(
-      {required this.name,
-      required this.emoji,
-      required this.users,
-      required this.gradient,
-      required this.sound,
-      required this.particleColor});
 }

@@ -1,0 +1,99 @@
+Analyzing data...                                               
+
+   info • Sort directive sections alphabetically • lib/data/database/app_database.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/data/database/app_database.dart:6:1 • directives_ordering
+   info • Static method should be a constructor • lib/data/database/app_database.dart:18:26 • prefer_constructors_over_static_methods
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:27:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:28:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:29:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:30:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:31:32 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openEncryptedBox' can't be inferred • lib/data/datasources/local_data_source.dart:32:32 • inference_failure_on_function_invocation
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:36:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:68:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:96:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:113:3 • strict_raw_type
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:130:3 • strict_raw_type
+   info • Missing type annotation on a public API • lib/data/datasources/local_data_source.dart:132:40 • type_annotate_public_apis
+warning • The type of value can't be inferred; a type must be explicitly provided • lib/data/datasources/local_data_source.dart:132:40 • inference_failure_on_untyped_parameter
+warning • The generic type 'Box<dynamic>' should have explicit type arguments but doesn't • lib/data/datasources/local_data_source.dart:173:3 • strict_raw_type
+warning • The type argument(s) of the function 'openBox' can't be inferred • lib/data/datasources/local_datasources.dart:18:16 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openBox' can't be inferred • lib/data/datasources/local_datasources.dart:19:16 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openBox' can't be inferred • lib/data/datasources/local_datasources.dart:20:16 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openBox' can't be inferred • lib/data/datasources/local_datasources.dart:21:16 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'openBox' can't be inferred • lib/data/datasources/local_datasources.dart:22:16 • inference_failure_on_function_invocation
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:26:48 • type_annotate_public_apis
+warning • The type of value can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:26:48 • inference_failure_on_untyped_parameter
+warning • The type argument(s) of the function 'box' can't be inferred • lib/data/datasources/local_datasources.dart:27:22 • inference_failure_on_function_invocation
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:34:44 • type_annotate_public_apis
+warning • The type of defaultValue can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:34:44 • inference_failure_on_untyped_parameter
+warning • The type argument(s) of the function 'box' can't be inferred • lib/data/datasources/local_datasources.dart:35:22 • inference_failure_on_function_invocation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/datasources/local_datasources.dart:40:9 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the function 'box' can't be inferred • lib/data/datasources/local_datasources.dart:48:22 • inference_failure_on_function_invocation
+warning • The type argument(s) of the function 'box' can't be inferred • lib/data/datasources/local_datasources.dart:53:22 • inference_failure_on_function_invocation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/datasources/local_datasources.dart:58:11 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the function 'box' can't be inferred • lib/data/datasources/local_datasources.dart:67:22 • inference_failure_on_function_invocation
+warning • The type argument(s) of 'List' can't be inferred • lib/data/datasources/local_datasources.dart:84:61 • inference_failure_on_collection_literal
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:100:40 • type_annotate_public_apis
+warning • The type of value can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:100:40 • inference_failure_on_untyped_parameter
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:101:35 • type_annotate_public_apis
+warning • The type of defaultValue can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:101:35 • inference_failure_on_untyped_parameter
+   info • Missing type annotation on a public API • lib/data/datasources/local_datasources.dart:107:5 • type_annotate_public_apis
+warning • The type of data can't be inferred; a type must be explicitly provided • lib/data/datasources/local_datasources.dart:107:5 • inference_failure_on_untyped_parameter
+   info • Asynchronous function invoked in a non-'async' function • lib/data/datasources/local_datasources.dart:119:7 • discarded_futures
+   info • Unnecessary 'await' • lib/data/datasources/local_datasources.dart:124:35 • unnecessary_await_in_return
+   info • 'encryptedSharedPreferences' is deprecated and shouldn't be used. EncryptedSharedPreferences is deprecated and will be removed in v11. The Jetpack Security library is deprecated by Google. Your data will be automatically migrated to custom ciphers on first access. Remove this parameter - it will be ignored • lib/data/datasources/local_datasources.dart:130:30 • deprecated_member_use
+   info • Use 'late' for private members with a non-nullable type • lib/data/datasources/local_datasources.dart:151:22 • use_late_for_private_fields_and_variables
+   info • 'bool' parameters should be named parameters • lib/data/datasources/local_datasources.dart:193:40 • avoid_positional_boolean_parameters
+   info • 'bool' parameters should be named parameters • lib/data/datasources/local_datasources.dart:198:36 • avoid_positional_boolean_parameters
+   info • 'bool' parameters should be named parameters • lib/data/datasources/local_datasources.dart:203:34 • avoid_positional_boolean_parameters
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:30:36 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:35:43 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Map<dynamic, dynamic>'.  • lib/data/models/feature_models.dart:118:42 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:185:38 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:186:33 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:453:43 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:455:31 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:532:33 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:535:30 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:589:40 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:590:40 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Map<dynamic, dynamic>'.  • lib/data/models/feature_models.dart:658:48 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:659:37 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/feature_models.dart:660:44 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Map<dynamic, dynamic>'.  • lib/data/models/session_model.dart:100:48 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/models/user_model.dart:36:31 • argument_type_not_assignable
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Map<dynamic, dynamic>'.  • lib/data/models/user_model.dart:37:45 • argument_type_not_assignable
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:23:7 • avoid_catches_without_on_clauses
+   info • Unnecessary use of a block function body • lib/data/repositories/repository_impls.dart:29:53 • prefer_expression_function_bodies
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:39:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:50:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/data/repositories/repository_impls.dart:59:13 • inference_failure_on_instance_creation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:69:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/data/repositories/repository_impls.dart:81:13 • inference_failure_on_instance_creation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:91:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:102:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/data/repositories/repository_impls.dart:109:11 • inference_failure_on_instance_creation
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:133:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:151:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:161:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:183:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of 'List' can't be inferred • lib/data/repositories/repository_impls.dart:197:64 • inference_failure_on_collection_literal
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:213:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:224:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:238:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:249:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of 'List' can't be inferred • lib/data/repositories/repository_impls.dart:263:64 • inference_failure_on_collection_literal
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:279:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:290:7 • avoid_catches_without_on_clauses
+  error • The argument type 'dynamic' can't be assigned to the parameter type 'Iterable<dynamic>'.  • lib/data/repositories/repository_impls.dart:301:39 • argument_type_not_assignable
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:311:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:322:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:338:7 • avoid_catches_without_on_clauses
+warning • The type argument(s) of 'List' can't be inferred • lib/data/repositories/repository_impls.dart:352:64 • inference_failure_on_collection_literal
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:367:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:378:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:392:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:403:7 • avoid_catches_without_on_clauses
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/data/repositories/repository_impls.dart:416:7 • avoid_catches_without_on_clauses
+

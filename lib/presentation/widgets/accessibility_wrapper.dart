@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/constants.dart';
+import 'package:focusguard_pro/core/constants.dart';
 
 /// Wrapper widget that ensures accessibility compliance:
 /// - Semantic labels on interactive elements
@@ -7,6 +7,15 @@ import '../../core/constants.dart';
 /// - Focus traversal support for keyboard/switch access
 /// - High-contrast text support
 class AccessibilityWrapper extends StatelessWidget {
+  const AccessibilityWrapper({
+    required this.child,
+    super.key,
+    this.semanticLabel,
+    this.semanticHint,
+    this.isButton = false,
+    this.excludeFromSemantics = false,
+    this.onTap,
+  });
   final Widget child;
   final String? semanticLabel;
   final String? semanticHint;
@@ -14,19 +23,9 @@ class AccessibilityWrapper extends StatelessWidget {
   final bool excludeFromSemantics;
   final VoidCallback? onTap;
 
-  const AccessibilityWrapper({
-    super.key,
-    required this.child,
-    this.semanticLabel,
-    this.semanticHint,
-    this.isButton = false,
-    this.excludeFromSemantics = false,
-    this.onTap,
-  });
-
   @override
   Widget build(BuildContext context) {
-    Widget wrapped = child;
+    var wrapped = child;
 
     // Ensure minimum touch target
     if (isButton || onTap != null) {
@@ -60,23 +59,22 @@ class AccessibilityWrapper extends StatelessWidget {
     required VoidCallback onPressed,
     double size = AppSizes.iconLg,
     Color? color,
-  }) {
-    return Semantics(
-      label: label,
-      button: true,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minWidth: AppSizes.minTouchTarget,
-            minHeight: AppSizes.minTouchTarget,
+  }) =>
+      Semantics(
+        label: label,
+        button: true,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: AppSizes.minTouchTarget,
+              minHeight: AppSizes.minTouchTarget,
+            ),
+            child: Center(child: Icon(icon, size: size, color: color)),
           ),
-          child: Center(child: Icon(icon, size: size, color: color)),
         ),
-      ),
-    );
-  }
+      );
 
   /// Wraps a text widget with adequate contrast checking.
   static Widget accessibleText(
@@ -85,16 +83,15 @@ class AccessibilityWrapper extends StatelessWidget {
     TextAlign? textAlign,
     int? maxLines,
     TextOverflow? overflow,
-  }) {
-    return Semantics(
-      label: text,
-      child: Text(
-        text,
-        style: style,
-        textAlign: textAlign,
-        maxLines: maxLines,
-        overflow: overflow,
-      ),
-    );
-  }
+  }) =>
+      Semantics(
+        label: text,
+        child: Text(
+          text,
+          style: style,
+          textAlign: textAlign,
+          maxLines: maxLines,
+          overflow: overflow,
+        ),
+      );
 }

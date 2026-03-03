@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import 'package:focusguard_pro/core/constants.dart';
 
 /// Context extensions for common operations
 extension BuildContextExtension on BuildContext {

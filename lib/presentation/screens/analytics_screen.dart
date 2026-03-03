@@ -1,12 +1,13 @@
 import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/constants.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/app_buttons.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
@@ -20,211 +21,232 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   static const _periods = ['Today', 'Week', 'Month', '3 Mo', 'Year'];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            // Header
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: Text('Analytics',
-                    style: Theme.of(context).textTheme.displaySmall),
-              ).animate().fadeIn(duration: 300.ms),
-            ),
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              // Header
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                  child: Text(
+                    'Analytics',
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                ).animate().fadeIn(duration: 300.ms),
+              ),
 
-            // Period tabs
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                child: Row(
-                  children: List.generate(_periods.length, (i) {
-                    final isActive = i == _selectedPeriod;
-                    return Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          HapticFeedback.selectionClick();
-                          setState(() => _selectedPeriod = i);
-                        },
-                        child: AnimatedContainer(
-                          duration: Anim.normal,
-                          height: 36,
-                          margin: EdgeInsets.only(right: i < 4 ? 6 : 0),
-                          decoration: BoxDecoration(
-                            gradient: isActive ? AppGradients.hero : null,
-                            color: isActive ? null : AppColors.surfaceLight,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(_periods[i],
+              // Period tabs
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                  child: Row(
+                    children: List.generate(_periods.length, (i) {
+                      final isActive = i == _selectedPeriod;
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            HapticFeedback.selectionClick();
+                            setState(() => _selectedPeriod = i);
+                          },
+                          child: AnimatedContainer(
+                            duration: Anim.normal,
+                            height: 36,
+                            margin: EdgeInsets.only(right: i < 4 ? 6 : 0),
+                            decoration: BoxDecoration(
+                              gradient: isActive ? AppGradients.hero : null,
+                              color: isActive ? null : AppColors.surfaceLight,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                _periods[i],
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                   color: isActive
                                       ? Colors.white
                                       : AppColors.textTertiary,
-                                )),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-                ),
-              ).animate(delay: 100.ms).fadeIn(duration: 300.ms),
-            ),
+                      );
+                    }),
+                  ),
+                ).animate(delay: 100.ms).fadeIn(duration: 300.ms),
+              ),
 
-            // Screen Time Overview
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GlassCard(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Screen Time',
-                              style: Theme.of(context).textTheme.headlineSmall),
-                          GradientText('5h 14m',
+              // Screen Time Overview
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: GlassCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Screen Time',
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            GradientText(
+                              '5h 14m',
                               style: Theme.of(context).textTheme.headlineLarge,
-                              gradient: AppGradients.hero),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      // Stacked bar
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: SizedBox(
-                          height: 12,
-                          child: Row(
-                            children: [
-                              Expanded(
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        // Stacked bar
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: SizedBox(
+                            height: 12,
+                            child: Row(
+                              children: [
+                                Expanded(
                                   flex: 64,
                                   child: Container(
-                                      color: AppColors.success
-                                          .withValues(alpha: 0.7))),
-                              Expanded(
+                                    color: AppColors.success
+                                        .withValues(alpha: 0.7),
+                                  ),
+                                ),
+                                Expanded(
                                   flex: 33,
                                   child: Container(
-                                      color: AppColors.alert
-                                          .withValues(alpha: 0.7))),
-                              Expanded(
+                                    color:
+                                        AppColors.alert.withValues(alpha: 0.7),
+                                  ),
+                                ),
+                                Expanded(
                                   flex: 13,
                                   child: Container(
-                                      color: AppColors.textTertiary
-                                          .withValues(alpha: 0.3))),
-                            ],
+                                    color: AppColors.textTertiary
+                                        .withValues(alpha: 0.3),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          _LegendDot(
+                        const SizedBox(height: 12),
+                        const Row(
+                          children: [
+                            _LegendDot(
                               color: AppColors.success,
-                              label: 'Productive: 3h 20m'),
-                          const SizedBox(width: 16),
-                          _LegendDot(
+                              label: 'Productive: 3h 20m',
+                            ),
+                            SizedBox(width: 16),
+                            _LegendDot(
                               color: AppColors.alert,
-                              label: 'Distracting: 1h 45m'),
-                        ],
-                      ),
-                    ],
+                              label: 'Distracting: 1h 45m',
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )
-                  .animate(delay: 200.ms)
-                  .fadeIn(duration: 400.ms)
-                  .slideY(begin: 0.03, end: 0),
-            ),
-
-            // Productivity Score Chart
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: GlassCard(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Productivity Score',
-                          style: Theme.of(context).textTheme.headlineSmall),
-                      const SizedBox(height: 4),
-                      Text('30-day trend',
-                          style: Theme.of(context).textTheme.bodySmall),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 180,
-                        child: _buildScoreChart(),
-                      ),
-                    ],
-                  ),
-                ),
-              ).animate(delay: 300.ms).fadeIn(duration: 400.ms),
-            ),
-
-            // Per-App Usage
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                child: Text('App Usage',
-                    style: Theme.of(context).textTheme.headlineSmall),
+                )
+                    .animate(delay: 200.ms)
+                    .fadeIn(duration: 400.ms)
+                    .slideY(begin: 0.03, end: 0),
               ),
-            ),
-            SliverList.builder(
-              itemCount: min(8, socialMediaApps.length),
-              itemBuilder: (context, i) {
-                final mins = [65, 48, 42, 35, 28, 22, 15, 10][i];
-                final maxMins = 65;
-                return Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, i < 7 ? 8 : 0),
-                  child: _AppUsageRow(
+
+              // Productivity Score Chart
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                  child: GlassCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Productivity Score',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '30-day trend',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: 180,
+                          child: _buildScoreChart(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ).animate(delay: 300.ms).fadeIn(duration: 400.ms),
+              ),
+
+              // Per-App Usage
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                  child: Text(
+                    'App Usage',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ),
+              ),
+              SliverList.builder(
+                itemCount: min(8, socialMediaApps.length),
+                itemBuilder: (context, i) {
+                  final mins = [65, 48, 42, 35, 28, 22, 15, 10][i];
+                  const maxMins = 65;
+                  return Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, i < 7 ? 8 : 0),
+                    child: _AppUsageRow(
                       name: socialMediaApps[i],
                       minutes: mins,
                       maxMinutes: maxMins,
-                      index: i),
-                );
-              },
-            ),
+                      index: i,
+                    ),
+                  );
+                },
+              ),
 
-            // Focus Heatmap
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-                child: GlassCard(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Focus Heatmap',
-                          style: Theme.of(context).textTheme.headlineSmall),
-                      const SizedBox(height: 4),
-                      Text('7-day × 24-hour activity',
-                          style: Theme.of(context).textTheme.bodySmall),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        height: 120,
-                        child: CustomPaint(
-                          size: const Size(double.infinity, 120),
-                          painter: _HeatmapPainter(),
+              // Focus Heatmap
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+                  child: GlassCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Focus Heatmap',
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          '7-day × 24-hour activity',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          height: 120,
+                          child: CustomPaint(
+                            size: const Size(double.infinity, 120),
+                            painter: _HeatmapPainter(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ).animate(delay: 400.ms).fadeIn(duration: 400.ms),
-            ),
+                ).animate(delay: 400.ms).fadeIn(duration: 400.ms),
+              ),
 
-            const SliverToBoxAdapter(child: SizedBox(height: 100)),
-          ],
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   Widget _buildScoreChart() {
     final rng = Random(42);
@@ -262,9 +284,15 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               show: true,
               getDotPainter: (spot, _, __, ___) => spot.x == 29
                   ? FlDotCirclePainter(
-                      radius: 5, color: AppColors.secondary, strokeWidth: 0)
+                      radius: 5,
+                      color: AppColors.secondary,
+                      strokeWidth: 0,
+                    )
                   : FlDotCirclePainter(
-                      radius: 0, color: Colors.transparent, strokeWidth: 0),
+                      radius: 0,
+                      color: Colors.transparent,
+                      strokeWidth: 0,
+                    ),
             ),
             belowBarData: BarAreaData(
               show: true,
@@ -286,11 +314,13 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             getTooltipItems: (spots) => spots
                 .map(
                   (s) => LineTooltipItem(
-                      'Score: ${s.y.round()}',
-                      const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600)),
+                    'Score: ${s.y.round()}',
+                    const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 )
                 .toList(),
           ),
@@ -302,34 +332,36 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 }
 
 class _LegendDot extends StatelessWidget {
+  const _LegendDot({required this.color, required this.label});
   final Color color;
   final String label;
-  const _LegendDot({required this.color, required this.label});
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
+  Widget build(BuildContext context) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-        const SizedBox(width: 6),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
-      ],
-    );
-  }
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 6),
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ],
+      );
 }
 
 class _AppUsageRow extends StatelessWidget {
+  const _AppUsageRow({
+    required this.name,
+    required this.minutes,
+    required this.maxMinutes,
+    required this.index,
+  });
   final String name;
-  final int minutes, maxMinutes, index;
-  const _AppUsageRow(
-      {required this.name,
-      required this.minutes,
-      required this.maxMinutes,
-      required this.index});
+  final int minutes;
+  final int maxMinutes;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +372,7 @@ class _AppUsageRow extends StatelessWidget {
       'Twitter/X',
       'Facebook',
       'Snapchat',
-      'Reddit'
+      'Reddit',
     ].contains(name);
     final barColor = isSocial ? AppColors.alert : AppColors.success;
 
@@ -357,11 +389,14 @@ class _AppUsageRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
-              child: Text(name[0],
-                  style: TextStyle(
-                      color: barColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15)),
+              child: Text(
+                name[0],
+                style: TextStyle(
+                  color: barColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -369,9 +404,13 @@ class _AppUsageRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w600)),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 const SizedBox(height: 6),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(3),
@@ -385,10 +424,12 @@ class _AppUsageRow extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Container(
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                barColor,
-                                barColor.withValues(alpha: 0.6)
-                              ]),
+                              gradient: LinearGradient(
+                                colors: [
+                                  barColor,
+                                  barColor.withValues(alpha: 0.6),
+                                ],
+                              ),
                               borderRadius: BorderRadius.circular(3),
                             ),
                           ),
@@ -401,9 +442,14 @@ class _AppUsageRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Text('${minutes}m',
-              style: TextStyle(
-                  color: barColor, fontWeight: FontWeight.w600, fontSize: 14)),
+          Text(
+            '${minutes}m',
+            style: TextStyle(
+              color: barColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     )
@@ -422,8 +468,8 @@ class _HeatmapPainter extends CustomPainter {
     final cellH = (size.height - 10) / 7;
     final cellSize = min(cellW, cellH) - 2;
 
-    for (int day = 0; day < 7; day++) {
-      for (int hour = 0; hour < 24; hour++) {
+    for (var day = 0; day < 7; day++) {
+      for (var hour = 0; hour < 24; hour++) {
         final intensity = _rng.nextDouble();
         final color = intensity < 0.2
             ? AppColors.surfaceLight

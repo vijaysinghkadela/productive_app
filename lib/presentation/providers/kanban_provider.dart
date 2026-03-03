@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/datasources/local_data_source.dart';
-import '../../core/security/input_sanitizer.dart';
+import 'package:focusguard_pro/core/security/input_sanitizer.dart';
+import 'package:focusguard_pro/data/datasources/local_data_source.dart';
 
 // ─── Task Entity ───
 
@@ -10,63 +11,17 @@ enum TaskStatus { todo, inProgress, done }
 enum TaskPriority { low, medium, high, urgent }
 
 class KanbanTask {
-  final String id;
-  final String title;
-  final String? description;
-  final TaskStatus status;
-  final TaskPriority priority;
-  final DateTime createdAt;
-  final DateTime? dueDate;
-  final List<String> labels;
-  final int sortOrder;
-
   const KanbanTask({
     required this.id,
     required this.title,
+    required this.createdAt,
     this.description,
     this.status = TaskStatus.todo,
     this.priority = TaskPriority.medium,
-    required this.createdAt,
     this.dueDate,
     this.labels = const [],
     this.sortOrder = 0,
   });
-
-  KanbanTask copyWith({
-    String? id,
-    String? title,
-    String? description,
-    TaskStatus? status,
-    TaskPriority? priority,
-    DateTime? createdAt,
-    DateTime? dueDate,
-    List<String>? labels,
-    int? sortOrder,
-  }) {
-    return KanbanTask(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      status: status ?? this.status,
-      priority: priority ?? this.priority,
-      createdAt: createdAt ?? this.createdAt,
-      dueDate: dueDate ?? this.dueDate,
-      labels: labels ?? this.labels,
-      sortOrder: sortOrder ?? this.sortOrder,
-    );
-  }
-
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'status': status.index,
-        'priority': priority.index,
-        'createdAt': createdAt.toIso8601String(),
-        'dueDate': dueDate?.toIso8601String(),
-        'labels': labels,
-        'sortOrder': sortOrder,
-      };
 
   factory KanbanTask.fromMap(Map<String, dynamic> map) => KanbanTask(
         id: map['id'] as String,
@@ -81,6 +36,50 @@ class KanbanTask {
         labels: List<String>.from(map['labels'] as List? ?? []),
         sortOrder: map['sortOrder'] as int? ?? 0,
       );
+  final String id;
+  final String title;
+  final String? description;
+  final TaskStatus status;
+  final TaskPriority priority;
+  final DateTime createdAt;
+  final DateTime? dueDate;
+  final List<String> labels;
+  final int sortOrder;
+
+  KanbanTask copyWith({
+    String? id,
+    String? title,
+    String? description,
+    TaskStatus? status,
+    TaskPriority? priority,
+    DateTime? createdAt,
+    DateTime? dueDate,
+    List<String>? labels,
+    int? sortOrder,
+  }) =>
+      KanbanTask(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        status: status ?? this.status,
+        priority: priority ?? this.priority,
+        createdAt: createdAt ?? this.createdAt,
+        dueDate: dueDate ?? this.dueDate,
+        labels: labels ?? this.labels,
+        sortOrder: sortOrder ?? this.sortOrder,
+      );
+
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'title': title,
+        'description': description,
+        'status': status.index,
+        'priority': priority.index,
+        'createdAt': createdAt.toIso8601String(),
+        'dueDate': dueDate?.toIso8601String(),
+        'labels': labels,
+        'sortOrder': sortOrder,
+      };
 
   String get priorityEmoji {
     switch (priority) {
@@ -99,10 +98,9 @@ class KanbanTask {
 // ─── Kanban State ───
 
 class KanbanState {
+  const KanbanState({this.tasks = const [], this.isLoading = false});
   final List<KanbanTask> tasks;
   final bool isLoading;
-
-  const KanbanState({this.tasks = const [], this.isLoading = false});
 
   List<KanbanTask> byStatus(TaskStatus status) =>
       tasks.where((t) => t.status == status).toList()
@@ -121,11 +119,10 @@ class KanbanState {
 // ─── Kanban Notifier ───
 
 class KanbanNotifier extends StateNotifier<KanbanState> {
-  final LocalDataSource _dataSource;
-
   KanbanNotifier(this._dataSource) : super(const KanbanState()) {
     _load();
   }
+  final LocalDataSource _dataSource;
 
   void _load() {
     // Load tasks from settings box (will migrate to SQLite in future)

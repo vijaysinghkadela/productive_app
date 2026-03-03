@@ -29,14 +29,15 @@ class AnalyticsService {
       logEvent('paywall_converted', {'plan': plan});
 
   /// Log focus session
-  void logFocusSession(
-      {required int durationMinutes,
-      required String type,
-      required bool completed}) {
+  void logFocusSession({
+    required int durationMinutes,
+    required String type,
+    required bool completed,
+  }) {
     logEvent('focus_session', {
       'duration_min': durationMinutes,
       'type': type,
-      'completed': completed
+      'completed': completed,
     });
   }
 

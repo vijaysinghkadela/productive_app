@@ -1,8 +1,8 @@
 /// Base failure class for domain layer errors
 class AppFailure implements Exception {
+  const AppFailure(this.message, {this.code});
   final String message;
   final String? code;
-  const AppFailure(this.message, {this.code});
 
   @override
   String toString() => 'AppFailure($code): $message';

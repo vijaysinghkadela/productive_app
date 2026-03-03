@@ -24,7 +24,8 @@ class AppBlockerService {
       final result = await _channel.invokeMethod<bool>('startService');
       _isRunning = result ?? false;
       debugPrint(
-          '🛡️ Blocker service ${_isRunning ? 'started' : 'failed to start'}');
+        '🛡️ Blocker service ${_isRunning ? 'started' : 'failed to start'}',
+      );
       return _isRunning;
     } on MissingPluginException {
       // No native implementation — demo mode
@@ -161,13 +162,18 @@ class UsageTrackerService {
 
   /// Get usage for a date range
   Future<List<Map<String, dynamic>>> getUsageRange(
-      DateTime start, DateTime end) async {
+    DateTime start,
+    DateTime end,
+  ) async {
     try {
-      final result = await _channel.invokeMethod<List>('getUsageRange', {
+      final result = await _channel
+          .invokeMethod<List<Map<String, dynamic>>>('getUsageRange', {
         'start': start.millisecondsSinceEpoch,
         'end': end.millisecondsSinceEpoch,
       });
-      return result?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ??
+      return result
+              ?.map(Map<String, dynamic>.from)
+              .toList() ??
           [];
     } on MissingPluginException {
       return []; // Demo
@@ -204,7 +210,8 @@ class FocusSessionService {
       _elapsedSeconds = DateTime.now().difference(_startTime!).inSeconds;
     }
     debugPrint(
-        '🎯 Session ended: ${_elapsedSeconds}s, $_distractionCount distractions');
+      '🎯 Session ended: ${_elapsedSeconds}s, $_distractionCount distractions',
+    );
   }
 
   void recordDistraction() {
@@ -248,7 +255,8 @@ class NotificationService {
 
   Future<void> showStreakAlert(int streak, int hoursRemaining) async {
     debugPrint(
-        '🔔 Streak: Don\'t break your $streak-day streak! ${hoursRemaining}h left');
+      '🔔 Streak: Don\'t break your $streak-day streak! ${hoursRemaining}h left',
+    );
   }
 
   Future<void> showWeeklyReport(int score) async {
@@ -317,14 +325,14 @@ class PurchaseService {
   }
 
   Future<bool> purchase(String productId) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     _currentTier = productId.contains('elite') ? 'elite' : 'pro';
     debugPrint('💎 Purchased: $productId → $_currentTier');
     return true;
   }
 
   Future<void> restore() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
     debugPrint('💎 Purchases restored');
   }
 }

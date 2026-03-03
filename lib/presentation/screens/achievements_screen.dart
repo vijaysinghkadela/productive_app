@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/constants.dart';
-import '../widgets/glass_card.dart';
-import '../widgets/app_buttons.dart';
+import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
+import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
 
 class AchievementsScreen extends ConsumerWidget {
   const AchievementsScreen({super.key});
@@ -12,7 +12,7 @@ class AchievementsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const level = 12;
     const xp = 2340;
-    final xpForNext = (level + 1) * 500;
+    const xpForNext = (level + 1) * 500;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -37,27 +37,35 @@ class AchievementsScreen extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Achievements',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium),
-                              Text('Level $level · Focus Warrior',
-                                  style: Theme.of(context).textTheme.bodySmall),
+                              Text(
+                                'Achievements',
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                              Text(
+                                'Level $level · Focus Warrior',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
                             ],
                           ),
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 8),
+                            horizontal: 14,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
                             gradient: AppGradients.hero,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Text('$xp XP',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14)),
+                          child: const Text(
+                            '$xp XP',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -67,14 +75,17 @@ class AchievementsScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                            '${xp % xpForNext} / $xpForNext XP to Level ${level + 1}',
-                            style: Theme.of(context).textTheme.bodySmall),
+                          '${xp % xpForNext} / $xpForNext XP to Level ${level + 1}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                         const SizedBox(height: 6),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: TweenAnimationBuilder<double>(
                             tween: Tween(
-                                begin: 0, end: (xp % xpForNext) / xpForNext),
+                              begin: 0,
+                              end: (xp % xpForNext) / xpForNext,
+                            ),
                             duration: const Duration(milliseconds: 1200),
                             curve: Curves.easeOutCubic,
                             builder: (context, value, _) => SizedBox(
@@ -91,9 +102,10 @@ class AchievementsScreen extends ConsumerWidget {
                                         borderRadius: BorderRadius.circular(4),
                                         boxShadow: [
                                           BoxShadow(
-                                              color: AppColors.primary
-                                                  .withValues(alpha: 0.5),
-                                              blurRadius: 8),
+                                            color: AppColors.primary
+                                                .withValues(alpha: 0.5),
+                                            blurRadius: 8,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -164,35 +176,35 @@ class AchievementsScreen extends ConsumerWidget {
 }
 
 class _CategoryPill extends StatelessWidget {
+  const _CategoryPill({required this.label, this.isActive = false});
   final String label;
   final bool isActive;
-  const _CategoryPill({required this.label, this.isActive = false});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        gradient: isActive ? AppGradients.hero : null,
-        color: isActive ? null : AppColors.surfaceLight,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Center(
-        child: Text(label,
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          gradient: isActive ? AppGradients.hero : null,
+          color: isActive ? null : AppColors.surfaceLight,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Center(
+          child: Text(
+            label,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: isActive ? Colors.white : AppColors.textTertiary,
-            )),
-      ),
-    );
-  }
+            ),
+          ),
+        ),
+      );
 }
 
 class _AchievementCard extends StatelessWidget {
+  const _AchievementCard({required this.achievement, required this.index});
   final _AchievementData achievement;
   final int index;
-  const _AchievementCard({required this.achievement, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +232,8 @@ class _AchievementCard extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: isUnlocked
                   ? LinearGradient(
-                      colors: [rarityColor, rarityColor.withValues(alpha: 0.6)])
+                      colors: [rarityColor, rarityColor.withValues(alpha: 0.6)],
+                    )
                   : null,
               color: isUnlocked ? null : AppColors.surfaceLight,
               borderRadius: BorderRadius.circular(16),
@@ -228,13 +241,17 @@ class _AchievementCard extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Icon(achievement.icon,
-                    size: 28,
-                    color: isUnlocked ? Colors.white : AppColors.textTertiary),
+                Icon(
+                  achievement.icon,
+                  size: 28,
+                  color: isUnlocked ? Colors.white : AppColors.textTertiary,
+                ),
                 if (!isUnlocked)
-                  Icon(Icons.lock_rounded,
-                      size: 16,
-                      color: AppColors.textTertiary.withValues(alpha: 0.5)),
+                  Icon(
+                    Icons.lock_rounded,
+                    size: 16,
+                    color: AppColors.textTertiary.withValues(alpha: 0.5),
+                  ),
               ],
             ),
           ),
@@ -259,11 +276,14 @@ class _AchievementCard extends StatelessWidget {
               color: rarityColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: Text(rarity,
-                style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w600,
-                    color: rarityColor)),
+            child: Text(
+              rarity,
+              style: TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+                color: rarityColor,
+              ),
+            ),
           ),
           if (!isUnlocked && achievement.progress != null) ...[
             const SizedBox(height: 10),
@@ -272,7 +292,7 @@ class _AchievementCard extends StatelessWidget {
               child: SizedBox(
                 height: 4,
                 child: LinearProgressIndicator(
-                  value: achievement.progress!,
+                  value: achievement.progress,
                   backgroundColor: AppColors.surfaceLight,
                   valueColor: AlwaysStoppedAnimation(rarityColor),
                 ),
@@ -287,7 +307,7 @@ class _AchievementCard extends StatelessWidget {
     if (isUnlocked && rarity == 'Legendary') {
       card = ShimmerBorderCard(
         padding: const EdgeInsets.all(16),
-        colors: [AppColors.warning, Colors.white, AppColors.warning],
+        colors: const [AppColors.warning, Colors.white, AppColors.warning],
         child: (card as GlassCard).child,
       );
     }
@@ -296,64 +316,75 @@ class _AchievementCard extends StatelessWidget {
         .animate(delay: (100 + index * 60).ms)
         .fadeIn(duration: 300.ms)
         .scale(
-            begin: const Offset(0.9, 0.9),
-            end: const Offset(1, 1),
-            duration: 300.ms);
+          begin: const Offset(0.9, 0.9),
+          end: const Offset(1, 1),
+          duration: 300.ms,
+        );
   }
 }
 
 class _AchievementData {
-  final String name, rarity;
+  const _AchievementData({
+    required this.name,
+    required this.rarity,
+    required this.icon,
+    this.unlocked = false,
+    this.progress,
+  });
+  final String name;
+  final String rarity;
   final IconData icon;
   final bool unlocked;
   final double? progress;
-  const _AchievementData(
-      {required this.name,
-      required this.rarity,
-      required this.icon,
-      this.unlocked = false,
-      this.progress});
 }
 
 const _achievements = [
   _AchievementData(
-      name: 'First Focus',
-      rarity: 'Common',
-      icon: Icons.play_circle_rounded,
-      unlocked: true),
+    name: 'First Focus',
+    rarity: 'Common',
+    icon: Icons.play_circle_rounded,
+    unlocked: true,
+  ),
   _AchievementData(
-      name: 'Block Master',
-      rarity: 'Common',
-      icon: Icons.shield_rounded,
-      unlocked: true),
+    name: 'Block Master',
+    rarity: 'Common',
+    icon: Icons.shield_rounded,
+    unlocked: true,
+  ),
   _AchievementData(
-      name: 'Marathon Focus',
-      rarity: 'Rare',
-      icon: Icons.timer_rounded,
-      unlocked: true),
+    name: 'Marathon Focus',
+    rarity: 'Rare',
+    icon: Icons.timer_rounded,
+    unlocked: true,
+  ),
   _AchievementData(
-      name: 'Social Detox',
-      rarity: 'Rare',
-      icon: Icons.phone_disabled_rounded,
-      unlocked: true),
+    name: 'Social Detox',
+    rarity: 'Rare',
+    icon: Icons.phone_disabled_rounded,
+    unlocked: true,
+  ),
   _AchievementData(
-      name: 'Week Warrior',
-      rarity: 'Epic',
-      icon: Icons.local_fire_department_rounded,
-      unlocked: true),
+    name: 'Week Warrior',
+    rarity: 'Epic',
+    icon: Icons.local_fire_department_rounded,
+    unlocked: true,
+  ),
   _AchievementData(
-      name: 'Score Perfectionist',
-      rarity: 'Epic',
-      icon: Icons.stars_rounded,
-      progress: 0.7),
+    name: 'Score Perfectionist',
+    rarity: 'Epic',
+    icon: Icons.stars_rounded,
+    progress: 0.7,
+  ),
   _AchievementData(
-      name: 'Habit Champion',
-      rarity: 'Legendary',
-      icon: Icons.emoji_events_rounded,
-      progress: 0.35),
+    name: 'Habit Champion',
+    rarity: 'Legendary',
+    icon: Icons.emoji_events_rounded,
+    progress: 0.35,
+  ),
   _AchievementData(
-      name: 'Focus Legend',
-      rarity: 'Legendary',
-      icon: Icons.auto_awesome_rounded,
-      progress: 0.15),
+    name: 'Focus Legend',
+    rarity: 'Legendary',
+    icon: Icons.auto_awesome_rounded,
+    progress: 0.15,
+  ),
 ];

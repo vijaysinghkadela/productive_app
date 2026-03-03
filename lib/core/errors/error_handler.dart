@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'app_exceptions.dart';
+import 'package:focusguard_pro/core/errors/app_exceptions.dart';
 
 /// Centralized error handler for the app.
 /// Routes errors to crash reporting and provides user-friendly messages.
