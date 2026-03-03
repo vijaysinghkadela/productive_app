@@ -1,6 +1,5 @@
-import * as functions from 'firebase-functions';
 import { Timestamp, FieldValue } from 'firebase-admin/firestore';
-import { getFirestore, getAuth, REGION } from '../shared/config/firebase.config';
+import { getFirestore, getAuth } from '../shared/config/firebase.config';
 import { Collections } from '../shared/constants/collections.constants';
 import { ACHIEVEMENT_DEFINITIONS } from './achievements.definitions';
 import { UserDocument, UserAchievementDocument } from '../shared/types/firestore.types';
@@ -10,10 +9,33 @@ import { cacheGet, cacheSet, cacheDelete } from '../shared/config/redis.config';
 
 // Map trigger types to relevant achievement metric sources
 const TRIGGER_METRIC_MAP: Record<AchievementTriggerType, string[]> = {
-  session_completed: ['sessions_completed', 'total_focus_minutes', 'longest_session_minutes', 'deep_sessions_count', 'early_sessions', 'late_sessions', 'perfect_sessions'],
-  usage_synced: ['apps_blocked', 'social_free_days', 'social_free_streak', 'monthly_social_minutes', 'social_reduction_pct', 'goal_under_50_days', 'reels_blocked'],
+  session_completed: [
+    'sessions_completed',
+    'total_focus_minutes',
+    'longest_session_minutes',
+    'deep_sessions_count',
+    'early_sessions',
+    'late_sessions',
+    'perfect_sessions',
+  ],
+  usage_synced: [
+    'apps_blocked',
+    'social_free_days',
+    'social_free_streak',
+    'monthly_social_minutes',
+    'social_reduction_pct',
+    'goal_under_50_days',
+    'reels_blocked',
+  ],
   goal_met: ['all_goals_met_streak'],
-  habit_completed: ['daily_habits_completed', 'habit_streak', 'all_habits_week', 'all_habits_month', 'morning_free_days', 'templates_used'],
+  habit_completed: [
+    'daily_habits_completed',
+    'habit_streak',
+    'all_habits_week',
+    'all_habits_month',
+    'morning_free_days',
+    'templates_used',
+  ],
   streak_updated: ['current_streak', 'comeback_streak', 'no_skip_streak'],
   level_up: ['user_level'],
   challenge_completed: ['challenges_completed'],
@@ -40,8 +62,11 @@ export async function checkAndUnlockAchievements(
   let unlockedIds = await cacheGet<string[]>(cacheKey);
 
   if (!unlockedIds) {
-    const achievSnap = await db.collection(Collections.USERS).doc(userId)
-      .collection(Collections.ACHIEVEMENTS).get();
+    const achievSnap = await db
+      .collection(Collections.USERS)
+      .doc(userId)
+      .collection(Collections.ACHIEVEMENTS)
+      .get();
     unlockedIds = achievSnap.docs.map((d) => d.id);
     await cacheSet(cacheKey, unlockedIds, 3600);
   }
@@ -50,9 +75,8 @@ export async function checkAndUnlockAchievements(
   const relevantMetrics = TRIGGER_METRIC_MAP[triggerType] || [];
 
   // Filter achievements that are relevant and not yet unlocked
-  const candidates = ACHIEVEMENT_DEFINITIONS.filter((a) =>
-    !unlockedIds!.includes(a.achievementId) &&
-    relevantMetrics.includes(a.condition.metric),
+  const candidates = ACHIEVEMENT_DEFINITIONS.filter(
+    (a) => !unlockedIds!.includes(a.achievementId) && relevantMetrics.includes(a.condition.metric),
   );
 
   if (candidates.length === 0) return [];
@@ -126,9 +150,15 @@ export async function checkAndUnlockAchievements(
     // Evaluate condition
     let conditionMet = false;
     switch (achievement.condition.operator) {
-      case 'gte': conditionMet = metricValue >= achievement.condition.value; break;
-      case 'lte': conditionMet = metricValue <= achievement.condition.value; break;
-      case 'eq': conditionMet = metricValue === achievement.condition.value; break;
+      case 'gte':
+        conditionMet = metricValue >= achievement.condition.value;
+        break;
+      case 'lte':
+        conditionMet = metricValue <= achievement.condition.value;
+        break;
+      case 'eq':
+        conditionMet = metricValue === achievement.condition.value;
+        break;
       case 'special':
         // Special handling for OG user
         if (achievement.achievementId === 'og_user') {
@@ -151,8 +181,11 @@ export async function checkAndUnlockAchievements(
         notified: false,
       };
 
-      await db.collection(Collections.USERS).doc(userId)
-        .collection(Collections.ACHIEVEMENTS).doc(achievement.achievementId)
+      await db
+        .collection(Collections.USERS)
+        .doc(userId)
+        .collection(Collections.ACHIEVEMENTS)
+        .doc(achievement.achievementId)
         .set(achievDoc);
 
       // Grant XP
@@ -179,8 +212,11 @@ export async function checkAndUnlockAchievements(
       await db.collection(Collections.USERS).doc(userId).update(userUpdate);
 
       // Create notification
-      const notifRef = db.collection(Collections.USERS).doc(userId)
-        .collection(Collections.NOTIFICATIONS).doc();
+      const notifRef = db
+        .collection(Collections.USERS)
+        .doc(userId)
+        .collection(Collections.NOTIFICATIONS)
+        .doc();
       await notifRef.set({
         notificationId: notifRef.id,
         userId,
@@ -209,7 +245,9 @@ export async function checkAndUnlockAchievements(
   // Invalidate cache if any achievements unlocked
   if (newlyUnlocked.length > 0) {
     await cacheDelete(cacheKey);
-    console.log(`User ${userId}: Unlocked ${newlyUnlocked.length} achievements: ${newlyUnlocked.join(', ')}`);
+    console.log(
+      `User ${userId}: Unlocked ${newlyUnlocked.length} achievements: ${newlyUnlocked.join(', ')}`,
+    );
   }
 
   return newlyUnlocked;

@@ -44,11 +44,7 @@ export async function authMiddleware(
 /**
  * Require email verification
  */
-export function requireEmailVerification(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): void {
+export function requireEmailVerification(req: Request, _res: Response, next: NextFunction): void {
   const authReq = req as AuthenticatedRequest;
   if (!authReq.emailVerified) {
     return next(new AuthError(ErrorCodes.AUTH_002, 'Email verification required'));
@@ -59,11 +55,7 @@ export function requireEmailVerification(
 /**
  * Require admin custom claim
  */
-export function requireAdmin(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): void {
+export function requireAdmin(req: Request, _res: Response, next: NextFunction): void {
   const authReq = req as AuthenticatedRequest;
   if (!authReq.customClaims?.admin) {
     return next(new ForbiddenError('Admin access required'));
@@ -76,7 +68,11 @@ export function requireAdmin(
  */
 export function requireSubscription(minTier: string) {
   const tierHierarchy: Record<string, number> = {
-    free: 0, basic: 1, pro: 2, elite: 3, lifetime: 4,
+    free: 0,
+    basic: 1,
+    pro: 2,
+    elite: 3,
+    lifetime: 4,
   };
 
   return (req: Request, _res: Response, next: NextFunction): void => {
@@ -86,9 +82,9 @@ export function requireSubscription(minTier: string) {
     const requiredLevel = tierHierarchy[minTier] ?? 0;
 
     if (userLevel < requiredLevel) {
-      return next(new ForbiddenError(
-        `This feature requires ${minTier} subscription. Current: ${userTier}`,
-      ));
+      return next(
+        new ForbiddenError(`This feature requires ${minTier} subscription. Current: ${userTier}`),
+      );
     }
     next();
   };

@@ -10,7 +10,10 @@ const SALT_ROUNDS = 12;
 /**
  * Encrypt a plaintext string using AES-256-GCM
  */
-export async function encryptField(plaintext: string, keyId: string = 'encryption-key'): Promise<string> {
+export async function encryptField(
+  plaintext: string,
+  keyId: string = 'encryption-key',
+): Promise<string> {
   const keyHex = await getSecret(keyId);
   const key = Buffer.from(keyHex, 'hex');
   const iv = crypto.randomBytes(IV_LENGTH);
@@ -27,7 +30,10 @@ export async function encryptField(plaintext: string, keyId: string = 'encryptio
 /**
  * Decrypt a ciphertext encrypted with encryptField
  */
-export async function decryptField(ciphertext: string, keyId: string = 'encryption-key'): Promise<string> {
+export async function decryptField(
+  ciphertext: string,
+  keyId: string = 'encryption-key',
+): Promise<string> {
   const keyHex = await getSecret(keyId);
   const key = Buffer.from(keyHex, 'hex');
 

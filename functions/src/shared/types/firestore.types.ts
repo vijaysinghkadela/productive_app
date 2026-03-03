@@ -162,8 +162,15 @@ export interface SessionDocument {
 }
 
 export type SessionType =
-  | 'deep_work' | 'study' | 'creative' | 'reading'
-  | 'exercise' | 'meditation' | 'coding' | 'writing' | 'custom';
+  | 'deep_work'
+  | 'study'
+  | 'creative'
+  | 'reading'
+  | 'exercise'
+  | 'meditation'
+  | 'coding'
+  | 'writing'
+  | 'custom';
 
 export type SessionMode = 'pomodoro' | 'deep_work' | 'ultra_focus' | 'flowtime' | 'custom';
 
@@ -309,8 +316,12 @@ export interface GoalDocument {
 }
 
 export type GoalType =
-  | 'app_limit' | 'focus_target' | 'social_free_days'
-  | 'weekly_focus_hours' | 'monthly_score' | 'custom';
+  | 'app_limit'
+  | 'focus_target'
+  | 'social_free_days'
+  | 'weekly_focus_hours'
+  | 'monthly_score'
+  | 'custom';
 
 export interface GoalHistoryEntry {
   date: string;
@@ -349,8 +360,13 @@ export interface HabitDocument {
 }
 
 export type HabitCategory =
-  | 'digital_wellness' | 'productivity' | 'health'
-  | 'mindfulness' | 'sleep' | 'social' | 'custom';
+  | 'digital_wellness'
+  | 'productivity'
+  | 'health'
+  | 'mindfulness'
+  | 'sleep'
+  | 'social'
+  | 'custom';
 
 export interface HabitFrequency {
   type: 'daily' | 'weekdays' | 'weekends' | 'specific_days' | 'x_per_week';
@@ -390,7 +406,13 @@ export interface AchievementDefinitionDocument {
   isActive: boolean;
 }
 
-export type AchievementCategory = 'focus' | 'social' | 'streak' | 'habit' | 'social_feature' | 'special';
+export type AchievementCategory =
+  | 'focus'
+  | 'social'
+  | 'streak'
+  | 'habit'
+  | 'social_feature'
+  | 'special';
 export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
 export interface AchievementCondition {
@@ -435,9 +457,18 @@ export interface NotificationDocument {
 }
 
 export type NotificationType =
-  | 'blocking_alert' | 'goal_warning' | 'goal_achieved' | 'streak_alert'
-  | 'achievement' | 'partner_activity' | 'challenge_update' | 'weekly_report'
-  | 'ai_insight' | 'bedtime' | 'system' | 'referral';
+  | 'blocking_alert'
+  | 'goal_warning'
+  | 'goal_achieved'
+  | 'streak_alert'
+  | 'achievement'
+  | 'partner_activity'
+  | 'challenge_update'
+  | 'weekly_report'
+  | 'ai_insight'
+  | 'bedtime'
+  | 'system'
+  | 'referral';
 
 // ─── Blocking Schedule Document ───
 export interface BlockingScheduleDocument {
@@ -602,8 +633,12 @@ export interface ChallengeDocument {
 }
 
 export type ChallengeType =
-  | 'social_media_detox' | 'focus_marathon' | 'morning_person'
-  | 'screen_time_slash' | 'deep_work' | 'custom';
+  | 'social_media_detox'
+  | 'focus_marathon'
+  | 'morning_person'
+  | 'screen_time_slash'
+  | 'deep_work'
+  | 'custom';
 
 export interface ChallengeRule {
   ruleId: string;
@@ -620,12 +655,15 @@ export interface ChallengeParticipantDocument {
   challengeId: string;
   userId: string;
   status: 'active' | 'completed' | 'failed' | 'withdrew';
-  progress: Record<string, {
-    currentValue: number;
-    targetValue: number;
-    percentage: number;
-    dailyHistory: { date: string; value: number; met: boolean }[];
-  }>;
+  progress: Record<
+    string,
+    {
+      currentValue: number;
+      targetValue: number;
+      percentage: number;
+      dailyHistory: { date: string; value: number; met: boolean }[];
+    }
+  >;
   rank: number;
   score: number;
   completionPercentage: number;

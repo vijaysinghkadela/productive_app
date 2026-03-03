@@ -4,7 +4,6 @@ import { getFirestore, getSecret, REGION } from '../shared/config/firebase.confi
 import { Collections } from '../shared/constants/collections.constants';
 import { DailyStatsDocument, ReportDocument, UserDocument } from '../shared/types/firestore.types';
 import { sendNotification, NotificationTemplates } from '../notifications/notifications.service';
-import * as admin from 'firebase-admin';
 
 // ─── Generate Weekly Report (Scheduled, Sunday 8pm UTC via Cloud Tasks) ───
 export const generateWeeklyReport = functions
@@ -31,7 +30,8 @@ export const generateWeeklyReport = functions
     const prevWeekStart = prevWeekStartDate.toISOString().split('T')[0];
 
     // Get users with weekly report enabled
-    const usersSnap = await db.collection(Collections.USERS)
+    const usersSnap = await db
+      .collection(Collections.USERS)
       .where('settings.notifications.weeklyReport', '==', true)
       .where('accountStatus', '==', 'active')
       .limit(500)
@@ -45,7 +45,9 @@ export const generateWeeklyReport = functions
         const user = userDoc.data() as UserDocument;
 
         // Fetch this week's daily stats
-        const statsSnap = await db.collection(Collections.USERS).doc(uid)
+        const statsSnap = await db
+          .collection(Collections.USERS)
+          .doc(uid)
           .collection(Collections.DAILY_STATS)
           .where('date', '>=', weekStart)
           .where('date', '<=', weekEnd)
@@ -57,7 +59,9 @@ export const generateWeeklyReport = functions
         const weekStats = statsSnap.docs.map((d) => d.data() as DailyStatsDocument);
 
         // Fetch previous week's stats for comparison
-        const prevStatsSnap = await db.collection(Collections.USERS).doc(uid)
+        const prevStatsSnap = await db
+          .collection(Collections.USERS)
+          .doc(uid)
           .collection(Collections.DAILY_STATS)
           .where('date', '>=', prevWeekStart)
           .where('date', '<=', prevWeekEnd)
@@ -68,15 +72,24 @@ export const generateWeeklyReport = functions
 
         // Calculate metrics
         const scores = weekStats.map((s) => s.productivityScore?.final || 0);
-        const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+        const avgScore =
+          scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
         const bestScore = Math.max(...scores, 0);
         const worstScore = Math.min(...scores.filter((s) => s > 0), 100);
 
-        const totalFocusMinutes = weekStats.reduce((s, d) => s + (d.focusSessions?.totalMinutes || 0), 0);
+        const totalFocusMinutes = weekStats.reduce(
+          (s, d) => s + (d.focusSessions?.totalMinutes || 0),
+          0,
+        );
         const totalSessions = weekStats.reduce((s, d) => s + (d.focusSessions?.completed || 0), 0);
-        const abandonedSessions = weekStats.reduce((s, d) => s + (d.focusSessions?.abandoned || 0), 0);
-        const completionRate = totalSessions + abandonedSessions > 0
-          ? Math.round((totalSessions / (totalSessions + abandonedSessions)) * 100) : 100;
+        const abandonedSessions = weekStats.reduce(
+          (s, d) => s + (d.focusSessions?.abandoned || 0),
+          0,
+        );
+        const completionRate =
+          totalSessions + abandonedSessions > 0
+            ? Math.round((totalSessions / (totalSessions + abandonedSessions)) * 100)
+            : 100;
 
         const socialMediaMinutes = weekStats.reduce((s, d) => s + d.socialMediaMinutes, 0);
 
@@ -85,7 +98,8 @@ export const generateWeeklyReport = functions
         for (const stat of weekStats) {
           for (const [appId, usage] of Object.entries(stat.appUsage || {})) {
             if (usage.category === 'social_media' || usage.category === 'entertainment') {
-              if (!appUsageTotals[appId]) appUsageTotals[appId] = { appName: usage.appName, minutes: 0 };
+              if (!appUsageTotals[appId])
+                appUsageTotals[appId] = { appName: usage.appName, minutes: 0 };
               appUsageTotals[appId].minutes += usage.totalMinutes;
             }
           }
@@ -103,7 +117,10 @@ export const generateWeeklyReport = functions
           }
           return s + met;
         }, 0);
-        const goalsTotalCount = weekStats.reduce((s, d) => s + Object.keys(d.goals || {}).length, 0);
+        const goalsTotalCount = weekStats.reduce(
+          (s, d) => s + Object.keys(d.goals || {}).length,
+          0,
+        );
 
         const habitsCompleted = weekStats.reduce((s, d) => {
           let completed = 0;
@@ -113,7 +130,8 @@ export const generateWeeklyReport = functions
           return s + completed;
         }, 0);
         const habitsTotal = weekStats.reduce((s, d) => s + Object.keys(d.habits || {}).length, 0);
-        const habitCompletionRate = habitsTotal > 0 ? Math.round((habitsCompleted / habitsTotal) * 100) : 100;
+        const habitCompletionRate =
+          habitsTotal > 0 ? Math.round((habitsCompleted / habitsTotal) * 100) : 100;
 
         // Achievements unlocked
         const achievementsUnlocked = weekStats.flatMap((s) => s.achievementsUnlocked || []);
@@ -121,18 +139,27 @@ export const generateWeeklyReport = functions
 
         // Previous week comparison
         const prevScores = prevStats.map((s) => s.productivityScore?.final || 0);
-        const prevAvgScore = prevScores.length > 0
-          ? Math.round(prevScores.reduce((a, b) => a + b, 0) / prevScores.length) : 0;
-        const prevFocusMinutes = prevStats.reduce((s, d) => s + (d.focusSessions?.totalMinutes || 0), 0);
+        const prevAvgScore =
+          prevScores.length > 0
+            ? Math.round(prevScores.reduce((a, b) => a + b, 0) / prevScores.length)
+            : 0;
+        const prevFocusMinutes = prevStats.reduce(
+          (s, d) => s + (d.focusSessions?.totalMinutes || 0),
+          0,
+        );
         const prevSocialMinutes = prevStats.reduce((s, d) => s + d.socialMediaMinutes, 0);
         const prevGoalsMet = prevStats.reduce((s, d) => {
           let met = 0;
-          for (const g of Object.values(d.goals || {})) { if (g.met) met++; }
+          for (const g of Object.values(d.goals || {})) {
+            if (g.met) met++;
+          }
           return s + met;
         }, 0);
 
-        const socialMediaReduction = prevSocialMinutes > 0
-          ? Math.round(((prevSocialMinutes - socialMediaMinutes) / prevSocialMinutes) * 100) : 0;
+        const socialMediaReduction =
+          prevSocialMinutes > 0
+            ? Math.round(((prevSocialMinutes - socialMediaMinutes) / prevSocialMinutes) * 100)
+            : 0;
 
         // AI insight (Elite only)
         let aiInsightSummary: string | null = null;
@@ -144,13 +171,17 @@ export const generateWeeklyReport = functions
 
             const completion = await openai.chat.completions.create({
               model: 'gpt-4o',
-              messages: [{
-                role: 'system',
-                content: 'You are a productivity coach. Generate a 2-3 sentence weekly insight summary based on the user\'s data. Be encouraging, specific, and actionable.',
-              }, {
-                role: 'user',
-                content: `Week summary: Avg score ${avgScore}/100, ${totalFocusMinutes}min focused, ${socialMediaMinutes}min social media, ${totalSessions} sessions, ${goalsMetCount}/${goalsTotalCount} goals met, ${habitCompletionRate}% habit completion, streak: ${user.stats.currentStreak}. Top distracting: ${topDistractingApps.map((a) => a.appName).join(', ')}. Score change: ${avgScore - prevAvgScore}.`,
-              }],
+              messages: [
+                {
+                  role: 'system',
+                  content:
+                    "You are a productivity coach. Generate a 2-3 sentence weekly insight summary based on the user's data. Be encouraging, specific, and actionable.",
+                },
+                {
+                  role: 'user',
+                  content: `Week summary: Avg score ${avgScore}/100, ${totalFocusMinutes}min focused, ${socialMediaMinutes}min social media, ${totalSessions} sessions, ${goalsMetCount}/${goalsTotalCount} goals met, ${habitCompletionRate}% habit completion, streak: ${user.stats.currentStreak}. Top distracting: ${topDistractingApps.map((a) => a.appName).join(', ')}. Score change: ${avgScore - prevAvgScore}.`,
+                },
+              ],
               max_tokens: 150,
               temperature: 0.7,
             });
@@ -163,12 +194,30 @@ export const generateWeeklyReport = functions
 
         // Generate top recommendations
         const recommendations: string[] = [];
-        if (avgScore < 60) recommendations.push('Try starting each day with a 25-minute focus session to build momentum.');
-        if (socialMediaMinutes > 300) recommendations.push(`Your social media usage was ${Math.round(socialMediaMinutes / 60)}hr this week. Set a daily limit to reduce gradually.`);
-        if (habitCompletionRate < 70) recommendations.push('Stack your habits — attach a new habit to one you already do consistently.');
-        if (totalSessions < 5) recommendations.push('Aim for at least 1 focus session per day. Start with 15 minutes if 25 feels too long.');
-        if (completionRate < 70) recommendations.push('You abandoned some sessions. Try shorter sessions if focus is difficult.');
-        if (recommendations.length < 3) recommendations.push('Keep up the good work! Consistency is key to long-term productivity.');
+        if (avgScore < 60)
+          recommendations.push(
+            'Try starting each day with a 25-minute focus session to build momentum.',
+          );
+        if (socialMediaMinutes > 300)
+          recommendations.push(
+            `Your social media usage was ${Math.round(socialMediaMinutes / 60)}hr this week. Set a daily limit to reduce gradually.`,
+          );
+        if (habitCompletionRate < 70)
+          recommendations.push(
+            'Stack your habits — attach a new habit to one you already do consistently.',
+          );
+        if (totalSessions < 5)
+          recommendations.push(
+            'Aim for at least 1 focus session per day. Start with 15 minutes if 25 feels too long.',
+          );
+        if (completionRate < 70)
+          recommendations.push(
+            'You abandoned some sessions. Try shorter sessions if focus is difficult.',
+          );
+        if (recommendations.length < 3)
+          recommendations.push(
+            'Keep up the good work! Consistency is key to long-term productivity.',
+          );
 
         // Create report document
         const reportRef = db.collection(Collections.REPORTS).doc();
@@ -258,7 +307,8 @@ export const generateMonthlyReport = functions
     prevMonthEnd.setDate(prevMonthEnd.getDate() - 1);
     const prevMonthStart = new Date(prevMonthEnd.getFullYear(), prevMonthEnd.getMonth(), 1);
 
-    const usersSnap = await db.collection(Collections.USERS)
+    const usersSnap = await db
+      .collection(Collections.USERS)
       .where('accountStatus', '==', 'active')
       .limit(500)
       .get();
@@ -269,7 +319,9 @@ export const generateMonthlyReport = functions
       try {
         const uid = userDoc.id;
 
-        const statsSnap = await db.collection(Collections.USERS).doc(uid)
+        const statsSnap = await db
+          .collection(Collections.USERS)
+          .doc(uid)
           .collection(Collections.DAILY_STATS)
           .where('date', '>=', monthStartStr)
           .where('date', '<=', monthEndStr)
@@ -282,7 +334,10 @@ export const generateMonthlyReport = functions
 
         const scores = monthStats.map((s) => s.productivityScore?.final || 0);
         const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-        const totalFocusMinutes = monthStats.reduce((s, d) => s + (d.focusSessions?.totalMinutes || 0), 0);
+        const totalFocusMinutes = monthStats.reduce(
+          (s, d) => s + (d.focusSessions?.totalMinutes || 0),
+          0,
+        );
         const socialMediaMinutes = monthStats.reduce((s, d) => s + d.socialMediaMinutes, 0);
 
         const reportRef = db.collection(Collections.REPORTS).doc();
@@ -302,7 +357,10 @@ export const generateMonthlyReport = functions
             bestScore: Math.max(...scores, 0),
             worstScore: Math.min(...scores.filter((s) => s > 0), 100),
             totalFocusMinutes,
-            totalSessionsCompleted: monthStats.reduce((s, d) => s + (d.focusSessions?.completed || 0), 0),
+            totalSessionsCompleted: monthStats.reduce(
+              (s, d) => s + (d.focusSessions?.completed || 0),
+              0,
+            ),
             sessionCompletionRate: 0,
             topDistractingApps: [],
             socialMediaMinutes,
@@ -316,7 +374,12 @@ export const generateMonthlyReport = functions
             streakHighlight: 0,
             aiInsightSummary: null,
             topRecommendations: [],
-            comparisonToPrevious: { scoreChange: 0, focusChange: 0, socialMediaChange: 0, goalsChange: 0 },
+            comparisonToPrevious: {
+              scoreChange: 0,
+              focusChange: 0,
+              socialMediaChange: 0,
+              goalsChange: 0,
+            },
           },
           pdfUrl: null,
           emailSent: false,

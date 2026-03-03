@@ -1,5 +1,4 @@
 import * as functions from 'firebase-functions';
-import { Timestamp, FieldValue } from 'firebase-admin/firestore';
 import { getFirestore, REGION } from '../shared/config/firebase.config';
 import { Collections } from '../shared/constants/collections.constants';
 import { checkAndUnlockAchievements } from '../achievements/achievements.engine';
@@ -158,15 +157,22 @@ export const onSubscriptionChanged = functions
         const bigquery = new BigQuery();
         const datasetId = process.env.BIGQUERY_DATASET_ID || 'focusguard_analytics';
 
-        await bigquery.dataset(datasetId).table('subscriptions').insert([{
-          userId,
-          eventType,
-          tier: newTier,
-          previousTier,
-          platform: 'revenuecat',
-          eventDate: new Date().toISOString(),
-        }]);
-      } catch { /* BigQuery sync is best-effort */ }
+        await bigquery
+          .dataset(datasetId)
+          .table('subscriptions')
+          .insert([
+            {
+              userId,
+              eventType,
+              tier: newTier,
+              previousTier,
+              platform: 'revenuecat',
+              eventDate: new Date().toISOString(),
+            },
+          ]);
+      } catch {
+        /* BigQuery sync is best-effort */
+      }
 
       console.log(`PubSub subscription.changed: ${userId} ${previousTier} → ${newTier}`);
     } catch (err) {

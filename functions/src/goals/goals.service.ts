@@ -7,73 +7,76 @@ import { TierLimits } from '../shared/constants/feature.flags';
 import { GoalDocument, SubscriptionTier } from '../shared/types/firestore.types';
 
 // ─── Set Goal (Callable) ───
-export const setGoal = functions
-  .region(REGION)
-  .https.onCall(async (data, context) => {
-    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
-    const uid = context.auth.uid;
-    const db = getFirestore();
+export const setGoal = functions.region(REGION).https.onCall(async (data, context) => {
+  if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
+  const uid = context.auth.uid;
+  const db = getFirestore();
 
-    const parsed = setGoalSchema.safeParse(data);
-    if (!parsed.success) {
-      throw new functions.https.HttpsError('invalid-argument', 'Invalid goal data',
-        { errors: parsed.error.errors });
-    }
+  const parsed = setGoalSchema.safeParse(data);
+  if (!parsed.success) {
+    throw new functions.https.HttpsError('invalid-argument', 'Invalid goal data', {
+      errors: parsed.error.errors,
+    });
+  }
 
-    const input = parsed.data;
-    const now = Timestamp.now();
+  const input = parsed.data;
+  const now = Timestamp.now();
 
-    // Check subscription limits
-    const userSnap = await db.collection(Collections.USERS).doc(uid).get();
-    const tier = (userSnap.data()?.subscription?.tier || 'free') as SubscriptionTier;
-    const limits = TierLimits[tier];
+  // Check subscription limits
+  const userSnap = await db.collection(Collections.USERS).doc(uid).get();
+  const tier = (userSnap.data()?.subscription?.tier || 'free') as SubscriptionTier;
+  const limits = TierLimits[tier];
 
-    const existingGoals = await db.collection(Collections.USERS).doc(uid)
-      .collection(Collections.GOALS).where('status', '==', 'active').get();
+  const existingGoals = await db
+    .collection(Collections.USERS)
+    .doc(uid)
+    .collection(Collections.GOALS)
+    .where('status', '==', 'active')
+    .get();
 
-    if (existingGoals.size >= limits.goals) {
-      throw new functions.https.HttpsError('resource-exhausted',
-        `Goal limit (${limits.goals}) exceeded for ${tier} plan. Upgrade to create more goals.`);
-    }
+  if (existingGoals.size >= limits.goals) {
+    throw new functions.https.HttpsError(
+      'resource-exhausted',
+      `Goal limit (${limits.goals}) exceeded for ${tier} plan. Upgrade to create more goals.`,
+    );
+  }
 
-    // Validate app_limit requires appId
-    if (input.type === 'app_limit' && !input.appId) {
-      throw new functions.https.HttpsError('invalid-argument',
-        'App limit goals require an appId');
-    }
+  // Validate app_limit requires appId
+  if (input.type === 'app_limit' && !input.appId) {
+    throw new functions.https.HttpsError('invalid-argument', 'App limit goals require an appId');
+  }
 
-    const goalRef = db.collection(Collections.USERS).doc(uid)
-      .collection(Collections.GOALS).doc();
+  const goalRef = db.collection(Collections.USERS).doc(uid).collection(Collections.GOALS).doc();
 
-    const goal: GoalDocument = {
-      goalId: goalRef.id,
-      userId: uid,
-      type: input.type,
-      name: input.name,
-      appId: input.appId || null,
-      category: input.category || null,
-      targetValue: input.targetValue,
-      unit: input.unit,
-      frequency: input.frequency,
-      currentStreak: 0,
-      longestStreak: 0,
-      totalCompletions: 0,
-      history: [],
-      status: 'active',
-      color: input.color,
-      icon: input.icon,
-      reminderEnabled: input.reminderEnabled,
-      reminderTime: input.reminderTime || null,
-      aiSuggested: false,
-      difficulty: input.difficulty,
-      createdAt: now,
-      updatedAt: now,
-    };
+  const goal: GoalDocument = {
+    goalId: goalRef.id,
+    userId: uid,
+    type: input.type,
+    name: input.name,
+    appId: input.appId || null,
+    category: input.category || null,
+    targetValue: input.targetValue,
+    unit: input.unit,
+    frequency: input.frequency,
+    currentStreak: 0,
+    longestStreak: 0,
+    totalCompletions: 0,
+    history: [],
+    status: 'active',
+    color: input.color,
+    icon: input.icon,
+    reminderEnabled: input.reminderEnabled,
+    reminderTime: input.reminderTime || null,
+    aiSuggested: false,
+    difficulty: input.difficulty,
+    createdAt: now,
+    updatedAt: now,
+  };
 
-    await goalRef.set(goal);
+  await goalRef.set(goal);
 
-    return { goalId: goalRef.id };
-  });
+  return { goalId: goalRef.id };
+});
 
 // ─── Evaluate Goals at Day End (Scheduled) ───
 export const evaluateGoalsAtDayEnd = functions
@@ -85,7 +88,8 @@ export const evaluateGoalsAtDayEnd = functions
     const today = new Date().toISOString().split('T')[0];
 
     // Get users active today (last active = today)
-    const usersSnap = await db.collection(Collections.USERS)
+    const usersSnap = await db
+      .collection(Collections.USERS)
       .where('stats.lastActiveDate', '==', today)
       .where('accountStatus', '==', 'active')
       .limit(500)
@@ -96,12 +100,20 @@ export const evaluateGoalsAtDayEnd = functions
         const uid = userDoc.id;
 
         // Get active goals
-        const goalsSnap = await db.collection(Collections.USERS).doc(uid)
-          .collection(Collections.GOALS).where('status', '==', 'active').get();
+        const goalsSnap = await db
+          .collection(Collections.USERS)
+          .doc(uid)
+          .collection(Collections.GOALS)
+          .where('status', '==', 'active')
+          .get();
 
         // Get today's stats
-        const statsSnap = await db.collection(Collections.USERS).doc(uid)
-          .collection(Collections.DAILY_STATS).doc(today).get();
+        const statsSnap = await db
+          .collection(Collections.USERS)
+          .doc(uid)
+          .collection(Collections.DAILY_STATS)
+          .doc(today)
+          .get();
 
         if (!statsSnap.exists) continue;
         const stats = statsSnap.data()!;

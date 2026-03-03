@@ -53,11 +53,18 @@ export interface AchievementTrigger {
 }
 
 export type AchievementTriggerType =
-  | 'session_completed' | 'usage_synced' | 'goal_met'
-  | 'habit_completed' | 'streak_updated' | 'level_up'
-  | 'challenge_completed' | 'accountability_started'
-  | 'referral_completed' | 'leaderboard_rank_changed'
-  | 'social_media_free_day' | 'score_calculated';
+  | 'session_completed'
+  | 'usage_synced'
+  | 'goal_met'
+  | 'habit_completed'
+  | 'streak_updated'
+  | 'level_up'
+  | 'challenge_completed'
+  | 'accountability_started'
+  | 'referral_completed'
+  | 'leaderboard_rank_changed'
+  | 'social_media_free_day'
+  | 'score_calculated';
 
 // ─── RevenueCat Webhook Types ───
 
@@ -87,9 +94,15 @@ export interface RevenueCatWebhookEvent {
 }
 
 export type RevenueCatEventType =
-  | 'INITIAL_PURCHASE' | 'RENEWAL' | 'CANCELLATION'
-  | 'BILLING_ISSUE' | 'EXPIRATION' | 'UNCANCELLATION'
-  | 'PRODUCT_CHANGE' | 'TRANSFER' | 'TEST'
+  | 'INITIAL_PURCHASE'
+  | 'RENEWAL'
+  | 'CANCELLATION'
+  | 'BILLING_ISSUE'
+  | 'EXPIRATION'
+  | 'UNCANCELLATION'
+  | 'PRODUCT_CHANGE'
+  | 'TRANSFER'
+  | 'TEST'
   | 'SUBSCRIBER_ALIAS';
 
 // ─── Feature Gates ───

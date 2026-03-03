@@ -31,7 +31,9 @@ export const onUserDocumentUpdate = functions
         await cacheDelete(`user:${uid}:subscription`);
         await cacheDelete(`user:${uid}:profile`);
 
-        console.log(`User ${uid}: tier changed ${before.subscription.tier} → ${after.subscription.tier}`);
+        console.log(
+          `User ${uid}: tier changed ${before.subscription.tier} → ${after.subscription.tier}`,
+        );
 
         // Update FCM topic subscriptions based on tier
         const tierTopics: Record<string, string[]> = {
@@ -51,12 +53,16 @@ export const onUserDocumentUpdate = functions
           for (const topic of oldTopics.filter((t) => !newTopics.includes(t))) {
             try {
               await messaging.unsubscribeFromTopic(token, topic);
-            } catch { /* token may be invalid */ }
+            } catch {
+              /* token may be invalid */
+            }
           }
           for (const topic of newTopics.filter((t) => !oldTopics.includes(t))) {
             try {
               await messaging.subscribeToTopic(token, topic);
-            } catch { /* token may be invalid */ }
+            } catch {
+              /* token may be invalid */
+            }
           }
         }
       }
@@ -64,7 +70,8 @@ export const onUserDocumentUpdate = functions
       // ─── 2. Username changed → check uniqueness, update references ───
       if (before.username !== after.username) {
         // Verify uniqueness
-        const existingUser = await db.collection(Collections.USERS)
+        const existingUser = await db
+          .collection(Collections.USERS)
           .where('username', '==', after.username)
           .limit(2)
           .get();
@@ -92,8 +99,11 @@ export const onUserDocumentUpdate = functions
 
         const batch = db.batch();
         for (const period of periods) {
-          const entryRef = db.collection(Collections.LEADERBOARD).doc(period)
-            .collection(Collections.ENTRIES).doc(uid);
+          const entryRef = db
+            .collection(Collections.LEADERBOARD)
+            .doc(period)
+            .collection(Collections.ENTRIES)
+            .doc(uid);
           batch.update(entryRef, {
             username: after.username,
             displayName: after.displayName,
@@ -102,26 +112,36 @@ export const onUserDocumentUpdate = functions
         }
 
         // Update accountability pairs
-        const pairsSnap = await db.collection(Collections.ACCOUNTABILITY_PAIRS)
-          .where('userIds', 'array-contains', uid).get();
+        const pairsSnap = await db
+          .collection(Collections.ACCOUNTABILITY_PAIRS)
+          .where('userIds', 'array-contains', uid)
+          .get();
         for (const pairDoc of pairsSnap.docs) {
           // Username stored in messages, not top-level — no batch needed
         }
 
-        try { await batch.commit(); } catch { /* some entries may not exist */ }
+        try {
+          await batch.commit();
+        } catch {
+          /* some entries may not exist */
+        }
         await cacheDelete(`user:${uid}:profile`);
         console.log(`User ${uid}: username changed ${before.username} → ${after.username}`);
       }
 
       // ─── 3. Notification settings changed → update FCM topic subscriptions ───
-      if (JSON.stringify(before.settings.notifications) !== JSON.stringify(after.settings.notifications)) {
+      if (
+        JSON.stringify(before.settings.notifications) !==
+        JSON.stringify(after.settings.notifications)
+      ) {
         const messaging = getMessaging();
-        const settingsTopics: { key: keyof typeof after.settings.notifications; topic: string }[] = [
-          { key: 'weeklyReport', topic: 'weekly_report' },
-          { key: 'achievementAlerts', topic: 'achievement_alerts' },
-          { key: 'challengeUpdates', topic: 'challenge_updates' },
-          { key: 'aiInsights', topic: 'ai_insights' },
-        ];
+        const settingsTopics: { key: keyof typeof after.settings.notifications; topic: string }[] =
+          [
+            { key: 'weeklyReport', topic: 'weekly_report' },
+            { key: 'achievementAlerts', topic: 'achievement_alerts' },
+            { key: 'challengeUpdates', topic: 'challenge_updates' },
+            { key: 'aiInsights', topic: 'ai_insights' },
+          ];
 
         for (const { key, topic } of settingsTopics) {
           const wasEnabled = before.settings.notifications[key];
@@ -134,7 +154,9 @@ export const onUserDocumentUpdate = functions
                 } else {
                   await messaging.unsubscribeFromTopic(token, topic);
                 }
-              } catch { /* invalid token */ }
+              } catch {
+                /* invalid token */
+              }
             }
           }
         }
@@ -183,7 +205,14 @@ export const onUserDocumentUpdate = functions
 
             // Grant bonus XP for milestones
             const milestoneXp: Record<number, number> = {
-              3: 50, 7: 100, 14: 200, 30: 500, 60: 1000, 90: 2000, 180: 5000, 365: 10000,
+              3: 50,
+              7: 100,
+              14: 200,
+              30: 500,
+              60: 1000,
+              90: 2000,
+              180: 5000,
+              365: 10000,
             };
             if (milestoneXp[milestone]) {
               await change.after.ref.update({

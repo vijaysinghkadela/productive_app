@@ -174,8 +174,10 @@ export const aggregateWeeklyAnalytics = functions
     const weekStartStr = weekStart.toISOString().split('T')[0];
 
     // Aggregate platform metrics
-    const usersSnap = await db.collection(Collections.USERS)
-      .where('accountStatus', '==', 'active').get();
+    const usersSnap = await db
+      .collection(Collections.USERS)
+      .where('accountStatus', '==', 'active')
+      .get();
 
     const metrics = {
       totalUsers: usersSnap.size,
@@ -186,8 +188,8 @@ export const aggregateWeeklyAnalytics = functions
       tierBreakdown: { free: 0, basic: 0, pro: 0, elite: 0, lifetime: 0 },
     };
 
-    let scoreSum = 0;
-    let scoreCount = 0;
+    const _scoreSum = 0;
+    const _scoreCount = 0;
 
     for (const userDoc of usersSnap.docs) {
       const user = userDoc.data() as UserDocument;
@@ -202,12 +204,15 @@ export const aggregateWeeklyAnalytics = functions
     }
 
     // Store aggregated metrics in admin collection
-    await db.collection('admin').doc(`weekly_metrics_${weekEndStr}`).set({
-      ...metrics,
-      weekStart: weekStartStr,
-      weekEnd: weekEndStr,
-      generatedAt: Timestamp.now(),
-    });
+    await db
+      .collection('admin')
+      .doc(`weekly_metrics_${weekEndStr}`)
+      .set({
+        ...metrics,
+        weekStart: weekStartStr,
+        weekEnd: weekEndStr,
+        generatedAt: Timestamp.now(),
+      });
 
     console.log(`Weekly analytics aggregated: ${metrics.activeUsersThisWeek} active users`);
   });
@@ -223,7 +228,8 @@ export const cleanupOldNotifications = functions
     const ninetyDaysAgo = new Date(Date.now() - 90 * 86400000);
     const cutoffTimestamp = Timestamp.fromDate(ninetyDaysAgo);
 
-    const usersSnap = await db.collection(Collections.USERS)
+    const usersSnap = await db
+      .collection(Collections.USERS)
       .where('accountStatus', '==', 'active')
       .limit(500)
       .get();
@@ -231,7 +237,9 @@ export const cleanupOldNotifications = functions
     let deleted = 0;
 
     for (const userDoc of usersSnap.docs) {
-      const notifsSnap = await db.collection(Collections.USERS).doc(userDoc.id)
+      const notifsSnap = await db
+        .collection(Collections.USERS)
+        .doc(userDoc.id)
         .collection(Collections.NOTIFICATIONS)
         .where('createdAt', '<', cutoffTimestamp)
         .where('read', '==', true)

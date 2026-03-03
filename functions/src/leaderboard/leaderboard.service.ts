@@ -1,85 +1,97 @@
 import * as functions from 'firebase-functions';
-import { Timestamp, FieldValue } from 'firebase-admin/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
 import { getFirestore, REGION } from '../shared/config/firebase.config';
 import { Collections } from '../shared/constants/collections.constants';
-import { LeaderboardEntryDocument, UserDocument, DailyStatsDocument } from '../shared/types/firestore.types';
+import {
+  LeaderboardEntryDocument,
+  UserDocument,
+  DailyStatsDocument,
+} from '../shared/types/firestore.types';
 
 // ─── Get Leaderboard (Callable) ───
-export const getLeaderboard = functions
-  .region(REGION)
-  .https.onCall(async (data, context) => {
-    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
-    const uid = context.auth.uid;
-    const db = getFirestore();
+export const getLeaderboard = functions.region(REGION).https.onCall(async (data, context) => {
+  if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
+  const uid = context.auth.uid;
+  const db = getFirestore();
 
-    const { period = 'weekly', page = 1, pageSize = 20, countryFilter } = data;
-    const validPeriods = ['daily', 'weekly', 'monthly', 'alltime'];
-    if (!validPeriods.includes(period)) {
-      throw new functions.https.HttpsError('invalid-argument', 'Invalid period');
+  const { period = 'weekly', page = 1, pageSize = 20, countryFilter } = data;
+  const validPeriods = ['daily', 'weekly', 'monthly', 'alltime'];
+  if (!validPeriods.includes(period)) {
+    throw new functions.https.HttpsError('invalid-argument', 'Invalid period');
+  }
+
+  const clampedPageSize = Math.min(pageSize, 50);
+  const offset = (page - 1) * clampedPageSize;
+
+  // Determine period key
+  const now = new Date();
+  let periodKey: string;
+  switch (period) {
+    case 'daily':
+      periodKey = `daily_${now.toISOString().split('T')[0]}`;
+      break;
+    case 'weekly': {
+      const weekNum = getWeekNumber(now);
+      periodKey = `weekly_${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
+      break;
     }
+    case 'monthly':
+      periodKey = `monthly_${now.toISOString().slice(0, 7)}`;
+      break;
+    default:
+      periodKey = 'alltime';
+  }
 
-    const clampedPageSize = Math.min(pageSize, 50);
-    const offset = (page - 1) * clampedPageSize;
+  let query = db
+    .collection(Collections.LEADERBOARD)
+    .doc(periodKey)
+    .collection(Collections.ENTRIES)
+    .orderBy('score', 'desc')
+    .limit(clampedPageSize)
+    .offset(offset);
 
-    // Determine period key
-    const now = new Date();
-    let periodKey: string;
-    switch (period) {
-      case 'daily':
-        periodKey = `daily_${now.toISOString().split('T')[0]}`;
-        break;
-      case 'weekly': {
-        const weekNum = getWeekNumber(now);
-        periodKey = `weekly_${now.getFullYear()}-W${String(weekNum).padStart(2, '0')}`;
-        break;
-      }
-      case 'monthly':
-        periodKey = `monthly_${now.toISOString().slice(0, 7)}`;
-        break;
-      default:
-        periodKey = 'alltime';
-    }
-
-    let query = db.collection(Collections.LEADERBOARD).doc(periodKey)
+  if (countryFilter) {
+    query = db
+      .collection(Collections.LEADERBOARD)
+      .doc(periodKey)
       .collection(Collections.ENTRIES)
+      .where('country', '==', countryFilter)
       .orderBy('score', 'desc')
       .limit(clampedPageSize)
       .offset(offset);
+  }
 
-    if (countryFilter) {
-      query = db.collection(Collections.LEADERBOARD).doc(periodKey)
-        .collection(Collections.ENTRIES)
-        .where('country', '==', countryFilter)
-        .orderBy('score', 'desc')
-        .limit(clampedPageSize)
-        .offset(offset);
+  const entriesSnap = await query.get();
+  const entries = entriesSnap.docs.map((d, idx) => ({
+    ...d.data(),
+    rank: offset + idx + 1,
+  }));
+
+  // Get user's own entry
+  let userEntry = null;
+  try {
+    const userEntrySnap = await db
+      .collection(Collections.LEADERBOARD)
+      .doc(periodKey)
+      .collection(Collections.ENTRIES)
+      .doc(uid)
+      .get();
+    if (userEntrySnap.exists) {
+      userEntry = userEntrySnap.data();
     }
+  } catch {
+    /* User may not have entry */
+  }
 
-    const entriesSnap = await query.get();
-    const entries = entriesSnap.docs.map((d, idx) => ({
-      ...d.data(),
-      rank: offset + idx + 1,
-    }));
-
-    // Get user's own entry
-    let userEntry = null;
-    try {
-      const userEntrySnap = await db.collection(Collections.LEADERBOARD).doc(periodKey)
-        .collection(Collections.ENTRIES).doc(uid).get();
-      if (userEntrySnap.exists) {
-        userEntry = userEntrySnap.data();
-      }
-    } catch { /* User may not have entry */ }
-
-    return {
-      entries,
-      userEntry,
-      period: periodKey,
-      page,
-      pageSize: clampedPageSize,
-      hasMore: entries.length === clampedPageSize,
-    };
-  });
+  return {
+    entries,
+    userEntry,
+    period: periodKey,
+    page,
+    pageSize: clampedPageSize,
+    hasMore: entries.length === clampedPageSize,
+  };
+});
 
 // ─── Rebuild Leaderboard (Scheduled, daily 3am UTC) ───
 export const rebuildLeaderboard = functions
@@ -93,7 +105,8 @@ export const rebuildLeaderboard = functions
     const now = new Date();
 
     // Get all active users with stats
-    const usersSnap = await db.collection(Collections.USERS)
+    const usersSnap = await db
+      .collection(Collections.USERS)
       .where('accountStatus', '==', 'active')
       .where('settings.privacy.showOnLeaderboard', '==', true)
       .limit(5000)
@@ -106,8 +119,12 @@ export const rebuildLeaderboard = functions
       const user = userDoc.data() as UserDocument;
 
       // Get today's score
-      const dailySnap = await db.collection(Collections.USERS).doc(userDoc.id)
-        .collection(Collections.DAILY_STATS).doc(today).get();
+      const dailySnap = await db
+        .collection(Collections.USERS)
+        .doc(userDoc.id)
+        .collection(Collections.DAILY_STATS)
+        .doc(today)
+        .get();
 
       const dailyScore = dailySnap.exists
         ? (dailySnap.data() as DailyStatsDocument).productivityScore?.final || 0
@@ -154,21 +171,30 @@ export const rebuildLeaderboard = functions
 
         // Get previous rank for rank change
         try {
-          const prevSnap = await db.collection(Collections.LEADERBOARD).doc(dailyKey)
-            .collection(Collections.ENTRIES).doc(entry.uid).get();
+          const prevSnap = await db
+            .collection(Collections.LEADERBOARD)
+            .doc(dailyKey)
+            .collection(Collections.ENTRIES)
+            .doc(entry.uid)
+            .get();
           if (prevSnap.exists) {
             entry.previousRank = prevSnap.data()?.rank || rank;
             entry.rankChange = entry.previousRank - rank;
           }
-        } catch { /* No previous rank */ }
+        } catch {
+          /* No previous rank */
+        }
 
         const entryData = { ...entry };
         delete (entryData as { uid?: string }).uid;
 
         // Write to daily leaderboard
         batch.set(
-          db.collection(Collections.LEADERBOARD).doc(dailyKey)
-            .collection(Collections.ENTRIES).doc(entry.uid),
+          db
+            .collection(Collections.LEADERBOARD)
+            .doc(dailyKey)
+            .collection(Collections.ENTRIES)
+            .doc(entry.uid),
           entryData,
         );
       }

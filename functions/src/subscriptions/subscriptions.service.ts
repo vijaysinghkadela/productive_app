@@ -1,19 +1,19 @@
 import * as functions from 'firebase-functions';
 import * as crypto from 'crypto';
-import { Timestamp, FieldValue } from 'firebase-admin/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
 import { getFirestore, getAuth, getSecret, REGION } from '../shared/config/firebase.config';
 import { Collections } from '../shared/constants/collections.constants';
-import { RevenueCatWebhookEvent, RevenueCatEventType } from '../shared/types/common.types';
+import { RevenueCatWebhookEvent } from '../shared/types/common.types';
 import { SubscriptionTier } from '../shared/types/firestore.types';
 
 const PRODUCT_TO_TIER: Record<string, SubscriptionTier> = {
-  'focusguard_basic_monthly': 'basic',
-  'focusguard_basic_yearly': 'basic',
-  'focusguard_pro_monthly': 'pro',
-  'focusguard_pro_yearly': 'pro',
-  'focusguard_elite_monthly': 'elite',
-  'focusguard_elite_yearly': 'elite',
-  'focusguard_lifetime': 'lifetime',
+  focusguard_basic_monthly: 'basic',
+  focusguard_basic_yearly: 'basic',
+  focusguard_pro_monthly: 'pro',
+  focusguard_pro_yearly: 'pro',
+  focusguard_elite_monthly: 'elite',
+  focusguard_elite_yearly: 'elite',
+  focusguard_lifetime: 'lifetime',
 };
 
 // ─── RevenueCat Webhook Handler ───
@@ -83,10 +83,13 @@ export const revenuecatWebhook = functions
             'subscription.status': event.period_type === 'TRIAL' ? 'trial' : 'active',
             'subscription.currentPeriodStart': Timestamp.fromMillis(event.purchased_at_ms),
             'subscription.currentPeriodEnd': event.expiration_at_ms
-              ? Timestamp.fromMillis(event.expiration_at_ms) : null,
+              ? Timestamp.fromMillis(event.expiration_at_ms)
+              : null,
             'subscription.cancelAtPeriodEnd': false,
-            'subscription.trialEndsAt': event.period_type === 'TRIAL' && event.expiration_at_ms
-              ? Timestamp.fromMillis(event.expiration_at_ms) : null,
+            'subscription.trialEndsAt':
+              event.period_type === 'TRIAL' && event.expiration_at_ms
+                ? Timestamp.fromMillis(event.expiration_at_ms)
+                : null,
             'subscription.entitlements': event.entitlement_ids,
             updatedAt: now,
           });
@@ -96,8 +99,11 @@ export const revenuecatWebhook = functions
           await getAuth().setCustomUserClaims(userId, { ...claims, tier: newTier });
 
           // Welcome notification
-          const notifRef = db.collection(Collections.USERS).doc(userId)
-            .collection(Collections.NOTIFICATIONS).doc();
+          const notifRef = db
+            .collection(Collections.USERS)
+            .doc(userId)
+            .collection(Collections.NOTIFICATIONS)
+            .doc();
           await notifRef.set({
             notificationId: notifRef.id,
             userId,
@@ -105,8 +111,12 @@ export const revenuecatWebhook = functions
             title: `Welcome to FocusGuard ${newTier.charAt(0).toUpperCase() + newTier.slice(1)}! 🎉`,
             body: 'Unlock your full productivity potential with premium features.',
             data: { action: 'navigate', destination: '/settings' },
-            read: false, readAt: null, actionTaken: null,
-            fcmMessageId: null, deliveredAt: null, createdAt: now,
+            read: false,
+            readAt: null,
+            actionTaken: null,
+            fcmMessageId: null,
+            deliveredAt: null,
+            createdAt: now,
           });
           break;
         }
@@ -116,7 +126,8 @@ export const revenuecatWebhook = functions
             'subscription.status': 'active',
             'subscription.currentPeriodStart': Timestamp.fromMillis(event.purchased_at_ms),
             'subscription.currentPeriodEnd': event.expiration_at_ms
-              ? Timestamp.fromMillis(event.expiration_at_ms) : null,
+              ? Timestamp.fromMillis(event.expiration_at_ms)
+              : null,
             'subscription.cancelAtPeriodEnd': false,
             updatedAt: now,
           });
@@ -129,8 +140,11 @@ export const revenuecatWebhook = functions
             updatedAt: now,
           });
 
-          const notifRef = db.collection(Collections.USERS).doc(userId)
-            .collection(Collections.NOTIFICATIONS).doc();
+          const notifRef = db
+            .collection(Collections.USERS)
+            .doc(userId)
+            .collection(Collections.NOTIFICATIONS)
+            .doc();
           await notifRef.set({
             notificationId: notifRef.id,
             userId,
@@ -138,8 +152,12 @@ export const revenuecatWebhook = functions
             title: 'Subscription cancelled',
             body: 'Your premium features will remain active until the end of your billing period.',
             data: { action: 'navigate', destination: '/subscription' },
-            read: false, readAt: null, actionTaken: null,
-            fcmMessageId: null, deliveredAt: null, createdAt: now,
+            read: false,
+            readAt: null,
+            actionTaken: null,
+            fcmMessageId: null,
+            deliveredAt: null,
+            createdAt: now,
           });
           break;
         }
@@ -176,8 +194,9 @@ export const revenuecatWebhook = functions
         case 'PRODUCT_CHANGE': {
           const oldTier = userSnap.data()?.subscription?.tier || 'free';
           const tierOrder = { free: 0, basic: 1, pro: 2, elite: 3, lifetime: 4 };
-          const isUpgrade = (tierOrder[newTier as keyof typeof tierOrder] || 0) >
-                            (tierOrder[oldTier as keyof typeof tierOrder] || 0);
+          const isUpgrade =
+            (tierOrder[newTier as keyof typeof tierOrder] || 0) >
+            (tierOrder[oldTier as keyof typeof tierOrder] || 0);
 
           await userRef.update({
             'subscription.tier': newTier,
@@ -203,48 +222,46 @@ export const revenuecatWebhook = functions
   });
 
 // ─── Check Entitlements (Callable) ───
-export const checkEntitlements = functions
-  .region(REGION)
-  .https.onCall(async (data, context) => {
-    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
-    const uid = context.auth.uid;
-    const db = getFirestore();
+export const checkEntitlements = functions.region(REGION).https.onCall(async (data, context) => {
+  if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not authenticated');
+  const uid = context.auth.uid;
+  const db = getFirestore();
 
-    const { featureName } = data;
-    if (!featureName) {
-      throw new functions.https.HttpsError('invalid-argument', 'featureName required');
-    }
+  const { featureName } = data;
+  if (!featureName) {
+    throw new functions.https.HttpsError('invalid-argument', 'featureName required');
+  }
 
-    const userSnap = await db.collection(Collections.USERS).doc(uid).get();
-    const tier = (userSnap.data()?.subscription?.tier || 'free') as SubscriptionTier;
+  const userSnap = await db.collection(Collections.USERS).doc(uid).get();
+  const tier = (userSnap.data()?.subscription?.tier || 'free') as SubscriptionTier;
 
-    // Feature gates
-    const featureGates: Record<string, SubscriptionTier[]> = {
-      'basic_tracking': ['free', 'basic', 'pro', 'elite', 'lifetime'],
-      'full_analytics': ['pro', 'elite', 'lifetime'],
-      'ai_coaching': ['pro', 'elite', 'lifetime'],
-      'unlimited_blocks': ['pro', 'elite', 'lifetime'],
-      'achievements': ['pro', 'elite', 'lifetime'],
-      'leaderboard': ['pro', 'elite', 'lifetime'],
-      'challenges': ['pro', 'elite', 'lifetime'],
-      'focus_modes': ['pro', 'elite', 'lifetime'],
-      'focus_spaces': ['pro', 'elite', 'lifetime'],
-      'export_reports': ['pro', 'elite', 'lifetime'],
-      'accountability_partner': ['pro', 'elite', 'lifetime'],
-      'bedtime_mode': ['pro', 'elite', 'lifetime'],
-      'strict_mode_biometric': ['elite', 'lifetime'],
-      'ai_unlimited': ['elite', 'lifetime'],
-      'custom_overlay': ['elite', 'lifetime'],
-      'priority_support': ['elite', 'lifetime'],
-    };
+  // Feature gates
+  const featureGates: Record<string, SubscriptionTier[]> = {
+    basic_tracking: ['free', 'basic', 'pro', 'elite', 'lifetime'],
+    full_analytics: ['pro', 'elite', 'lifetime'],
+    ai_coaching: ['pro', 'elite', 'lifetime'],
+    unlimited_blocks: ['pro', 'elite', 'lifetime'],
+    achievements: ['pro', 'elite', 'lifetime'],
+    leaderboard: ['pro', 'elite', 'lifetime'],
+    challenges: ['pro', 'elite', 'lifetime'],
+    focus_modes: ['pro', 'elite', 'lifetime'],
+    focus_spaces: ['pro', 'elite', 'lifetime'],
+    export_reports: ['pro', 'elite', 'lifetime'],
+    accountability_partner: ['pro', 'elite', 'lifetime'],
+    bedtime_mode: ['pro', 'elite', 'lifetime'],
+    strict_mode_biometric: ['elite', 'lifetime'],
+    ai_unlimited: ['elite', 'lifetime'],
+    custom_overlay: ['elite', 'lifetime'],
+    priority_support: ['elite', 'lifetime'],
+  };
 
-    const allowedTiers = featureGates[featureName] || ['pro', 'elite', 'lifetime'];
-    const hasAccess = allowedTiers.includes(tier);
+  const allowedTiers = featureGates[featureName] || ['pro', 'elite', 'lifetime'];
+  const hasAccess = allowedTiers.includes(tier);
 
-    return {
-      hasAccess,
-      tier,
-      reason: hasAccess ? 'Feature is available' : `Requires ${allowedTiers[0]} or higher`,
-      upgradeRequired: !hasAccess,
-    };
-  });
+  return {
+    hasAccess,
+    tier,
+    reason: hasAccess ? 'Feature is available' : `Requires ${allowedTiers[0]} or higher`,
+    upgradeRequired: !hasAccess,
+  };
+});

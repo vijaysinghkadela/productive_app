@@ -38,15 +38,17 @@ export function requestLogger(req: Request, res: Response, next: NextFunction): 
 
   res.on('finish', () => {
     const duration = Date.now() - start;
-    console.log(JSON.stringify({
-      requestId,
-      method: req.method,
-      path: req.path,
-      statusCode: res.statusCode,
-      durationMs: duration,
-      userAgent: req.headers['user-agent'],
-      ip: req.ip,
-    }));
+    console.log(
+      JSON.stringify({
+        requestId,
+        method: req.method,
+        path: req.path,
+        statusCode: res.statusCode,
+        durationMs: duration,
+        userAgent: req.headers['user-agent'],
+        ip: req.ip,
+      }),
+    );
   });
 
   next();
@@ -56,10 +58,7 @@ export function requestLogger(req: Request, res: Response, next: NextFunction): 
  * CORS configuration
  */
 export function corsConfig() {
-  const allowedOrigins = [
-    'https://focusguardpro.app',
-    'https://admin.focusguardpro.app',
-  ];
+  const allowedOrigins = ['https://focusguardpro.app', 'https://admin.focusguardpro.app'];
 
   if (process.env.FUNCTIONS_EMULATOR === 'true') {
     allowedOrigins.push('http://localhost:3000', 'http://localhost:5000');

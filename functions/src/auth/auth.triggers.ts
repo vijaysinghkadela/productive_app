@@ -1,9 +1,14 @@
 import * as functions from 'firebase-functions';
-import { Timestamp, FieldValue } from 'firebase-admin/firestore';
-import { getFirestore, getAuth, getMessaging, REGION } from '../shared/config/firebase.config';
+import { Timestamp } from 'firebase-admin/firestore';
+import { getFirestore, getAuth, REGION } from '../shared/config/firebase.config';
 import { Collections } from '../shared/constants/collections.constants';
-import { UserDocument, UserSubscription, UserStats, UserSettings } from '../shared/types/firestore.types';
-import { generateReferralCode, generateUsername, hashEmail } from '../shared/utils/crypto.utils';
+import {
+  UserDocument,
+  UserSubscription,
+  UserStats,
+  UserSettings,
+} from '../shared/types/firestore.types';
+import { generateReferralCode, generateUsername } from '../shared/utils/crypto.utils';
 
 // ─── onCreate Trigger ───
 export const onUserCreated = functions
@@ -21,7 +26,11 @@ export const onUserCreated = functions
       let usernameExists = true;
       let attempts = 0;
       while (usernameExists && attempts < 5) {
-        const snap = await db.collection(Collections.USERS).where('username', '==', username).limit(1).get();
+        const snap = await db
+          .collection(Collections.USERS)
+          .where('username', '==', username)
+          .limit(1)
+          .get();
         usernameExists = !snap.empty;
         if (usernameExists) username = generateUsername(user.displayName || 'user');
         attempts++;
@@ -155,8 +164,10 @@ export const onUserCreated = functions
 
       // Create initial daily_stats
       const dailyStatsRef = db
-        .collection(Collections.USERS).doc(user.uid)
-        .collection(Collections.DAILY_STATS).doc(today);
+        .collection(Collections.USERS)
+        .doc(user.uid)
+        .collection(Collections.DAILY_STATS)
+        .doc(today);
 
       batch.set(dailyStatsRef, {
         date: today,
@@ -172,7 +183,13 @@ export const onUserCreated = functions
         hourlyPickups: new Array(24).fill(0),
         firstPhoneUse: null,
         lastPhoneUse: null,
-        focusSessions: { completed: 0, abandoned: 0, totalMinutes: 0, averageLength: 0, longestSession: 0 },
+        focusSessions: {
+          completed: 0,
+          abandoned: 0,
+          totalMinutes: 0,
+          averageLength: 0,
+          longestSession: 0,
+        },
         goals: {},
         habits: {},
         mood: null,
@@ -182,9 +199,18 @@ export const onUserCreated = functions
           final: 0,
           components: {
             baseScore: 100,
-            socialMediaDeduction: 0, screenTimeDeduction: 0, overrideDeduction: 0,
-            abandonedSessionDeduction: 0, habitDeduction: 0, focusBonus: 0, goalBonus: 0,
-            habitBonus: 0, streakBonus: 0, journalBonus: 0, morningRoutineBonus: 0, socialMediaFreeBonus: 0,
+            socialMediaDeduction: 0,
+            screenTimeDeduction: 0,
+            overrideDeduction: 0,
+            abandonedSessionDeduction: 0,
+            habitDeduction: 0,
+            focusBonus: 0,
+            goalBonus: 0,
+            habitBonus: 0,
+            streakBonus: 0,
+            journalBonus: 0,
+            morningRoutineBonus: 0,
+            socialMediaFreeBonus: 0,
           },
           hourlySnapshots: [],
           calculatedAt: now,
@@ -198,13 +224,35 @@ export const onUserCreated = functions
 
       // Create default goals
       const defaultGoals = [
-        { name: 'Instagram Limit', appId: 'com.instagram.android', targetValue: 60, icon: '📸', color: '#E1306C' },
-        { name: 'TikTok Limit', appId: 'com.zhiliaoapp.musically', targetValue: 30, icon: '🎵', color: '#000000' },
-        { name: 'YouTube Limit', appId: 'com.google.android.youtube', targetValue: 90, icon: '▶️', color: '#FF0000' },
+        {
+          name: 'Instagram Limit',
+          appId: 'com.instagram.android',
+          targetValue: 60,
+          icon: '📸',
+          color: '#E1306C',
+        },
+        {
+          name: 'TikTok Limit',
+          appId: 'com.zhiliaoapp.musically',
+          targetValue: 30,
+          icon: '🎵',
+          color: '#000000',
+        },
+        {
+          name: 'YouTube Limit',
+          appId: 'com.google.android.youtube',
+          targetValue: 90,
+          icon: '▶️',
+          color: '#FF0000',
+        },
       ];
 
       for (const goal of defaultGoals) {
-        const goalRef = db.collection(Collections.USERS).doc(user.uid).collection(Collections.GOALS).doc();
+        const goalRef = db
+          .collection(Collections.USERS)
+          .doc(user.uid)
+          .collection(Collections.GOALS)
+          .doc();
         batch.set(goalRef, {
           goalId: goalRef.id,
           userId: user.uid,
@@ -233,15 +281,29 @@ export const onUserCreated = functions
 
       // Create default habits
       const defaultHabits = [
-        { name: 'No Phone First Hour', icon: '📵', color: '#6C63FF', category: 'digital_wellness' as const },
-        { name: 'Phone-Free Meals', icon: '🍽️', color: '#00D4AA', category: 'digital_wellness' as const },
+        {
+          name: 'No Phone First Hour',
+          icon: '📵',
+          color: '#6C63FF',
+          category: 'digital_wellness' as const,
+        },
+        {
+          name: 'Phone-Free Meals',
+          icon: '🍽️',
+          color: '#00D4AA',
+          category: 'digital_wellness' as const,
+        },
         { name: 'Evening Wind-Down', icon: '🌙', color: '#FF6B9D', category: 'sleep' as const },
         { name: '8hr Sleep', icon: '😴', color: '#4ECDC4', category: 'health' as const },
         { name: 'Morning Stretch', icon: '🧘', color: '#FFB347', category: 'health' as const },
       ];
 
       for (let i = 0; i < defaultHabits.length; i++) {
-        const habitRef = db.collection(Collections.USERS).doc(user.uid).collection(Collections.HABITS).doc();
+        const habitRef = db
+          .collection(Collections.USERS)
+          .doc(user.uid)
+          .collection(Collections.HABITS)
+          .doc();
         batch.set(habitRef, {
           habitId: habitRef.id,
           userId: user.uid,
@@ -290,8 +352,10 @@ export const onUserCreated = functions
       // Send welcome notification (non-critical, don't block)
       try {
         const welcomeNotifRef = db
-          .collection(Collections.USERS).doc(user.uid)
-          .collection(Collections.NOTIFICATIONS).doc();
+          .collection(Collections.USERS)
+          .doc(user.uid)
+          .collection(Collections.NOTIFICATIONS)
+          .doc();
         await welcomeNotifRef.set({
           notificationId: welcomeNotifRef.id,
           userId: user.uid,
@@ -310,7 +374,9 @@ export const onUserCreated = functions
         console.error('Welcome notification failed:', err);
       }
 
-      console.log(`User created: ${user.uid}, username: ${username}, referralCode: ${referralCode}`);
+      console.log(
+        `User created: ${user.uid}, username: ${username}, referralCode: ${referralCode}`,
+      );
     } catch (error) {
       console.error(`Error creating user ${user.uid}:`, error);
       throw error;
@@ -334,10 +400,16 @@ export const onUserDeleted = functions
 
       // Delete subcollections in batches
       const subcollections = [
-        Collections.SESSIONS, Collections.DAILY_STATS, Collections.GOALS,
-        Collections.HABITS, Collections.ACHIEVEMENTS, Collections.JOURNAL,
-        Collections.NOTIFICATIONS, Collections.AI_CONVERSATIONS,
-        Collections.BLOCKING_SCHEDULE, Collections.FOCUS_MODES,
+        Collections.SESSIONS,
+        Collections.DAILY_STATS,
+        Collections.GOALS,
+        Collections.HABITS,
+        Collections.ACHIEVEMENTS,
+        Collections.JOURNAL,
+        Collections.NOTIFICATIONS,
+        Collections.AI_CONVERSATIONS,
+        Collections.BLOCKING_SCHEDULE,
+        Collections.FOCUS_MODES,
       ];
 
       for (const sub of subcollections) {
@@ -348,21 +420,31 @@ export const onUserDeleted = functions
       const periods = ['daily', 'weekly', 'monthly', 'alltime'];
       for (const period of periods) {
         try {
-          await db.collection(Collections.LEADERBOARD).doc(period)
-            .collection(Collections.ENTRIES).doc(user.uid).delete();
-        } catch { /* Entry may not exist */ }
+          await db
+            .collection(Collections.LEADERBOARD)
+            .doc(period)
+            .collection(Collections.ENTRIES)
+            .doc(user.uid)
+            .delete();
+        } catch {
+          /* Entry may not exist */
+        }
       }
 
       // Remove from accountability pairs
-      const pairs = await db.collection(Collections.ACCOUNTABILITY_PAIRS)
-        .where('userIds', 'array-contains', user.uid).get();
+      const pairs = await db
+        .collection(Collections.ACCOUNTABILITY_PAIRS)
+        .where('userIds', 'array-contains', user.uid)
+        .get();
       for (const pair of pairs.docs) {
         await pair.ref.update({ status: 'ended', updatedAt: Timestamp.now() });
       }
 
       // Remove from challenge participants
-      const challenges = await db.collectionGroup(Collections.PARTICIPANTS)
-        .where('userId', '==', user.uid).get();
+      const challenges = await db
+        .collectionGroup(Collections.PARTICIPANTS)
+        .where('userId', '==', user.uid)
+        .get();
       for (const doc of challenges.docs) {
         await doc.ref.delete();
       }
@@ -393,10 +475,7 @@ export const beforeSignIn = functions
       }
 
       if (data.accountStatus === 'deleted') {
-        throw new functions.auth.HttpsError(
-          'permission-denied',
-          'This account has been deleted.',
-        );
+        throw new functions.auth.HttpsError('permission-denied', 'This account has been deleted.');
       }
 
       // Update last active date
@@ -419,9 +498,15 @@ export const beforeCreate = functions
 
     // Check banned domains
     const bannedDomains = [
-      'tempmail.com', 'throwaway.email', 'guerrillamail.com',
-      'mailinator.com', 'yopmail.com', 'trashmail.com',
-      'fakeinbox.com', 'sharklasers.com', 'guerrillamailblock.com',
+      'tempmail.com',
+      'throwaway.email',
+      'guerrillamail.com',
+      'mailinator.com',
+      'yopmail.com',
+      'trashmail.com',
+      'fakeinbox.com',
+      'sharklasers.com',
+      'guerrillamailblock.com',
     ];
 
     const domain = email.split('@')[1]?.toLowerCase();

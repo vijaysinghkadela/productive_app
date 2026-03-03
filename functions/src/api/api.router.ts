@@ -1,7 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { authMiddleware, requireAdmin, requireEmailVerification, AuthenticatedRequest } from '../shared/middleware/auth.middleware';
+import {
+  authMiddleware,
+  requireAdmin,
+  requireEmailVerification,
+} from '../shared/middleware/auth.middleware';
 import { requestLogger, corsConfig } from '../shared/middleware/validation.middleware';
 import { adminRateLimit } from '../shared/middleware/ratelimit.middleware';
 import { globalErrorHandler } from '../shared/errors/error.handler';
@@ -37,10 +41,24 @@ adminRouter.get('/users', async (req, res, next) => {
     const limit = Math.min(parseInt(pageSize as string) || 20, 100);
     const offset = (parseInt(page as string) - 1) * limit;
 
-    let query = db.collection(Collections.USERS).orderBy('createdAt', 'desc').limit(limit).offset(offset);
+    let query = db
+      .collection(Collections.USERS)
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+      .offset(offset);
 
-    if (tier) query = db.collection(Collections.USERS).where('subscription.tier', '==', tier).limit(limit).offset(offset);
-    if (status) query = db.collection(Collections.USERS).where('accountStatus', '==', status).limit(limit).offset(offset);
+    if (tier)
+      query = db
+        .collection(Collections.USERS)
+        .where('subscription.tier', '==', tier)
+        .limit(limit)
+        .offset(offset);
+    if (status)
+      query = db
+        .collection(Collections.USERS)
+        .where('accountStatus', '==', status)
+        .limit(limit)
+        .offset(offset);
 
     const snap = await query.get();
     const users = snap.docs.map((d) => ({
@@ -54,8 +72,14 @@ adminRouter.get('/users', async (req, res, next) => {
       createdAt: d.data().createdAt?.toDate(),
     }));
 
-    res.json({ success: true, data: users, meta: { page: parseInt(page as string), pageSize: limit } });
-  } catch (err) { next(err); }
+    res.json({
+      success: true,
+      data: users,
+      meta: { page: parseInt(page as string), pageSize: limit },
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // GET /admin/users/:uid — full user profile
@@ -63,9 +87,14 @@ adminRouter.get('/users/:uid', async (req, res, next) => {
   try {
     const db = getFirestore();
     const snap = await db.collection(Collections.USERS).doc(req.params.uid).get();
-    if (!snap.exists) return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'User not found' } });
+    if (!snap.exists)
+      return res
+        .status(404)
+        .json({ success: false, error: { code: 'NOT_FOUND', message: 'User not found' } });
     res.json({ success: true, data: snap.data() });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 // PUT /admin/users/:uid/suspend
@@ -77,7 +106,9 @@ adminRouter.put('/users/:uid/suspend', async (req, res, next) => {
       updatedAt: Timestamp.now(),
     });
     res.json({ success: true, data: { message: 'User suspended' } });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 // PUT /admin/users/:uid/restore
@@ -89,7 +120,9 @@ adminRouter.put('/users/:uid/restore', async (req, res, next) => {
       updatedAt: Timestamp.now(),
     });
     res.json({ success: true, data: { message: 'User restored' } });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 // GET /admin/analytics/overview
@@ -115,14 +148,20 @@ adminRouter.get('/analytics/overview', async (_req, res, next) => {
         date: today,
       },
     });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 // POST /admin/notifications/broadcast
 adminRouter.post('/notifications/broadcast', async (req, res, next) => {
   try {
     const { title, body, data = {}, segment } = req.body;
-    if (!title || !body) return res.status(400).json({ success: false, error: { code: 'VALIDATION_001', message: 'title and body required' } });
+    if (!title || !body)
+      return res.status(400).json({
+        success: false,
+        error: { code: 'VALIDATION_001', message: 'title and body required' },
+      });
 
     const db = getFirestore();
     let query = db.collection(Collections.USERS).where('accountStatus', '==', 'active');
@@ -136,15 +175,24 @@ adminRouter.post('/notifications/broadcast', async (req, res, next) => {
       const batch = db.batch();
       const chunk = usersSnap.docs.slice(i, i + 400);
       for (const userDoc of chunk) {
-        const notifRef = db.collection(Collections.USERS).doc(userDoc.id)
-          .collection(Collections.NOTIFICATIONS).doc();
+        const notifRef = db
+          .collection(Collections.USERS)
+          .doc(userDoc.id)
+          .collection(Collections.NOTIFICATIONS)
+          .doc();
         batch.set(notifRef, {
           notificationId: notifRef.id,
           userId: userDoc.id,
           type: 'system',
-          title, body, data,
-          read: false, readAt: null, actionTaken: null,
-          fcmMessageId: null, deliveredAt: null, createdAt: now,
+          title,
+          body,
+          data,
+          read: false,
+          readAt: null,
+          actionTaken: null,
+          fcmMessageId: null,
+          deliveredAt: null,
+          createdAt: now,
         });
         count++;
       }
@@ -152,7 +200,9 @@ adminRouter.post('/notifications/broadcast', async (req, res, next) => {
     }
 
     res.json({ success: true, data: { sent: count } });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 // POST /admin/achievements — create achievement
@@ -162,7 +212,9 @@ adminRouter.post('/achievements', async (req, res, next) => {
     const ref = db.collection(Collections.ACHIEVEMENTS).doc(req.body.achievementId || undefined);
     await ref.set({ ...req.body, isActive: true });
     res.json({ success: true, data: { achievementId: ref.id } });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 // POST /admin/challenges — create challenge
@@ -180,7 +232,9 @@ adminRouter.post('/challenges', async (req, res, next) => {
       updatedAt: Timestamp.now(),
     });
     res.json({ success: true, data: { challengeId: ref.id } });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.use('/admin', adminRouter);
@@ -194,7 +248,9 @@ jobsRouter.post('/send-notification', async (req, res, next) => {
     const { sendNotification } = await import('../notifications/notifications.service');
     await sendNotification(req.body);
     res.json({ success: true });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.use('/jobs', jobsRouter);

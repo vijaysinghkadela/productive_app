@@ -4,7 +4,12 @@ import { getFirestore, getSecret, REGION } from '../shared/config/firebase.confi
 import { Collections } from '../shared/constants/collections.constants';
 import { cacheIncrement } from '../shared/config/redis.config';
 import { aiChatSchema } from '../shared/validators/common.validators';
-import { AIConversationDocument, AIMessage, UserDocument, DailyStatsDocument } from '../shared/types/firestore.types';
+import {
+  AIConversationDocument,
+  AIMessage,
+  UserDocument,
+  DailyStatsDocument,
+} from '../shared/types/firestore.types';
 import { v4 as uuidv4 } from 'uuid';
 
 // ─── AI Coaching Chat (Callable) ───
@@ -24,8 +29,10 @@ export const getAICoaching = functions
     const tier = user.subscription.tier;
 
     if (!['pro', 'elite', 'lifetime'].includes(tier)) {
-      throw new functions.https.HttpsError('permission-denied',
-        'AI coaching requires Pro or Elite subscription');
+      throw new functions.https.HttpsError(
+        'permission-denied',
+        'AI coaching requires Pro or Elite subscription',
+      );
     }
 
     // Rate limiting
@@ -35,14 +42,17 @@ export const getAICoaching = functions
     const currentCount = await cacheIncrement(rateLimitKey, 30 * 86400); // Expire end of month
 
     if (currentCount > maxMessages) {
-      throw new functions.https.HttpsError('resource-exhausted',
-        `Monthly AI message limit (${maxMessages}) reached. ${tier === 'pro' ? 'Upgrade to Elite for 500/month.' : ''}`);
+      throw new functions.https.HttpsError(
+        'resource-exhausted',
+        `Monthly AI message limit (${maxMessages}) reached. ${tier === 'pro' ? 'Upgrade to Elite for 500/month.' : ''}`,
+      );
     }
 
     const parsed = aiChatSchema.safeParse(data);
     if (!parsed.success) {
-      throw new functions.https.HttpsError('invalid-argument', 'Invalid message',
-        { errors: parsed.error.errors });
+      throw new functions.https.HttpsError('invalid-argument', 'Invalid message', {
+        errors: parsed.error.errors,
+      });
     }
 
     const { message, conversationId } = parsed.data;
@@ -52,8 +62,11 @@ export const getAICoaching = functions
     let convoRef;
 
     if (conversationId) {
-      convoRef = db.collection(Collections.USERS).doc(uid)
-        .collection(Collections.AI_CONVERSATIONS).doc(conversationId);
+      convoRef = db
+        .collection(Collections.USERS)
+        .doc(uid)
+        .collection(Collections.AI_CONVERSATIONS)
+        .doc(conversationId);
       const convoSnap = await convoRef.get();
       if (convoSnap.exists) {
         conversation = convoSnap.data() as AIConversationDocument;
@@ -62,8 +75,11 @@ export const getAICoaching = functions
 
     if (!conversation) {
       const newId = conversationId || uuidv4();
-      convoRef = db.collection(Collections.USERS).doc(uid)
-        .collection(Collections.AI_CONVERSATIONS).doc(newId);
+      convoRef = db
+        .collection(Collections.USERS)
+        .doc(uid)
+        .collection(Collections.AI_CONVERSATIONS)
+        .doc(newId);
     }
 
     // Build context snapshot from last 7 days
@@ -71,7 +87,9 @@ export const getAICoaching = functions
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     const startDateStr = sevenDaysAgo.toISOString().split('T')[0];
 
-    const statsSnap = await db.collection(Collections.USERS).doc(uid)
+    const statsSnap = await db
+      .collection(Collections.USERS)
+      .doc(uid)
       .collection(Collections.DAILY_STATS)
       .where('date', '>=', startDateStr)
       .orderBy('date', 'desc')
@@ -81,8 +99,8 @@ export const getAICoaching = functions
     const stats = statsSnap.docs.map((d) => d.data() as DailyStatsDocument);
 
     const scores = stats.map((s) => s.productivityScore?.final || 0);
-    const avgScore = scores.length > 0
-      ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+    const avgScore =
+      scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     const bestScore = Math.max(...scores, 0);
     const worstScore = Math.min(...scores.filter((s) => s > 0), 100);
 
@@ -142,7 +160,9 @@ export const getAICoaching = functions
       temperature: 0.7,
     });
 
-    const aiResponse = completion.choices[0]?.message?.content || 'I apologize, but I couldn\'t generate a response. Please try again.';
+    const aiResponse =
+      completion.choices[0]?.message?.content ||
+      "I apologize, but I couldn't generate a response. Please try again.";
     const tokensUsed = completion.usage?.total_tokens || 0;
 
     // Save conversation
@@ -162,11 +182,7 @@ export const getAICoaching = functions
       createdAt: now,
     };
 
-    const updatedMessages = [
-      ...(conversation?.messages || []),
-      userMessage,
-      assistantMessage,
-    ];
+    const updatedMessages = [...(conversation?.messages || []), userMessage, assistantMessage];
 
     const convoData: AIConversationDocument = {
       conversationId: convoRef!.id,

@@ -43,29 +43,43 @@ export function rateLimitMiddleware(config: RateLimitConfig) {
 
 // Pre-configured rate limiters
 export const syncUsageRateLimit = rateLimitMiddleware({
-  limit: 60, windowSeconds: 3600, keyPrefix: 'sync_usage',
+  limit: 60,
+  windowSeconds: 3600,
+  keyPrefix: 'sync_usage',
 });
 
 export const sessionAnalyticsRateLimit = rateLimitMiddleware({
-  limit: 30, windowSeconds: 3600, keyPrefix: 'session_analytics',
+  limit: 30,
+  windowSeconds: 3600,
+  keyPrefix: 'session_analytics',
 });
 
 export const trackHabitRateLimit = rateLimitMiddleware({
-  limit: 200, windowSeconds: 3600, keyPrefix: 'track_habit',
+  limit: 200,
+  windowSeconds: 3600,
+  keyPrefix: 'track_habit',
 });
 
 export const setGoalRateLimit = rateLimitMiddleware({
-  limit: 20, windowSeconds: 3600, keyPrefix: 'set_goal',
+  limit: 20,
+  windowSeconds: 3600,
+  keyPrefix: 'set_goal',
 });
 
 export const leaderboardRateLimit = rateLimitMiddleware({
-  limit: 60, windowSeconds: 60, keyPrefix: 'leaderboard',
+  limit: 60,
+  windowSeconds: 60,
+  keyPrefix: 'leaderboard',
 });
 
 export const searchUsersRateLimit = rateLimitMiddleware({
-  limit: 30, windowSeconds: 60, keyPrefix: 'search_users',
+  limit: 30,
+  windowSeconds: 60,
+  keyPrefix: 'search_users',
 });
 
 export const adminRateLimit = rateLimitMiddleware({
-  limit: 100, windowSeconds: 60, keyPrefix: 'admin',
+  limit: 100,
+  windowSeconds: 60,
+  keyPrefix: 'admin',
 });

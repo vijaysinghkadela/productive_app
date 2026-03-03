@@ -68,8 +68,11 @@ export async function sendNotification(input: SendNotificationInput): Promise<vo
   }
 
   // Create Firestore notification document
-  const notifRef = db.collection(Collections.USERS).doc(userId)
-    .collection(Collections.NOTIFICATIONS).doc();
+  const notifRef = db
+    .collection(Collections.USERS)
+    .doc(userId)
+    .collection(Collections.NOTIFICATIONS)
+    .doc();
 
   let fcmMessageId: string | null = null;
 
@@ -156,7 +159,8 @@ export const sendStreakReminders = functions
     const today = new Date().toISOString().split('T')[0];
 
     // Get users with active streaks who haven't completed today's goals
-    const usersSnap = await db.collection(Collections.USERS)
+    const usersSnap = await db
+      .collection(Collections.USERS)
       .where('stats.currentStreak', '>', 0)
       .where('accountStatus', '==', 'active')
       .limit(500)
@@ -169,8 +173,12 @@ export const sendStreakReminders = functions
       // Check if they have activity today
       if (user.stats.lastActiveDate === today) {
         // They were active, check if goals are met
-        const dailySnap = await db.collection(Collections.USERS).doc(userDoc.id)
-          .collection(Collections.DAILY_STATS).doc(today).get();
+        const dailySnap = await db
+          .collection(Collections.USERS)
+          .doc(userDoc.id)
+          .collection(Collections.DAILY_STATS)
+          .doc(today)
+          .get();
 
         if (dailySnap.exists) {
           const stats = dailySnap.data()!;

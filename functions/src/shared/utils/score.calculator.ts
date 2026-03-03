@@ -1,5 +1,9 @@
-import { ScoreComponents, DailyStatsDocument, GoalDocument, HabitDocument } from '../types/firestore.types';
-import { Timestamp } from 'firebase-admin/firestore';
+import {
+  ScoreComponents,
+  DailyStatsDocument,
+  GoalDocument,
+  HabitDocument,
+} from '../types/firestore.types';
 
 export interface ScoreInput {
   dailyStats: DailyStatsDocument;
@@ -74,9 +78,14 @@ export function calculateProductivityScore(input: ScoreInput): {
   }
 
   const totalDeductions =
-    socialMediaDeduction + screenTimeDeduction + overrideDeduction +
-    abandonedSessionDeduction + habitDeduction + noSessionPenalty +
-    earlyPhonePenalty + lateNightPenalty;
+    socialMediaDeduction +
+    screenTimeDeduction +
+    overrideDeduction +
+    abandonedSessionDeduction +
+    habitDeduction +
+    noSessionPenalty +
+    earlyPhonePenalty +
+    lateNightPenalty;
 
   // --- ADDITIONS ---
   // Completed focus sessions: +8 each, max +40
@@ -125,8 +134,14 @@ export function calculateProductivityScore(input: ScoreInput): {
     dailyStats.firstPhoneUse && dailyStats.firstPhoneUse >= '08:00' ? 5 : 0;
 
   const totalAdditions =
-    focusBonus + goalBonus + habitBonus + socialMediaFreeBonus +
-    streakBonus + journalBonus + gratitudeBonus + morningRoutineBonus;
+    focusBonus +
+    goalBonus +
+    habitBonus +
+    socialMediaFreeBonus +
+    streakBonus +
+    journalBonus +
+    gratitudeBonus +
+    morningRoutineBonus;
 
   // --- FINAL SCORE ---
   const rawScore = 100 - totalDeductions + totalAdditions;
@@ -194,5 +209,8 @@ export function calculateSessionXp(
   const distractionPenalty = distractionCount * 5;
   const longSessionBonus = durationMinutes >= 120 ? 50 : 0;
 
-  return Math.max(0, base + durationBonus + completionBonus - distractionPenalty + longSessionBonus);
+  return Math.max(
+    0,
+    base + durationBonus + completionBonus - distractionPenalty + longSessionBonus,
+  );
 }
