@@ -5,10 +5,16 @@ import 'package:focusguard_pro/presentation/screens/achievements_screen.dart';
 import 'package:focusguard_pro/presentation/screens/ai_coaching_screen.dart';
 import 'package:focusguard_pro/presentation/screens/analytics_screen.dart';
 import 'package:focusguard_pro/presentation/screens/app_blocker_screen.dart';
+import 'package:focusguard_pro/presentation/screens/app_lock_screen.dart';
+import 'package:focusguard_pro/presentation/screens/auth/forgot_password_screen.dart';
 import 'package:focusguard_pro/presentation/screens/auth/login_screen.dart';
 import 'package:focusguard_pro/presentation/screens/auth/signup_screen.dart';
 import 'package:focusguard_pro/presentation/screens/challenges_screen.dart';
+import 'package:focusguard_pro/presentation/screens/changelog_screen.dart';
+import 'package:focusguard_pro/presentation/screens/detox_challenge_screen.dart';
 import 'package:focusguard_pro/presentation/screens/digital_wellbeing_screen.dart';
+import 'package:focusguard_pro/presentation/screens/focus_modes_screen.dart';
+import 'package:focusguard_pro/presentation/screens/focus_music_screen.dart';
 import 'package:focusguard_pro/presentation/screens/focus_session_screen.dart';
 import 'package:focusguard_pro/presentation/screens/focus_spaces_screen.dart';
 import 'package:focusguard_pro/presentation/screens/goals_screen.dart';
@@ -17,15 +23,22 @@ import 'package:focusguard_pro/presentation/screens/home_screen.dart';
 import 'package:focusguard_pro/presentation/screens/journal_screen.dart';
 import 'package:focusguard_pro/presentation/screens/kanban_screen.dart';
 import 'package:focusguard_pro/presentation/screens/leaderboard_screen.dart';
+import 'package:focusguard_pro/presentation/screens/more_screen.dart';
+import 'package:focusguard_pro/presentation/screens/notifications_center_screen.dart';
 import 'package:focusguard_pro/presentation/screens/onboarding_screen.dart';
 import 'package:focusguard_pro/presentation/screens/overlay_nudge_screen.dart';
 import 'package:focusguard_pro/presentation/screens/permissions_screen.dart';
+import 'package:focusguard_pro/presentation/screens/privacy_policy_screen.dart';
 import 'package:focusguard_pro/presentation/screens/profile_screen.dart';
+import 'package:focusguard_pro/presentation/screens/referral_screen.dart';
+import 'package:focusguard_pro/presentation/screens/reports_screen.dart';
 import 'package:focusguard_pro/presentation/screens/settings_screen.dart';
 import 'package:focusguard_pro/presentation/screens/shell_screen.dart';
 import 'package:focusguard_pro/presentation/screens/splash_screen.dart';
 import 'package:focusguard_pro/presentation/screens/subscription_screen.dart';
+import 'package:focusguard_pro/presentation/screens/support_screen.dart';
 import 'package:focusguard_pro/presentation/screens/terms_screen.dart';
+import 'package:focusguard_pro/presentation/screens/widget_config_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -102,6 +115,10 @@ final GoRouter appRouter = GoRouter(
           path: '/blocker',
           pageBuilder: (c, s) => _fadePage(s, const AppBlockerScreen()),
         ),
+        GoRoute(
+          path: '/more',
+          pageBuilder: (c, s) => _fadePage(s, const MoreScreen()),
+        ),
       ],
     ),
 
@@ -170,6 +187,54 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/kanban',
       pageBuilder: (c, s) => _slidePage(s, const KanbanScreen()),
+    ),
+    GoRoute(
+      path: '/notifications-center',
+      pageBuilder: (c, s) => _slidePage(s, const NotificationsCenterScreen()),
+    ),
+    GoRoute(
+      path: '/focus-music',
+      pageBuilder: (c, s) => _slidePage(s, const FocusMusicScreen()),
+    ),
+    GoRoute(
+      path: '/focus-modes',
+      pageBuilder: (c, s) => _slidePage(s, const FocusModesScreen()),
+    ),
+    GoRoute(
+      path: '/detox-challenge',
+      pageBuilder: (c, s) => _slidePage(s, const DetoxChallengeScreen()),
+    ),
+    GoRoute(
+      path: '/reports',
+      pageBuilder: (c, s) => _slidePage(s, const ReportsScreen()),
+    ),
+    GoRoute(
+      path: '/app-lock',
+      pageBuilder: (c, s) => _slidePage(s, const AppLockScreen()),
+    ),
+    GoRoute(
+      path: '/widget-config',
+      pageBuilder: (c, s) => _slidePage(s, const WidgetConfigScreen()),
+    ),
+    GoRoute(
+      path: '/referral',
+      pageBuilder: (c, s) => _slidePage(s, const ReferralScreen()),
+    ),
+    GoRoute(
+      path: '/support',
+      pageBuilder: (c, s) => _slidePage(s, const SupportScreen()),
+    ),
+    GoRoute(
+      path: '/privacy-policy',
+      pageBuilder: (c, s) => _slidePage(s, const PrivacyPolicyScreen()),
+    ),
+    GoRoute(
+      path: '/changelog',
+      pageBuilder: (c, s) => _slidePage(s, const ChangelogScreen()),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      pageBuilder: (c, s) => _slidePage(s, const ForgotPasswordScreen()),
     ),
   ],
 );

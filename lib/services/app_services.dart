@@ -285,6 +285,7 @@ class PurchaseService {
 
   String get currentTier => _currentTier;
   bool get isTrialActive => _isTrialActive;
+  bool get isBasic => _currentTier == 'basic';
   bool get isPro => _currentTier == 'pro' || _currentTier == 'elite';
   bool get isElite => _currentTier == 'elite';
 
@@ -304,11 +305,13 @@ class PurchaseService {
       case 'full_analytics':
         return isPro;
       case 'ai_coaching':
+        return isPro;
+      case 'ai_coaching_unlimited':
         return isElite;
       case 'strict_mode':
         return isElite;
       case 'focus_spaces':
-        return isPro;
+        return isElite;
       case 'accountability':
         return isPro;
       case 'habits':

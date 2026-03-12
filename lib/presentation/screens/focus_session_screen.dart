@@ -8,6 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focusguard_pro/core/constants.dart';
 import 'package:focusguard_pro/core/theme.dart';
 import 'package:focusguard_pro/core/utils.dart';
+import 'package:focusguard_pro/domain/entities/user.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart'
+    hide FocusTimerNotifier, FocusTimerState, TimerPhase, focusTimerProvider;
 import 'package:focusguard_pro/presentation/providers/focus_timer_provider.dart';
 import 'package:focusguard_pro/presentation/screens/focus/anti_gravity_overlay.dart';
 import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
@@ -304,8 +307,26 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                           itemBuilder: (context, i) {
                             final preset = pomodoroPresets[i];
                             final isSelected = i == _selectedPreset;
+                            final tier = ref.watch(authProvider).user?.tier ??
+                                SubscriptionTier.free;
+                            final hasAllTimers = tier == SubscriptionTier.pro ||
+                                tier == SubscriptionTier.elite;
+                            // Only the 25-min Classic preset (index 0) is
+                            // available on Basic/Free; others require Pro+.
+                            final isLocked = !hasAllTimers && i != 0;
                             return GestureDetector(
                               onTap: () {
+                                if (isLocked) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        '🔒 All timer presets require Pro. Upgrade to unlock.',
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                  return;
+                                }
                                 HapticFeedback.selectionClick();
                                 setState(() {
                                   _selectedPreset = i;
@@ -339,33 +360,57 @@ class _FocusSessionScreenState extends ConsumerState<FocusSessionScreen>
                                         )
                                       : null,
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                child: Stack(
                                   children: [
-                                    Text(
-                                      preset.emoji,
-                                      style: const TextStyle(fontSize: 20),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          preset.emoji,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: isLocked
+                                                ? AppColors.textTertiary
+                                                : null,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          preset.label,
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                            color: isLocked
+                                                ? AppColors.textTertiary
+                                                : isSelected
+                                                    ? Colors.white
+                                                    : AppColors.textSecondary,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${preset.workMinutes}m',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: isLocked
+                                                ? AppColors.textTertiary
+                                                : isSelected
+                                                    ? Colors.white70
+                                                    : AppColors.textTertiary,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      preset.label,
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600,
-                                        color: isSelected
-                                            ? Colors.white
-                                            : AppColors.textSecondary,
+                                    if (isLocked)
+                                      const Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Icon(
+                                          Icons.lock_rounded,
+                                          size: 12,
+                                          color: AppColors.textTertiary,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '${preset.workMinutes}m',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: isSelected
-                                            ? Colors.white70
-                                            : AppColors.textTertiary,
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),

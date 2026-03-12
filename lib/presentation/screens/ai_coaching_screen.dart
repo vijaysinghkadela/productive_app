@@ -1,19 +1,29 @@
 // ignore_for_file: discarded_futures
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:focusguard_pro/core/constants.dart';
+import 'package:focusguard_pro/domain/entities/user.dart';
+import 'package:focusguard_pro/presentation/providers/app_providers.dart'
+    hide FocusTimerNotifier, FocusTimerState, TimerPhase, focusTimerProvider;
 import 'package:focusguard_pro/presentation/widgets/app_buttons.dart';
 import 'package:focusguard_pro/presentation/widgets/glass_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AiCoachingScreen extends StatefulWidget {
+const int _kProDailyLimit = 10;
+const String _kPrefCountKey = 'ai_coaching_count';
+const String _kPrefDateKey = 'ai_coaching_date';
+
+class AiCoachingScreen extends ConsumerStatefulWidget {
   const AiCoachingScreen({super.key});
 
   @override
-  State<AiCoachingScreen> createState() => _AiCoachingScreenState();
+  ConsumerState<AiCoachingScreen> createState() => _AiCoachingScreenState();
 }
 
-class _AiCoachingScreenState extends State<AiCoachingScreen> {
+class _AiCoachingScreenState extends ConsumerState<AiCoachingScreen> {
   final _inputCtrl = TextEditingController();
   final _scrollCtrl = ScrollController();
   final List<_ChatMessage> _messages = [
@@ -24,6 +34,29 @@ class _AiCoachingScreenState extends State<AiCoachingScreen> {
     ),
   ];
   bool _isTyping = false;
+  int _todayCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDailyCount();
+  }
+
+  Future<void> _loadDailyCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    final savedDate = prefs.getString(_kPrefDateKey) ?? '';
+    final count = savedDate == today ? (prefs.getInt(_kPrefCountKey) ?? 0) : 0;
+    if (mounted) setState(() => _todayCount = count);
+  }
+
+  Future<void> _incrementDailyCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    await prefs.setString(_kPrefDateKey, today);
+    await prefs.setInt(_kPrefCountKey, _todayCount + 1);
+    if (mounted) setState(() => _todayCount++);
+  }
 
   @override
   void dispose() {
@@ -32,31 +65,61 @@ class _AiCoachingScreenState extends State<AiCoachingScreen> {
     super.dispose();
   }
 
-  void _sendMessage(String text) {
+  Future<void> _sendMessage(String text) async {
     if (text.trim().isEmpty) return;
-    HapticFeedback.lightImpact();
+
+    final tier = ref.read(authProvider).user?.tier ?? SubscriptionTier.free;
+    final isElite = tier == SubscriptionTier.elite;
+    final isPro = tier == SubscriptionTier.pro || isElite;
+
+    if (!isPro) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('🔒 AI coaching requires Pro or Elite.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (!isElite && _todayCount >= _kProDailyLimit) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            '⚡ Daily limit reached (10/day). Upgrade to Elite for unlimited AI coaching.',
+          ),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
+    unawaited(HapticFeedback.lightImpact());
     setState(() {
       _messages.add(_ChatMessage(text: text.trim(), isUser: true));
       _inputCtrl.clear();
       _isTyping = true;
     });
     _scrollToBottom();
+    await _incrementDailyCount();
 
     // Simulate AI response after delay
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        setState(() {
-          _isTyping = false;
-          _messages.add(
-            _ChatMessage(
-              text: _getAIResponse(text),
-              isUser: false,
-            ),
-          );
-        });
-        _scrollToBottom();
-      }
-    });
+    unawaited(
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        if (mounted) {
+          setState(() {
+            _isTyping = false;
+            _messages.add(
+              _ChatMessage(
+                text: _getAIResponse(text),
+                isUser: false,
+              ),
+            );
+          });
+          _scrollToBottom();
+        }
+      }),
+    );
   }
 
   void _scrollToBottom() {

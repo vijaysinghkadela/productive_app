@@ -59,13 +59,13 @@ dev_dependencies:
   flutter_lints: ^3.0.2
   flutter_test:
     sdk: flutter
-  focus_guard: any
   integration_test:
     sdk: flutter
   mockito: ^5.4.4
   riverpod_annotation: any
   riverpod_generator: any
 flutter:
+  generate: true
   uses-material-design: true
 
   # assets:

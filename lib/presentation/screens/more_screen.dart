@@ -34,7 +34,7 @@ class MoreScreen extends StatelessWidget {
                   mainAxisSpacing: 10,
                   childAspectRatio: 1.05,
                   children: [
-                    _tile(context, '👤', 'Profile', '/profile-page'),
+                    _tile(context, '👤', 'Profile', '/profile'),
                     _tile(context, '🧠', 'AI Coach', '/ai-coaching'),
                     _tile(context, '✅', 'Habits', '/habits'),
                     _tile(context, '⚔️', 'Challenges', '/challenges'),
@@ -99,7 +99,7 @@ class MoreScreen extends StatelessWidget {
                   '⚙️',
                   'Settings',
                   'App preferences',
-                  '/settings-page',
+                  '/settings',
                 ),
                 _row(
                   context,

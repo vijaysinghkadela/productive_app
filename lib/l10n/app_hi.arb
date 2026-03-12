@@ -48,5 +48,84 @@
   "startFocus": "फोकस शुरू करें",
   "endFocus": "फोकस समाप्त करें",
   "upgradeToUnlock": "इस सुविधा को अनलॉक करने के लिए अपग्रेड करें",
-  "startFreeTrial": "मुफ्त ट्रायल शुरू करें"
+  "startFreeTrial": "मुफ्त ट्रायल शुरू करें",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithApple": "Continue with Apple",
+  "thisWeek": "This Week",
+  "thisMonth": "This Month",
+  "all": "All",
+  "notifications": "Notifications",
+  "focusModes": "Focus Modes",
+  "focusMusic": "Focus Music",
+  "referral": "Invite Friends",
+  "support": "Support",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "changelog": "Changelog",
+  "strict_mode": "Strict Mode",
+  "bedtime": "Bedtime Mode",
+  "streak": "Streak",
+  "xp": "XP",
+  "level": "Level",
+  "takeABreak": "Take a Break",
+  "breakTime": "Break Time",
+  "deepWork": "Deep Work",
+  "study": "Study",
+  "creative": "Creative",
+  "reading": "Reading",
+  "exercise": "Exercise",
+  "minutesShort": "{count}m",
+  "@minutesShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutes": "{hours}h {minutes}m",
+  "@hoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dayStreak": "{count} day streak",
+  "@dayStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scoreOutOf100": "{score}/100",
+  "@scoreOutOf100": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "blockedApps": "{count} apps blocked",
+  "@blockedApps": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "basic": "Basic",
+  "pro": "Pro",
+  "elite": "Elite",
+  "perMonth": "/month",
+  "restorePurchases": "Restore Purchases",
+  "onboarding1Title": "Take Control",
+  "onboarding1Desc": "Block distracting apps and reclaim hours of your day.",
+  "onboarding2Title": "Stay Focused",
+  "onboarding2Desc": "Pomodoro timers, ambient sounds, and deep work sessions.",
+  "onboarding3Title": "Track Progress",
+  "onboarding3Desc": "Beautiful analytics, streaks, and achievements keep you motivated."
 }

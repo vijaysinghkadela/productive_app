@@ -16,11 +16,24 @@ class HiveDatasource {
 
   Future<void> init() async {
     await Hive.initFlutter();
-    await Hive.openBox<dynamic>(_userBox);
-    await Hive.openBox<dynamic>(_sessionsBox);
-    await Hive.openBox<dynamic>(_statsBox);
-    await Hive.openBox<dynamic>(_settingsBox);
-    await Hive.openBox<dynamic>(_cacheBox);
+    await _openBoxSafe<dynamic>(_userBox);
+    await _openBoxSafe<dynamic>(_sessionsBox);
+    await _openBoxSafe<dynamic>(_statsBox);
+    await _openBoxSafe<dynamic>(_settingsBox);
+    await _openBoxSafe<dynamic>(_cacheBox);
+  }
+
+  /// Opens a Hive box safely — if the box file is corrupted (e.g. from an
+  /// interrupted write or a manual cache clear), delete it and retry once.
+  /// This prevents the app from crashing on startup for users who clear cache.
+  static Future<Box<T>> _openBoxSafe<T>(String boxName) async {
+    try {
+      return await Hive.openBox<T>(boxName);
+    } catch (e) {
+      debugPrint('⚠️ Hive box "$boxName" corrupted, deleting and retrying: $e');
+      await Hive.deleteBoxFromDisk(boxName);
+      return Hive.openBox<T>(boxName);
+    }
   }
 
   // Generic CRUD

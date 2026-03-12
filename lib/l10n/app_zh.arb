@@ -21,5 +21,111 @@
   "challenges": "挑战",
   "leaderboard": "排行榜",
   "startFocus": "开始专注",
-  "upgradeToUnlock": "升级以解锁此功能"
+  "upgradeToUnlock": "升级以解锁此功能",
+  "email": "Email",
+  "password": "Password",
+  "forgotPassword": "Forgot Password?",
+  "createAccount": "Create Account",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithApple": "Continue with Apple",
+  "getStarted": "Get Started",
+  "skip": "Skip",
+  "next": "Next",
+  "done": "Done",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "search": "Search",
+  "loading": "Loading...",
+  "error": "Something went wrong",
+  "retry": "Retry",
+  "noData": "No data yet",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "thisWeek": "This Week",
+  "thisMonth": "This Month",
+  "all": "All",
+  "aiCoaching": "AI Coaching",
+  "journal": "Journal",
+  "reports": "Reports",
+  "subscription": "Subscription",
+  "digitalWellbeing": "Digital Wellbeing",
+  "notifications": "Notifications",
+  "appBlocker": "App Blocker",
+  "focusModes": "Focus Modes",
+  "focusMusic": "Focus Music",
+  "referral": "Invite Friends",
+  "support": "Support",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "changelog": "Changelog",
+  "strict_mode": "Strict Mode",
+  "bedtime": "Bedtime Mode",
+  "streak": "Streak",
+  "xp": "XP",
+  "level": "Level",
+  "endFocus": "End Focus",
+  "takeABreak": "Take a Break",
+  "breakTime": "Break Time",
+  "deepWork": "Deep Work",
+  "study": "Study",
+  "creative": "Creative",
+  "reading": "Reading",
+  "exercise": "Exercise",
+  "minutesShort": "{count}m",
+  "@minutesShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursMinutes": "{hours}h {minutes}m",
+  "@hoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "dayStreak": "{count} day streak",
+  "@dayStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scoreOutOf100": "{score}/100",
+  "@scoreOutOf100": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "blockedApps": "{count} apps blocked",
+  "@blockedApps": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "basic": "Basic",
+  "pro": "Pro",
+  "elite": "Elite",
+  "perMonth": "/month",
+  "startFreeTrial": "Start Free Trial",
+  "restorePurchases": "Restore Purchases",
+  "onboarding1Title": "Take Control",
+  "onboarding1Desc": "Block distracting apps and reclaim hours of your day.",
+  "onboarding2Title": "Stay Focused",
+  "onboarding2Desc": "Pomodoro timers, ambient sounds, and deep work sessions.",
+  "onboarding3Title": "Track Progress",
+  "onboarding3Desc": "Beautiful analytics, streaks, and achievements keep you motivated."
 }

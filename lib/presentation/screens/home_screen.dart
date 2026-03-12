@@ -38,7 +38,7 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     // Avatar + greeting
                     GestureDetector(
-                      onTap: () => context.push('/profile-page'),
+                      onTap: () => context.push('/profile'),
                       child: Row(
                         children: [
                           Container(
